@@ -9,7 +9,7 @@ import {
 import SideMenu from 'react-native-side-menu';
 import Menu from './Menu';
 
-const image = 'http://www.mapleleaffarms.com/lib/sitefiles/White-Duck_Facing_Front.jpg';
+const source = require('../assets/hamburgerIcon.png');
 
 const styles = StyleSheet.create({
     button: {
@@ -97,7 +97,7 @@ export default class Basic extends Component {
               style={styles.button}
             >
               <Image
-                source={{ image }}
+                source={source}
                 style={{ width: 32, height: 32 }}
               />
             </TouchableOpacity>

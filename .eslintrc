@@ -201,4 +201,5 @@
     'jsx-a11y/no-access-key': 'warn'
   },
   plugins: [/*'import', */'jsx-a11y', 'react'],
+  "extends": "airbnb"
 }

@@ -2,12 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Login from './components/Login';
 import Map from './components/Map';
+import Basic from './components/Basic';
+import Modals from './components/Modal';
 
 export default class App extends React.Component {
     render() {
         return (
           <View style={styles.container}>
-            <Map/>
+            <Basic />
           </View>
         );
     }

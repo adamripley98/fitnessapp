@@ -1,11 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, AppRegistry, TouchableOpacity } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import WelcomeScreen from './components/WelcomeScreen';
-import LoginScreen from './components/LoginScreen';
-import TrainerRegisterScreen from './components/TrainerRegisterScreen';
-import UserRegisterScreen from './components/UserRegisterScreen';
-
+import RegisterScreen from './components/RegisterScreen';
+import LogScreen from './components/LogScreen';
+import ProtectedView from './components/ProtectedView';
 
 const styles = StyleSheet.create({
     container: {
@@ -24,10 +22,10 @@ class App extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigate('UserRegister')}>
+            <TouchableOpacity onPress={() => navigate('Register')}>
               <Text>Go to register</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigate('Login')}>
+            <TouchableOpacity onPress={() => navigate('Log')}>
               <Text>Go to login</Text>
             </TouchableOpacity>
           </View>
@@ -39,17 +37,14 @@ const myApp = StackNavigator({
     App: {
         screen: App,
     },
-    Welcome: {
-        screen: WelcomeScreen,
+    Log: {
+        screen: LogScreen,
     },
-    Login: {
-        screen: LoginScreen,
+    Register: {
+        screen: RegisterScreen,
     },
-    TrainerRegister: {
-        screen: TrainerRegisterScreen,
-    },
-    UserRegister: {
-        screen: UserRegisterScreen,
+    Protected: {
+        screen: ProtectedView,
     },
 }, { initialRouteName: 'App' });
 

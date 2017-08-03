@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
+import { Animated, StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import MapStyle from './mapStyle.json';
@@ -10,25 +10,37 @@ export default class Map extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentRegion: {
+            currentRegion: new MapView.AnimatedRegion({
                 latitude: null,
                 longitude: null,
                 latitudeDelta: null,
                 longitudeDelta: null,
-            },
+            }),
         };
+    }
+    componentDidMount() {
+        this.getCurrentCoords();
+    }
+    onRegionChange(region) {
+        this.setState({
+            currentRegion: new MapView.AnimatedRegion({
+                latitude: region.latitude,
+                longitude: region.longitude,
+                latitudeDelta: region.latitudeDelta,
+                longitudeDelta: region.longitudeDelta,
+            }),
+        });
     }
     getCurrentCoords() {
         navigator.geolocation.getCurrentPosition(
             (success) => {
-                console.log(success);
                 this.setState({
-                    currentRegion: {
+                    currentRegion: new MapView.AnimatedRegion({
                         latitude: success.coords.latitude,
                         longitude: success.coords.longitude,
                         latitudeDelta: 0.005,
                         longitudeDelta: 0.005,
-                    },
+                    }),
                 });
             },
             (error) => {
@@ -36,41 +48,41 @@ export default class Map extends React.Component {
             {},
         );
     }
-    componentDidMount() {
-        this.getCurrentCoords();
+    moveToCurrentCoords() {
+        navigator.geolocation.getCurrentPosition(
+            (success) => {
+                this.state.currentRegion.timing({
+                    latitude: success.coords.latitude,
+                    longitude: success.coords.longitude,
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                }).start();
+            },
+            (error) => {
+            },
+            {},
+        );
     }
     render() {
-        if (this.state.currentRegion.latitude && this.state.currentRegion.longitude) {
-            return (
-              <View style={styles.container}>
-                <MapView
-                  style={styles.map}
-                  initialRegion={{
-                      latitude: this.state.currentRegion.latitude,
-                      longitude: this.state.currentRegion.longitude,
-                      latitudeDelta: this.state.currentRegion.latitudeDelta,
-                      longitudeDelta: this.state.currentRegion.longitudeDelta,
-                  }}
-                  region={this.state.currentRegion}
-                  showsUserLocation
-                  provider={PROVIDER_GOOGLE}
-                  customMapStyle={MapStyle}
-                />
-                <TouchableOpacity
-                  onPress={this.getCurrentCoords.bind(this)}
-                  style={styles.currentLocation}
-                >
-                  <Image
-                    source={currentLocation}
-                    style={{ width: 32, height: 32 }}
-                  />
-                </TouchableOpacity>
-              </View>
-            );
-        }
         return (
           <View style={styles.container}>
-            <Text>BOI</Text>
+            <MapView.Animated
+              style={styles.map}
+              region={this.state.currentRegion}
+              onRegionChange={this.onRegionChange.bind(this)}
+              showsUserLocation
+              provider={PROVIDER_GOOGLE}
+              customMapStyle={MapStyle}
+            />
+            <TouchableOpacity
+              onPress={this.moveToCurrentCoords.bind(this)}
+              style={styles.currentLocation}
+            >
+              <Image
+                source={currentLocation}
+                style={{ width: 36, height: 36 }}
+              />
+            </TouchableOpacity>
           </View>
         );
     }
@@ -93,6 +105,6 @@ const styles = StyleSheet.create({
     currentLocation: {
         position: 'absolute',
         bottom: 100,
-        right: 25,
+        right: 15,
     },
 });

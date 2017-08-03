@@ -64,25 +64,32 @@ export default class Map extends React.Component {
         );
     }
     render() {
+        if (this.state.currentRegion.latitude && this.state.currentRegion.longitude) {
+            return (
+              <View style={styles.container}>
+                <MapView.Animated
+                  style={styles.map}
+                  region={this.state.currentRegion}
+                  onRegionChange={this.onRegionChange.bind(this)}
+                  showsUserLocation
+                  provider={PROVIDER_GOOGLE}
+                  customMapStyle={MapStyle}
+                />
+                <TouchableOpacity
+                  onPress={this.moveToCurrentCoords.bind(this)}
+                  style={styles.currentLocation}
+                >
+                  <Image
+                    source={currentLocation}
+                    style={{ width: 36, height: 36 }}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+        }
         return (
           <View style={styles.container}>
-            <MapView.Animated
-              style={styles.map}
-              region={this.state.currentRegion}
-              onRegionChange={this.onRegionChange.bind(this)}
-              showsUserLocation
-              provider={PROVIDER_GOOGLE}
-              customMapStyle={MapStyle}
-            />
-            <TouchableOpacity
-              onPress={this.moveToCurrentCoords.bind(this)}
-              style={styles.currentLocation}
-            >
-              <Image
-                source={currentLocation}
-                style={{ width: 36, height: 36 }}
-              />
-            </TouchableOpacity>
+            <Text>BOI</Text>
           </View>
         );
     }
@@ -99,6 +106,7 @@ const styles = StyleSheet.create({
     },
     map: {
         position: 'absolute',
+        zIndex: 0,
         height: '100%',
         width: '100%',
     },

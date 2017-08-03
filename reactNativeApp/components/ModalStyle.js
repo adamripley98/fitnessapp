@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
     container: {
@@ -20,11 +20,21 @@ export default StyleSheet.create({
         padding: 22,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 4,
+        borderRadius: 0,
         borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: '100%',
+        width: '80%',
     },
     bottomModal: {
         justifyContent: 'flex-end',
+        margin: 0,
+    },
+    leftModal: {
+        alignItems: 'flex-start',
+        margin: 0,
+    },
+    rightModal: {
+        alignItems: 'flex-end',
         margin: 0,
     },
 });

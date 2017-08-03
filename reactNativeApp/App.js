@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Map from './components/Map';
 import Basic from './components/Basic';
 import Modals from './components/Modal';
+import ModalBox from './components/ModalBox';
 
 export default class App extends React.Component {
     render() {

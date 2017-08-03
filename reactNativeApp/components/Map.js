@@ -4,7 +4,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import MapStyle from './mapStyle.json';
 
-const currentLocation = require('../assets/icons/currentLocationBlue.png');
+const currentLocation = require('../assets/icons/currentLocationFYTOrange.png');
 
 export default class Map extends React.Component {
     constructor(props) {

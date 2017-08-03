@@ -6,6 +6,8 @@ import {
   Text,
 } from 'react-native';
 import React from 'react';
+import firebase from 'firebase';
+import { firebaseRef } from '../../firebase';
 
 const t = require('tcomb-form-native');
 
@@ -63,7 +65,6 @@ class Register extends React.Component {
             },
         };
     }
-
     componentWillUnmount() {
         this.setState = {
             value: {
@@ -73,44 +74,59 @@ class Register extends React.Component {
         };
     }
 
+    register(navigate) {
+        let noErr = true;
+        firebase.auth().createUserWithEmailAndPassword(this.state.value.email,
+        this.state.value.password).catch((error) => {
+            noErr = false;
+            alert(error.message);
+            console.log('Error registering with firebase', error.code, error.message);
+        })
+        .then(() => {
+          if (noErr) {
+            navigate('Log');
+          }
+        });
+    }
+
     _onChange = (value) => {
         this.setState({
             value,
         });
     };
 
-    _handleAdd = (navigate) => {
-        const value = this.refs.form.getValue();
-        console.log('what is value', value);
-        if (value) {
-            const data = {
-                email: value.email,
-                password: value.password,
-            };
-      // Serialize and post the data
-            const json = JSON.stringify(data);
-            fetch('http://localhost:3000/users/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-                body: json,
-            })
-            .then(response => response.json())
-      .then(() => {
-        // Redirect to login screen
-          navigate('Log');
-      })
-      .catch((error) => {
-          console.log('There was an error creating your account.', error);
-      })
-      .done();
-        } else {
-      // Form validation error
-            alert('Please fix the errors listed and try again.');
-        }
-    }
+    // _handleAdd = (navigate) => {
+    //     const value = this.refs.form.getValue();
+    //     console.log('what is value', value);
+    //     if (value) {
+    //         const data = {
+    //             email: value.email,
+    //             password: value.password,
+    //         };
+    //   // Serialize and post the data
+    //         const json = JSON.stringify(data);
+    //         fetch('http://localhost:3000/users/register', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Accept: 'application/json',
+    //             },
+    //             body: json,
+    //         })
+    //         .then(response => response.json())
+    //   .then(() => {
+    //     // Redirect to login screen
+    //       navigate('Log');
+    //   })
+    //   .catch((error) => {
+    //       console.log('There was an error creating your account.', error);
+    //   })
+    //   .done();
+    //     } else {
+    //   // Form validation error
+    //         alert('Please fix the errors listed and try again.');
+    //     }
+    // }
 
     render() {
         const { navigate } = this.props.navigation;
@@ -123,7 +139,7 @@ class Register extends React.Component {
               value={this.state.value}
               onChange={this._onChange}
             />
-            <TouchableHighlight onPress={() => this._handleAdd(navigate)}>
+            <TouchableHighlight onPress={() => this.register(navigate)}>
               <Text style={[styles.button, styles.greenButton]}>Create account</Text>
             </TouchableHighlight>
           </ScrollView>

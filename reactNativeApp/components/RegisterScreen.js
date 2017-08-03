@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
-import { firebaseRef } from '../../firebase';
+import { firebaseApp } from '../../firebase';
 
 const t = require('tcomb-form-native');
 
@@ -55,6 +55,10 @@ const styles = StyleSheet.create({
 });
 
 class Register extends React.Component {
+    static navigationOptions = {
+        title: 'Welcome',
+        header: null,
+    };
     constructor(props) {
         // super(props);
         super(props);
@@ -94,39 +98,6 @@ class Register extends React.Component {
             value,
         });
     };
-
-    // _handleAdd = (navigate) => {
-    //     const value = this.refs.form.getValue();
-    //     console.log('what is value', value);
-    //     if (value) {
-    //         const data = {
-    //             email: value.email,
-    //             password: value.password,
-    //         };
-    //   // Serialize and post the data
-    //         const json = JSON.stringify(data);
-    //         fetch('http://localhost:3000/users/register', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Accept: 'application/json',
-    //             },
-    //             body: json,
-    //         })
-    //         .then(response => response.json())
-    //   .then(() => {
-    //     // Redirect to login screen
-    //       navigate('Log');
-    //   })
-    //   .catch((error) => {
-    //       console.log('There was an error creating your account.', error);
-    //   })
-    //   .done();
-    //     } else {
-    //   // Form validation error
-    //         alert('Please fix the errors listed and try again.');
-    //     }
-    // }
 
     render() {
         const { navigate } = this.props.navigation;

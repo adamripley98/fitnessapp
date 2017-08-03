@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
+import { firebaseApp } from '../../firebase';
 
 const t = require('tcomb-form-native');
 
@@ -54,7 +55,10 @@ const styles = StyleSheet.create({
 });
 
 class LogScreen extends React.Component {
-
+    static navigationOptions = {
+        title: 'Welcome',
+        header: null,
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -95,47 +99,6 @@ class LogScreen extends React.Component {
           }
       });
     }
-    // _handleAdd = (navigate) => {
-    //     const value = this.refs.form.getValue();
-    //     // If the form is valid...
-    //     if (value) {
-    //         const data = {
-    //             username: value.email,
-    //             password: value.password,
-    //         };
-    //       // Serialize and post the data
-    //         const json = JSON.stringify(data);
-    //         fetch('http://localhost:3000/users/login', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Accept: 'application/json',
-    //             },
-    //             body: json,
-    //         })
-    //         .then(response => response.json())
-    //         .then((res) => {
-    //             console.log('this is res', res);
-    //             if (res.error) {
-    //                 alert(res.error);
-    //             } else {
-    //                 console.log('res.token', res.token);
-    //                 AsyncStorage.setItem('jwt', res.token);
-    //               // Redirect to home screen
-    //                 // this.props.navigator.pop();
-    //                 navigate('Protected');
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             console.log('error logging in', err);
-    //             // alert('There was an error logging in.');
-    //         })
-    //         .done();
-    //     } else {
-    //         // Form validation error
-    //         alert('Please fix the errors listed and try again.');
-    //     }
-    // }
 
     render() {
         const { navigate } = this.props.navigation;

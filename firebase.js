@@ -7,6 +7,6 @@ const config = {
     databaseURL: 'https://fitnessapp-8041a.firebaseio.com',
 };
 
-const firebaseRef = firebase.initializeApp(config);
+const firebaseApp = firebase.initializeApp(config);
 
-export default firebaseRef;
+export default firebaseApp;

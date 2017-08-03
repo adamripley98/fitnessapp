@@ -24,6 +24,8 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@shoutem/theme": "^0.10.0",
+    "@shoutem/ui": "^0.19.6",
     "babel-eslint": "^7.2.3",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",

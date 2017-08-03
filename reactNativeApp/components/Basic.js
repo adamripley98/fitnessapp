@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 import SideMenu from 'react-native-side-menu';
 import Menu from './Menu';
+import Map from './Map';
 
-const source = require('../assets/hamburgerIcon.png');
+const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
 const styles = StyleSheet.create({
     button: {
@@ -78,26 +79,14 @@ export default class Basic extends Component {
             onChange={isOpen => this.updateMenuState(isOpen)}
           >
             <View style={styles.container}>
-              <Text style={styles.welcome}>
-            Welcome to React Native!
-          </Text>
-              <Text style={styles.instructions}>
-            To get started, edit index.ios.js
-          </Text>
-              <Text style={styles.instructions}>
-            Press Cmd+R to reload,{'\n'}
-            Cmd+Control+Z for dev menu
-          </Text>
-              <Text style={styles.instructions}>
-            Current selected menu item is: {this.state.selectedItem}
-              </Text>
+              <Map />
             </View>
             <TouchableOpacity
               onPress={this.toggle}
               style={styles.button}
             >
               <Image
-                source={source}
+                source={hamburgerIcon}
                 style={{ width: 32, height: 32 }}
               />
             </TouchableOpacity>

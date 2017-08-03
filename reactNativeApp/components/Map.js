@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import MapStyle from './mapStyle.json';
+
+const currentLocation = require('../assets/icons/currentLocationBlue.png');
 
 export default class Map extends React.Component {
     constructor(props) {
@@ -11,8 +13,8 @@ export default class Map extends React.Component {
             currentRegion: {
                 latitude: null,
                 longitude: null,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.02,
+                latitudeDelta: null,
+                longitudeDelta: null,
             },
         };
     }
@@ -24,6 +26,8 @@ export default class Map extends React.Component {
                     currentRegion: {
                         latitude: success.coords.latitude,
                         longitude: success.coords.longitude,
+                        latitudeDelta: 0.005,
+                        longitudeDelta: 0.005,
                     },
                 });
             },
@@ -44,19 +48,29 @@ export default class Map extends React.Component {
                   initialRegion={{
                       latitude: this.state.currentRegion.latitude,
                       longitude: this.state.currentRegion.longitude,
-                      latitudeDelta: 0.02,
-                      longitudeDelta: 0.02,
+                      latitudeDelta: this.state.currentRegion.latitudeDelta,
+                      longitudeDelta: this.state.currentRegion.longitudeDelta,
                   }}
+                  region={this.state.currentRegion}
                   showsUserLocation
                   provider={PROVIDER_GOOGLE}
                   customMapStyle={MapStyle}
                 />
+                <TouchableOpacity
+                  onPress={this.getCurrentCoords.bind(this)}
+                  style={styles.currentLocation}
+                >
+                  <Image
+                    source={currentLocation}
+                    style={{ width: 32, height: 32 }}
+                  />
+                </TouchableOpacity>
               </View>
             );
         }
         return (
           <View style={styles.container}>
-            <Text>No</Text>
+            <Text>BOI</Text>
           </View>
         );
     }
@@ -68,10 +82,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        height: '100%',
+        width: '100%',
     },
     map: {
         position: 'absolute',
         height: '100%',
         width: '100%',
+    },
+    currentLocation: {
+        position: 'absolute',
+        bottom: 100,
+        right: 25,
     },
 });

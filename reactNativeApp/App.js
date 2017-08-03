@@ -1,9 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, AppRegistry, TouchableOpacity } from 'react-native';
-import { StackNavigator } from 'react-navigation';
-import RegisterScreen from './components/RegisterScreen';
-import LogScreen from './components/LogScreen';
-import ProtectedView from './components/ProtectedView';
+import { StyleSheet, Text, View } from 'react-native';
+import Login from './components/Login';
+import Map from './components/Map';
+import Basic from './components/Basic';
+import Modals from './components/Modal';
+
+export default class App extends React.Component {
+    render() {
+        return (
+          <View style={styles.container}>
+            <Basic />
+          </View>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -13,41 +23,3 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
-
-class App extends React.Component {
-    static navigationOptions = {
-        title: 'Welcome',
-    };
-    render() {
-        const { navigate } = this.props.navigation;
-        return (
-          <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigate('Register')}>
-              <Text>Go to register</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigate('Log')}>
-              <Text>Go to login</Text>
-            </TouchableOpacity>
-          </View>
-        );
-    }
-}
-
-const myApp = StackNavigator({
-    App: {
-        screen: App,
-    },
-    Log: {
-        screen: LogScreen,
-    },
-    Register: {
-        screen: RegisterScreen,
-    },
-    Protected: {
-        screen: ProtectedView,
-    },
-}, { initialRouteName: 'App' });
-
-AppRegistry.registerComponent('myApp', () => myApp);
-
-export default myApp;

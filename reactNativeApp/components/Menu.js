@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: window.width,
         height: window.height,
-        backgroundColor: 'gray',
+        backgroundColor: '#ff5c41',
         padding: 20,
     },
     avatarContainer: {

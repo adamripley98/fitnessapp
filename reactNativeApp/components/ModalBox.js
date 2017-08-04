@@ -69,9 +69,18 @@ export default class ModalBox extends React.Component {
               onClosed={this.onClose}
               onOpened={this.onOpen}
               onClosingState={this.onClosingState}
+              swipeArea={70}
             >
               <Text style={styles.text}>Basic modal</Text>
               <Button onPress={() => this.setState({ swipeToClose: !this.state.swipeToClose })} style={styles.btn}>Disable swipeToClose({this.state.swipeToClose ? 'true' : 'false'})</Button>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                decelerationRate={'fast'}
+              >
+                <View style={{ width: screen.width * 0.95, paddingLeft: 10 }}>
+                  {this.renderList()}
+                </View>
+              </ScrollView>
             </Modal>
 
             <Modal style={[styles.modal, styles.modal2]} backdrop={false} position={'top'} ref={'modal2'}>

@@ -69,6 +69,7 @@ export default class Map extends React.Component {
               <View style={styles.container}>
                 <MapView.Animated
                   style={styles.map}
+                  initialRegion={this.state.currentRegion}
                   region={this.state.currentRegion}
                   onRegionChange={this.onRegionChange.bind(this)}
                   showsUserLocation

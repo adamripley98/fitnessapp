@@ -62,6 +62,6 @@ const myApp = StackNavigator({
     Protected: {
         screen: ProtectedView,
     },
-}, { initialRouteName: 'App' });
+}, { initialRouteName: 'Log' });
 
 export default myApp;

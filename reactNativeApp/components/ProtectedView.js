@@ -44,11 +44,20 @@ class ProtectedView extends React.Component {
         title: 'Welcome',
         header: null,
     };
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+        };
+    }
     componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
+            } else {
+                this.setState({ name: user.displayName });
+                console.log('this is user', user);
             }
         });
     }
@@ -68,7 +77,7 @@ class ProtectedView extends React.Component {
         return (
           <View style={styles.container}>
             {
-              <Text style={styles.centering}>hey there sexi :P</Text>
+              <Text style={styles.centering}>hey there {this.state.name} :P</Text>
             }
             <TouchableHighlight onPress={() => this.logout(navigate)}>
               <Text style={[styles.button, styles.greenButton]}>Log out</Text>

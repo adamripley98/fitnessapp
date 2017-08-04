@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: '100%',
         width: '100%',
+        zIndex: 0,
     },
     map: {
         position: 'absolute',

@@ -52,10 +52,11 @@ export default class Map extends React.Component {
         navigator.geolocation.getCurrentPosition(
             (success) => {
                 this.state.currentRegion.timing({
+                    duration: 700,
                     latitude: success.coords.latitude,
                     longitude: success.coords.longitude,
-                    latitudeDelta: 0.005,
-                    longitudeDelta: 0.005,
+                    latitudeDelta: 0.007,
+                    longitudeDelta: 0.007,
                 }).start();
             },
             (error) => {
@@ -82,7 +83,7 @@ export default class Map extends React.Component {
                 >
                   <Image
                     source={currentLocation}
-                    style={{ width: 36, height: 36 }}
+                    style={{ width: 32, height: 32 }}
                   />
                 </TouchableOpacity>
               </View>
@@ -104,17 +105,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: '100%',
         width: '100%',
-        zIndex: 0,
     },
     map: {
-        position: 'absolute',
-        zIndex: 0,
         height: '100%',
         width: '100%',
     },
     currentLocation: {
         position: 'absolute',
-        bottom: 100,
+        bottom: 150,
         right: 15,
     },
 });

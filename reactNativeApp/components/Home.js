@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import ModalBox from 'react-native-modalbox';
+import LinearGradient from 'react-native-linear-gradient';
 
 import LeftModal from './modalComponents/LeftModal';
 import RightModal from './modalComponents/RightModal';
@@ -9,29 +10,33 @@ import BottomModal from './modalComponents/BottomModal';
 import Map from './Map';
 import styles from './ModalStyle';
 
+const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
+const settingsIcon = require('../assets/icons/settingsIcon.png');
+const xIcon = require('../assets/icons/xIcon.png');
+
 export default class Home extends Component {
     state = {
         visibleModal: null,
         bottomModalIsOpen: false,
     };
-    renderLeftModalContent = () => (
-      <View style={styles.modalContent}>
-        <Text>This is the left side</Text>
-        {this.renderButton('Close', () => this.setState({ visibleModal: null }))}
-        <LeftModal />
-      </View>
-    );
-    renderRightModalContent = () => (
-      <View style={styles.modalContent}>
-        <Text>This is the right side</Text>
-        {this.renderButton('Close', () => this.setState({ visibleModal: null }))}
-        <RightModal />
-      </View>
-    );
-    renderBottomModalContent = () => (
-      <View style={styles.bottomModal}>
-        <Text>Basic modal on Home</Text>
-        <BottomModal />
+
+    onMenuItemSelected = (item) => {
+        console.log(item);
+        this.setState({
+            isOpen: false,
+            selectedItem: item,
+        });
+    };
+
+    // LEFT
+    leftButton = () => (
+      <View style={styles.leftModalButton}>
+        <TouchableOpacity onPress={() => this.setState({ visibleModal: 'left' })} >
+          <Image
+            source={hamburgerIcon}
+            style={{ width: 36, height: 36 }}
+          />
+        </TouchableOpacity>
       </View>
     );
     leftModalFrame = () => (
@@ -41,8 +46,23 @@ export default class Home extends Component {
         animationIn={'slideInLeft'}
         animationOut={'slideOutLeft'}
       >
-        {this.renderLeftModalContent()}
+        <View style={styles.modalContent}>
+          <LeftModal onItemSelected={this.onMenuItemSelected} />
+          {this.xButton()}
+        </View>
       </Modal>
+    );
+
+    // RIGHT
+    rightButton = () => (
+      <View style={styles.rightModalButton}>
+        <TouchableOpacity onPress={() => this.setState({ visibleModal: 'right' })}>
+          <Image
+            source={hamburgerIcon}
+            style={{ width: 36, height: 36 }}
+          />
+        </TouchableOpacity>
+      </View>
     );
     rightModalFrame = () => (
       <Modal
@@ -51,8 +71,27 @@ export default class Home extends Component {
         animationIn={'slideInRight'}
         animationOut={'slideOutRight'}
       >
-        {this.renderRightModalContent()}
+        <View style={styles.modalContent}>
+          <Text>This is the right side</Text>
+          {this.renderButton('Close', () => this.setState({ visibleModal: null }))}
+          <RightModal />
+        </View>
       </Modal>
+    );
+
+
+    // BOTTOM
+    bottomButton = () => (
+      <View style={styles.bottomModalButton}>
+        <TouchableOpacity
+          style={{ width: '100%', display: 'flex', alignItems: 'center' }}
+          onPress={() => this.setState({ bottomModalIsOpen: true })}
+        >
+          <View style={styles.bottomButton}>
+            <Text style={{ fontSize: 30 }}>Gyms</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
     bottomModalFrame = () => (
       <ModalBox
@@ -63,9 +102,14 @@ export default class Home extends Component {
         swipeThreshold={175}
         swipeArea={100}
       >
-        {this.renderBottomModalContent()}
+        <View style={styles.bottomModal}>
+          <Text>Basic modal on Home</Text>
+          <BottomModal />
+        </View>
       </ModalBox>
     );
+
+    // GENERAL BUTTONS
     renderButton = (text, onPress) => (
       <TouchableOpacity onPress={onPress}>
         <View style={styles.button}>
@@ -73,39 +117,30 @@ export default class Home extends Component {
         </View>
       </TouchableOpacity>
     );
-    leftButton = (text, onPress) => (
-      <TouchableOpacity onPress={onPress}>
-        <View style={[styles.button, { position: 'absolute', left: 10, top: 20 }]}>
-          <Text>{text}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-    rightButton = (text, onPress) => (
-      <TouchableOpacity onPress={onPress}>
-        <View style={[styles.button, { position: 'absolute', right: 10, top: 20 }]}>
-          <Text>{text}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-    bottomButton = (text, onPress) => (
-      <TouchableOpacity onPress={onPress}>
-        <View style={styles.button}>
-          <Text>{text}</Text>
-        </View>
-      </TouchableOpacity>
-    );
+    xButton = () => (
+      <View style={styles.leftXButtonPosition}>
+        <TouchableOpacity onPress={() => this.setState({ visibleModal: null })}>
+          <View>
+            <Image
+              source={xIcon}
+              style={{ width: 20, height: 20 }}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
 
     render() {
         console.log(this.state.visibleModal);
         return (
           <View style={styles.container}>
-            {this.leftButton('Left Modal', () => this.setState({ visibleModal: 'left' }))}
-            {this.rightButton('Right Modal', () => this.setState({ visibleModal: 'right' }))}
-            {this.bottomButton('Bottom ModalBox', () => this.setState({ bottomModalIsOpen: true }))}
+            <Map />
+            {this.leftButton()}
+            {this.rightButton()}
+            {this.bottomButton()}
             {this.leftModalFrame()}
             {this.rightModalFrame()}
             {this.bottomModalFrame()}
-            <Map />
           </View>
         );
     }

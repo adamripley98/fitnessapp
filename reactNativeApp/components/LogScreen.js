@@ -107,6 +107,14 @@ export default class LoginScreen extends React.Component {
             password: '',
         };
     }
+    componentDidMount = () => {
+        const { navigate } = this.props.navigation;
+        firebase.auth().onAuthStateChanged((usr) => {
+            if (usr) {
+                navigate('UserProfile');
+            }
+        });
+    }
     componentWillUnmount() {
         this.setState = {
             email: '',
@@ -125,7 +133,7 @@ export default class LoginScreen extends React.Component {
       })
       .then(() => {
           if (noErr) {
-              navigate('Protected');
+              navigate('UserProfile');
           }
       });
     }
@@ -134,7 +142,8 @@ export default class LoginScreen extends React.Component {
         navigate('Register');
     }
 
-    forgot(navigate) {
+    // if user forgot password, will send email reset
+    forgot() {
         firebase.auth().sendPasswordResetEmail(this.state.email).then(() => {
             console.log('email sent');
         }).catch((error) => {
@@ -184,7 +193,7 @@ export default class LoginScreen extends React.Component {
                   <View>
                     <Text
                       style={styles.forgotPasswordText}
-                      onPress={() => this.forgot(navigate)}
+                      onPress={() => this.forgot()}
                     >Forgot Password?</Text>
                   </View>
                 </TouchableOpacity>

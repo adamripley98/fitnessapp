@@ -8,7 +8,9 @@ import firebase from 'firebase';
 // import Modals from './components/Modal';
 import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
-import ProtectedView from './components/ProtectedView';
+import UserProfileScreen from './components/UserProfileScreen';
+import EditUserProfileScreen from './components/EditUserProfileScreen';
+
 import { firebaseApp } from '../firebase';
 
 const styles = StyleSheet.create({
@@ -25,15 +27,6 @@ class App extends React.Component {
         title: 'Welcome',
         header: null,
     };
-    componentDidMount = () => {
-        // user = firebase.auth().currentUser;
-        const { navigate } = this.props.navigation;
-        firebase.auth().onAuthStateChanged((usr) => {
-            if (usr) {
-                navigate('Protected');
-            }
-        });
-    }
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -59,9 +52,15 @@ const myApp = StackNavigator({
     Register: {
         screen: RegisterScreen,
     },
-    Protected: {
-        screen: ProtectedView,
+    UserProfile: {
+        screen: UserProfileScreen,
     },
+    EditUserProfile: {
+        screen: EditUserProfileScreen,
+    }
+    // img: {
+    //     screen: image,
+    // }
 }, { initialRouteName: 'Log' });
 
 export default myApp;

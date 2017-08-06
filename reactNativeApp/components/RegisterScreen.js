@@ -141,6 +141,7 @@ export default class FakeReg extends React.Component {
               if (noErr) {
                   firebase.auth().currentUser.updateProfile({
                       displayName: this.state.name,
+                      photoURL: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
                   }).then(() => {
                     // update successful
                       navigate('Log');

@@ -12,20 +12,11 @@ import styles from './ModalStyle';
 
 const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 const settingsIcon = require('../assets/icons/settingsIcon.png');
-const xIcon = require('../assets/icons/xIcon.png');
 
 export default class Home extends Component {
     state = {
         visibleModal: null,
         bottomModalIsOpen: false,
-    };
-
-    onMenuItemSelected = (item) => {
-        console.log(item);
-        this.setState({
-            isOpen: false,
-            selectedItem: item,
-        });
     };
 
     // LEFT
@@ -47,8 +38,7 @@ export default class Home extends Component {
         animationOut={'slideOutLeft'}
       >
         <View style={styles.modalContent}>
-          <LeftModal onItemSelected={this.onMenuItemSelected} />
-          {this.xButton()}
+          <LeftModal menuLeftXPressed={this.leftXPressed} />
         </View>
       </Modal>
     );
@@ -117,21 +107,13 @@ export default class Home extends Component {
         </View>
       </TouchableOpacity>
     );
-    xButton = () => (
-      <View style={styles.leftXButtonPosition}>
-        <TouchableOpacity onPress={() => this.setState({ visibleModal: null })}>
-          <View>
-            <Image
-              source={xIcon}
-              style={{ width: 20, height: 20 }}
-            />
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
+
+    // FUNCTIONS
+    leftXPressed = () => {
+        this.setState({ visibleModal: null });
+    }
 
     render() {
-        console.log(this.state.visibleModal);
         return (
           <View style={styles.container}>
             <Map />

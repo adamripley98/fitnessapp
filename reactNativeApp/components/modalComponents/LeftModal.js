@@ -18,13 +18,13 @@ const profPic = '../assets/jchen.png';
 export default class LeftModal extends Component {
     state = {
         visibleModal: null,
+        selectedItem: null,
     };
 
     onMenuItemSelected = (item) => {
         console.log(item);
         this.setState({
-            isOpen: false,
-            selectedItem: item,
+            visibleModal: item,
         });
     };
     xButton = () => (
@@ -39,6 +39,22 @@ export default class LeftModal extends Component {
         </TouchableOpacity>
       </View>
     );
+
+    paymentMenu = () => (
+      <ModalBox
+        style={styles.modalPage}
+        swipeToClose
+        isOpen={this.state.visibleModal === 'Payment'}
+        onClosed={() => this.setState({ visibleModal: null })}
+        swipeThreshold={175}
+        swipeArea={100}
+      >
+        <View style={styles.bottomModal}>
+          <Text>Payment Menu</Text>
+        </View>
+      </ModalBox>
+    );
+
     render() {
         return (
           <View style={{ width: '100%', height: '100%' }}>
@@ -65,6 +81,7 @@ export default class LeftModal extends Component {
               </Text>
             </ScrollView>
             {this.xButton()}
+            {this.paymentMenu()}
           </View>
         );
     }

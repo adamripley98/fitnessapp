@@ -4,13 +4,14 @@ import Login from './components/Login';
 import Map from './components/Map';
 import Basic from './components/Basic';
 import Home from './components/Home';
+import HomeV2 from './components/HomeV2';
 import ModalBox from './components/ModalBox';
 
 export default class App extends React.Component {
     render() {
         return (
           <View style={styles.container}>
-            <Home />
+            <HomeV2 />
           </View>
         );
     }

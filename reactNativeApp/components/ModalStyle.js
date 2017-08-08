@@ -10,8 +10,6 @@ export default StyleSheet.create({
     modalContent: {
         backgroundColor: 'white',
         padding: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 0,
         borderColor: 'rgba(0, 0, 0, 0.1)',
         height: '100%',
@@ -97,6 +95,18 @@ export default StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.1)',
         height: '100%',
         width: '100%',
-
+    },
+    modalPage: {
+        backgroundColor: 'white',
+        padding: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        borderColor: 'black',
+        height: Dimensions.get('window').height,
+        width: Dimensions.get('window').width,
+        position: 'absolute',
+        left: 0,
+        top: 0,
     },
 });

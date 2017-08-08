@@ -146,7 +146,7 @@ export default class RegisterScreen extends React.Component {
                   }).then(() => {
                     // update successful
                       console.log('curUser', curUser);
-                      firebase.database().ref('/users/' + curUser.uid).set({
+                      firebase.database().ref(`/users/${curUser.uid}`).set({
                           fullName: this.state.name,
                           age: '99',
                           bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
@@ -230,7 +230,7 @@ export default class RegisterScreen extends React.Component {
                     />
                   </View>
                   <TextInput
-                    secureTextEntry={true}
+                    secureTextEntry
                     style={[styles.input, styles.whiteFont]}
                     placeholder="Password"
                     placeholderTextColor="#FFF"
@@ -249,7 +249,7 @@ export default class RegisterScreen extends React.Component {
                     />
                   </View>
                   <TextInput
-                    secureTextEntry={true}
+                    secureTextEntry
                     style={[styles.input, styles.whiteFont]}
                     placeholder="Confirm Password"
                     placeholderTextColor="#FFF"

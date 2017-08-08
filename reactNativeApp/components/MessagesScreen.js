@@ -77,6 +77,7 @@ class MessagesScreen extends React.Component {
         this.state = {
             name: '',
             userId: '',
+            threadId: null,
         };
     }
 
@@ -110,9 +111,28 @@ class MessagesScreen extends React.Component {
         console.log('message sent');
         console.log('messages', this.state.messages);
         const testMessage = {
-            text: 'hello there',
+            userId: this.state.userId,
+            body: 'This is the second message',
         };
-        firebase.database().ref(`messages/${this.state.userId}`).set(testMessage);
+        firebase.database().ref(`threads/${this.state.threadId}/messages`).push(testMessage);
+    }
+
+    createThread = () => {
+        const firstMessage = {
+            userId: this.state.userId,
+            body: 'This is the first message',
+        };
+        const threadsRef = firebase.database().ref('threads/');
+        threadsRef.once('value').then((snapshot) => {
+            const threads = snapshot.val();
+            if (true) {
+                const newThreadKey = threadsRef.push({
+                    users: [this.state.userId],
+                }).key;
+                firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+                this.setState({ threadId: newThreadKey });
+            }
+        });
     }
 
     render() {
@@ -124,8 +144,11 @@ class MessagesScreen extends React.Component {
               placeholder={'Send a message'}
               onChangeText={age => this.setState({ tempAge: age })}
             />
+            <TouchableOpacity onPress={() => this.createThread()}>
+              <Text style={[styles.button, styles.greenButton]}>Create Thread</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => this.sendMessage()}>
-              <Text style={[styles.button, styles.greenButton]}>Send message</Text>
+              <Text style={[styles.button, styles.greenButton]}>Send Message</Text>
             </TouchableOpacity>
           </View>
         );

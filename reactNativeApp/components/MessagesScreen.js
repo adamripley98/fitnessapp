@@ -112,7 +112,7 @@ class MessagesScreen extends React.Component {
         const testMessage = {
             text: 'hello there',
         };
-        firebase.database().ref('messages/' + this.state.userId).set(testMessage);
+        firebase.database().ref(`messages/${this.state.userId}`).set(testMessage);
     }
 
     render() {

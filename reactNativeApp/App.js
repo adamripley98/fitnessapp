@@ -31,12 +31,7 @@ class App extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigate('Register')}>
-              <Text>Go to register</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigate('Log')}>
-              <Text>Go to login</Text>
-            </TouchableOpacity>
+            <LogScreen />
           </View>
         );
     }
@@ -57,10 +52,7 @@ const myApp = StackNavigator({
     },
     EditUserProfile: {
         screen: EditUserProfileScreen,
-    }
-    // img: {
-    //     screen: image,
-    // }
+    },
 }, { initialRouteName: 'Log' });
 
 export default myApp;

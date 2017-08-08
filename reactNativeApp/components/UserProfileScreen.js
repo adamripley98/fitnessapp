@@ -12,13 +12,8 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
-import { firebaseApp } from '../../firebase';
-
-const ImagePicker = require('react-native-image-picker');
 
 const { width, height } = Dimensions.get('window');
-
-const brian = 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAxcAAAAJGNlMDkxMDJhLTUzMGEtNDhmMC04YzNhLWVmYWQ0YTc5MThiYw.jpg';
 
 const styles = StyleSheet.create({
     container: {
@@ -57,37 +52,48 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     mark: {
-        width: null,
-        height: null,
-        flex: 1,
+        width: 140,
+        height: 140,
+        // flex: 1,
+        borderWidth: 4,
+        borderRadius: 70,
     },
 });
 
-class ProtectedView extends React.Component {
+class UserProfileScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
     };
     constructor(props) {
         super(props);
-        let u = {};
-        const { navigate } = this.props.navigation;
         this.state = {
-            emailVerified: false,
-            name: 'Unspecified User',
-            profPic: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+            name: '',
         };
+    }
+
+    componentWillMount() {
+        const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
             } else {
                 console.log('user is', user);
-                this.setState({
-                    emailVerified: user.emailVerified,
-                    name: user.displayName || 'Joe Smith',
-                    profPic: user.photoURL || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-                });
                 console.log('what is state', this.state);
+                const userRef = firebase.database().ref('/users/' + user.uid);
+                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
+                userRef.on('value', (snapshot) => {
+                    console.log('snapshot inside user', snapshot);
+                    this.setState({
+                        emailVerified: user.emailVerified,
+                        name: user.displayName,
+                        profPic: user.photoURL,
+                        userId: user.uid,
+                        age: snapshot.val().age,
+                        bio: snapshot.val().bio,
+                    });
+                    console.log('what is state', this.state);
+                });
             }
         });
     }
@@ -141,4 +147,4 @@ class ProtectedView extends React.Component {
     }
   }
 
-module.exports = ProtectedView;
+module.exports = UserProfileScreen;

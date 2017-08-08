@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 });
 
 
-export default class LoginScreen extends React.Component {
+export default class LogScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -106,8 +106,6 @@ export default class LoginScreen extends React.Component {
             email: '',
             password: '',
         };
-    }
-    componentDidMount = () => {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((usr) => {
             if (usr) {
@@ -115,6 +113,7 @@ export default class LoginScreen extends React.Component {
             }
         });
     }
+
     componentWillUnmount() {
         this.setState = {
             email: '',

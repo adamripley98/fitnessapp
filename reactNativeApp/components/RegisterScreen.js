@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class FakeReg extends React.Component {
+export default class RegisterScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -139,11 +139,20 @@ export default class FakeReg extends React.Component {
           })
           .then(() => {
               if (noErr) {
-                  firebase.auth().currentUser.updateProfile({
+                  const curUser = firebase.auth().currentUser;
+                  curUser.updateProfile({
                       displayName: this.state.name,
                       photoURL: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
                   }).then(() => {
                     // update successful
+                      console.log('curUser', curUser);
+                      firebase.database().ref('/users/' + curUser.uid).set({
+                          fullName: this.state.name,
+                          age: '99',
+                          bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
+                      });
+                      return 'done';
+                  }).then(() => {
                       navigate('Log');
                   }).catch((e) => {
                       alert('error');

@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   AsyncStorage,
-  TouchableHighlight,
   TouchableOpacity,
   Component,
   StyleSheet,
@@ -14,8 +13,16 @@ import React from 'react';
 import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
+const background = require('./logos/bkg.jpg');
 
 const styles = StyleSheet.create({
+    banner: {
+        width,
+        height: 30,
+        margin: 7,
+        paddingTop: 10,
+        backgroundColor: '#656964',
+    },
     container: {
         marginTop: 40,
         padding: 10,
@@ -41,7 +48,6 @@ const styles = StyleSheet.create({
     },
     centering: {
         flex: 1,
-        paddingTop: 28,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -58,6 +64,16 @@ const styles = StyleSheet.create({
         borderWidth: 4,
         borderRadius: 70,
     },
+
+    // markWrap: {
+    //     flex: 1,
+    //     paddingVertical: 30,
+    // },
+    // mark: {
+    //     width: null,
+    //     height: null,
+    //     flex: 1,
+    // },
 });
 
 class UserProfileScreen extends React.Component {
@@ -101,6 +117,7 @@ class UserProfileScreen extends React.Component {
     verifyEmail = () => {
         firebase.auth().currentUser.sendEmailVerification().then(() => {
             console.log('verification email sent');
+            alert('Verification email sent!');
         }).catch((error) => {
             alert('Error sending verification email');
             console.log('error sending verification email', error);
@@ -124,13 +141,14 @@ class UserProfileScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
+            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
             {this.state.emailVerified === false ?
               <TouchableOpacity onPress={() => this.verifyEmail()}>
-                <Text> Click here to verify your email!</Text>
+                <Text style={styles.banner}> Click here to verify your email!</Text>
               </TouchableOpacity> :
               <View />}
             <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
-            <View style={styles.markWrap}>
+            <View>
               <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
             </View>
             <Text> {this.state.name} </Text>
@@ -139,9 +157,9 @@ class UserProfileScreen extends React.Component {
             <TouchableOpacity onPress={() => this.editProf(navigate)}>
               <Text> Edit profile</Text>
             </TouchableOpacity>
-            <TouchableHighlight onPress={() => this.logout()}>
+            <TouchableOpacity onPress={() => this.logout()}>
               <Text style={[styles.button, styles.greenButton]}>Log out</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         );
     }

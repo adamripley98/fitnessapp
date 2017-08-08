@@ -10,6 +10,7 @@ import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
+import MessagesScreen from './components/MessagesScreen';
 
 import { firebaseApp } from '../firebase';
 
@@ -52,6 +53,9 @@ const myApp = StackNavigator({
     },
     EditUserProfile: {
         screen: EditUserProfileScreen,
+    },
+    Messages: {
+        screen: MessagesScreen,
     },
 }, { initialRouteName: 'Log' });
 

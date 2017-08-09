@@ -23,13 +23,29 @@ const ImagePicker = require('react-native-image-picker');
 const { width, height } = Dimensions.get('window');
 
 const brian = 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAxcAAAAJGNlMDkxMDJhLTUzMGEtNDhmMC04YzNhLWVmYWQ0YTc5MThiYw.jpg';
+const background = require('./logos/bkg.jpg');
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 40,
-        padding: 10,
+    banner: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width,
+        height: 30,
+        textAlign: 'center',
+        paddingTop: 10,
+        paddingBottom: 30,
+        backgroundColor: '#f44336',
+        marginBottom: 20,
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        shadowColor: 'black',
+        shadowOffset: { height: 3, width: 3 },
+    },
+    cont: {
         flex: 1,
-        flexDirection: 'column',
+    },
+    container: {
+        flex: 1,
     },
     background: {
         width,
@@ -48,22 +64,79 @@ const styles = StyleSheet.create({
     blueButton: {
         backgroundColor: '#34AADC',
     },
+    bg: {
+        paddingTop: 30,
+        width: null,
+        height: null,
+    },
     centering: {
-        flex: 1,
-        paddingTop: 28,
+        backgroundColor: 'transparent',
+        fontSize: 35,
+        marginTop: 60,
+        marginBottom: 30,
+        alignContent: 'center',
+    },
+    markWrap: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+    },
+    markBio: {
         justifyContent: 'center',
         alignItems: 'center',
     },
-    markWrap: {
-        flex: 1,
-        paddingVertical: 10,
-        borderWidth: 5,
-        borderRadius: 10,
-    },
     mark: {
-        width: 300,
-        height: 300,
-        flex: 1,
+        width: 160,
+        height: 160,
+        borderWidth: 3,
+        borderRadius: 80,
+        backgroundColor: '#FFAB91',
+        opacity: 0.5,
+    },
+    name: {
+        fontSize: 20,
+        marginTop: 20,
+        backgroundColor: 'transparent',
+    },
+    icon: {
+        width: 30,
+        height: 30,
+        marginLeft: 150,
+    },
+    bio: {
+        backgroundColor: 'transparent',
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
+        borderColor: '#424242',
+        height: 60,
+        width: width - 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        paddingTop: 40,
+        paddingBottom: 40,
+    },
+    location: {
+        fontSize: 15,
+    },
+    profile: {
+        paddingTop: 30,
+        backgroundColor: '#FFAB91',
+    },
+    changePic: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent',
+        marginTop: -95,
+        paddingTop: 10,
+        paddingBottom: 10,
+    },
+    cent: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    public: {
+        borderBottomWidth: 2,
     },
 });
 
@@ -133,12 +206,6 @@ class EditUserProfileScreen extends React.Component {
         });
     }
 
-    // _pickImage = async () => {
-    //     if (!result.cancelled) {
-    //         this.setState({ profPic: result.uri });
-    //     }
-    // }
-
     saveChanges = (navigate) => {
         firebase.auth().currentUser.updateProfile({
             displayName: this.state.tempName || this.state.name,
@@ -170,33 +237,42 @@ class EditUserProfileScreen extends React.Component {
         console.log('email verified', this.state.emailVerified);
         return (
           <View style={styles.container}>
-            {this.state.emailVerified === false ?
-              <TouchableOpacity onPress={() => this.verifyEmail()}>
-                <Text> Click here to verify your email!</Text>
-              </TouchableOpacity> :
-              <View />}
-            <Text style={styles.centering}>Edit your profile, {this.state.name.split(' ')[0] || 'dood'}!</Text>
-            <View style={styles.markWrap}>
-              <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-            </View>
-            <TextInput
-              placeholder={this.state.name || 'Full name'}
-              onChangeText={usr => this.setState({ tempName: usr })}
-            />
-            <TextInput
-              placeholder={this.state.age || 'Age'}
-              onChangeText={age => this.setState({ tempAge: age })}
-            />
-            <TextInput
-              placeholder={this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`}
-              onChangeText={bio => this.setState({ bio })}
-            />
-            <TouchableOpacity onPress={() => this.changeProfPic()}>
-              <Text> Change profile pic</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.saveChanges(navigate)}>
-              <Text style={[styles.button, styles.greenButton]}>Save changes</Text>
-            </TouchableOpacity>
+            <Image
+              source={background}
+              style={[styles.cont, styles.bg]}
+              resizeMode="cover"
+            >
+              {this.state.emailVerified === false ?
+                <TouchableOpacity onPress={() => this.verifyEmail()}>
+                  <Text style={styles.banner}> Click here to verify your email!</Text>
+                </TouchableOpacity> :
+                <View />}
+              <View style={styles.public}>
+                <Text> Public Info </Text>
+                <View style={styles.markWrap}>
+                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
+                </View>
+                <TouchableOpacity style={styles.changePic} onPress={() => this.changeProfPic()}>
+                  <Text> Change Profile Photo</Text>
+                </TouchableOpacity>
+                <TextInput
+                  placeholder={this.state.name || 'Full name'}
+                  onChangeText={usr => this.setState({ tempName: usr })}
+                />
+                <TextInput
+                  placeholder={this.state.age || 'Age'}
+                  onChangeText={age => this.setState({ tempAge: age })}
+                />
+                <TextInput
+                  placeholder={this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`}
+                  onChangeText={bio => this.setState({ bio })}
+                />
+              </View>
+              <Text> Private Info </Text>
+              <TouchableOpacity onPress={() => this.saveChanges(navigate)}>
+                <Text style={[styles.button, styles.greenButton]}>Save changes</Text>
+              </TouchableOpacity>
+            </Image>
           </View>
         );
     }

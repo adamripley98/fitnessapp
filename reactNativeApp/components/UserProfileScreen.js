@@ -127,6 +127,7 @@ class UserProfileScreen extends React.Component {
     }
 
     componentWillMount() {
+      // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
@@ -138,14 +139,16 @@ class UserProfileScreen extends React.Component {
                 console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
-                    this.setState({
-                        emailVerified: user.emailVerified,
-                        name: user.displayName,
-                        profPic: user.photoURL,
-                        userId: user.uid,
-                        age: snapshot.val().age,
-                        bio: snapshot.val().bio,
-                    });
+                    if (snapshot !== null) {
+                        this.setState({
+                            emailVerified: user.emailVerified,
+                            name: user.displayName,
+                            profPic: user.photoURL,
+                            userId: user.uid,
+                            age: snapshot.val().age,
+                            bio: snapshot.val().bio,
+                        });
+                    }
                     console.log('what is state', this.state);
                 });
             }
@@ -214,9 +217,9 @@ class UserProfileScreen extends React.Component {
                 </View>
               </View>
             </Image>
-            <TouchableOpacity onPress={() => this.logout()}>
+            {/* <TouchableOpacity onPress={() => this.logout()}>
               <Text style={[styles.button, styles.greenButton]}>Log out</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         );
     }

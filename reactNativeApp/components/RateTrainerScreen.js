@@ -122,8 +122,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         height: 150,
         margin: 20,
-        // padding: 100,
-        // width: width - 30,
         backgroundColor: 'white',
         opacity: 0.5,
     },

@@ -130,38 +130,43 @@ export default class RegisterScreen extends React.Component {
 
     register(navigate) {
         let noErr = true;
-        if (this.state.password === this.state.confirmPassword) {
-            firebase.auth().createUserWithEmailAndPassword(this.state.email,
-          this.state.password).catch((error) => {
-              noErr = false;
-              alert(error.message);
-              console.log('Error registering with firebase', error.code, error.message);
-          })
-          .then(() => {
-              if (noErr) {
-                  const curUser = firebase.auth().currentUser;
-                  curUser.updateProfile({
-                      displayName: this.state.name,
-                      photoURL: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
-                  }).then(() => {
-                    // update successful
-                      console.log('curUser', curUser);
-                      firebase.database().ref(`/users/${curUser.uid}`).set({
-                          fullName: this.state.name,
-                          age: '99',
-                          bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
-                      });
-                      return 'done';
-                  }).then(() => {
-                      navigate('Log');
-                  }).catch((e) => {
-                      alert('error');
-                      console.log('err', e);
-                  });
-              }
-          });
-        } else {
+        if (!this.state.name || !this.state.email || !this.state.password ||
+          !this.state.confirmPassword) {
+            alert('All fields must be filled in');
+        } else if (this.state.password !== this.state.confirmPassword) {
             alert('Passwords must match');
+        } else if (this.state.name.indexOf(' ') === -1) {
+            alert('Please enter full name');
+        } else {
+            firebase.auth().createUserWithEmailAndPassword(this.state.email,
+        this.state.password).catch((error) => {
+            noErr = false;
+            alert(error.message);
+            console.log('Error registering with firebase', error.code, error.message);
+        })
+        .then(() => {
+            if (noErr) {
+                const curUser = firebase.auth().currentUser;
+                curUser.updateProfile({
+                    displayName: this.state.name,
+                    photoURL: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+                }).then(() => {
+                  // update successful
+                    console.log('curUser', curUser);
+                    firebase.database().ref(`/users/${curUser.uid}`).set({
+                        fullName: this.state.name,
+                        age: '99',
+                        bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
+                    });
+                    return 'done';
+                }).then(() => {
+                    navigate('Log');
+                }).catch((e) => {
+                    alert('error');
+                    console.log('err', e);
+                });
+            }
+        });
         }
     }
 
@@ -194,7 +199,7 @@ export default class RegisterScreen extends React.Component {
                   </View>
                   <TextInput
                     style={[styles.input, styles.whiteFont]}
-                    placeholder="Name"
+                    placeholder="Full Name"
                     placeholderTextColor="#FFF"
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"

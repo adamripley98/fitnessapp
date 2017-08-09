@@ -151,6 +151,20 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 70,
     },
+    textBox: {
+        borderWidth: 2,
+        height: 120,
+        margin: 10,
+        backgroundColor: 'white',
+        opacity: 0.5,
+    },
+    textBoxSmall: {
+        borderWidth: 2,
+        height: 30,
+        margin: 10,
+        backgroundColor: 'white',
+        opacity: 0.5,
+    },
 });
 
 class EditUserProfileScreen extends React.Component {
@@ -269,20 +283,26 @@ class EditUserProfileScreen extends React.Component {
                   <Text> Change Profile Photo</Text>
                 </TouchableOpacity>
                 <View style={styles.input}>
-                  <TextInput
-                    placeholder={this.state.name || 'Full name'}
-                    onChangeText={usr => this.setState({ tempName: usr })}
-                  />
-                  <TextInput
-                    placeholder={this.state.age || 'Age'}
-                    onChangeText={age => this.setState({ tempAge: age })}
-                  />
-                  <TextInput
-                    placeholder={this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`}
-                    onChangeText={bio => this.setState({ bio })}
-                    multiline={true}
-                    numberOfLines={10}
-                  />
+                  <View style={styles.textBoxSmall}>
+                    <TextInput
+                      placeholder={'Enter your full name'}
+                      onChangeText={usr => this.setState({ tempName: usr })}
+                    />
+                  </View>
+                  <View style={styles.textBoxSmall}>
+                    <TextInput
+                      placeholder={'Enter your age'}
+                      onChangeText={age => this.setState({ tempAge: age })}
+                    />
+                  </View>
+                  <View style={styles.textBox}>
+                    <TextInput
+                      placeholder={`${this.state.name.split(' ')[0]}, explain your fitness goals.`}
+                      onChangeText={bio => this.setState({ bio })}
+                      multiline={true}
+                      numberOfLines={10}
+                    />
+                  </View>
                 </View>
               </View>
               <View style={styles.private}>

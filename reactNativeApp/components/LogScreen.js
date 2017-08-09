@@ -109,7 +109,7 @@ export default class LogScreen extends React.Component {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((usr) => {
             if (usr) {
-                navigate('Rating');
+                navigate('UserProfile');
             }
         });
     }
@@ -166,7 +166,7 @@ export default class LogScreen extends React.Component {
                     <Image source={personIcon} style={styles.icon} resizeMode="contain" />
                   </View>
                   <TextInput
-                    placeholder="Username"
+                    placeholder="Email Address"
                     placeholderTextColor="#FFF"
                     autoCapitalize="none"
                     autoCorrect={false}

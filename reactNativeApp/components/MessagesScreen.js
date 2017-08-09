@@ -78,6 +78,7 @@ class MessagesScreen extends React.Component {
             name: '',
             userId: '',
             threadId: null,
+            currentMessage: null,
         };
     }
 
@@ -109,18 +110,21 @@ class MessagesScreen extends React.Component {
 
     sendMessage = () => {
         console.log('message sent');
-        console.log('messages', this.state.messages);
-        const testMessage = {
+        console.log('messages', this.state.currentMessage);
+        const messageToSend = {
             userId: this.state.userId,
-            body: 'This is the second message',
+            body: this.state.currentMessage,
         };
-        firebase.database().ref(`threads/${this.state.threadId}/messages`).push(testMessage);
+        if (this.state.currentMessage) {
+            firebase.database().ref(`threads/${this.state.threadId}/messages`).push(messageToSend);
+            this.setState({ currentMessage: null });
+        }
     }
 
     createThread = () => {
         const firstMessage = {
-            userId: this.state.userId,
-            body: 'This is the first message',
+            userId: 'TRIM_BOT',
+            body: 'This is the start of your conversation with your trainer',
         };
         const threadsRef = firebase.database().ref('threads/');
         threadsRef.once('value').then((snapshot) => {
@@ -135,6 +139,16 @@ class MessagesScreen extends React.Component {
         });
     }
 
+    displayMessages = () => {
+        const ref = firebase.database().ref(`threads/${this.state.threadId}/messages`);
+        ref.on('value', (snapshot) => {
+            console.log(snapshot.val());
+            for (const key in snapshot.val()) {
+                console.log(snapshot.val()[key].body);
+            }
+        });
+    }
+
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -142,13 +156,17 @@ class MessagesScreen extends React.Component {
             <Text style={styles.centering}>Here are your messages, {this.state.name.split(' ')[0] || 'dood'}!</Text>
             <TextInput
               placeholder={'Send a message'}
-              onChangeText={age => this.setState({ tempAge: age })}
+              onChangeText={message => this.setState({ currentMessage: message })}
+              value={this.state.currentMessage}
             />
             <TouchableOpacity onPress={() => this.createThread()}>
               <Text style={[styles.button, styles.greenButton]}>Create Thread</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.sendMessage()}>
               <Text style={[styles.button, styles.greenButton]}>Send Message</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.displayMessages()}>
+              <Text style={[styles.button, styles.greenButton]}>Log Message</Text>
             </TouchableOpacity>
           </View>
         );

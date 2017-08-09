@@ -136,7 +136,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     public: {
+        borderTopWidth: 2,
         borderBottomWidth: 2,
+        backgroundColor: 'transparent',
+        marginLeft: 30,
+        borderColor: '#424242',
+    },
+    private: {
+        backgroundColor: 'transparent',
+        marginLeft: 30,
+        borderBottomWidth: 2,
+        borderColor: '#424242',
+    },
+    input: {
+        marginTop: 70,
     },
 });
 
@@ -248,27 +261,33 @@ class EditUserProfileScreen extends React.Component {
                 </TouchableOpacity> :
                 <View />}
               <View style={styles.public}>
-                <Text> Public Info </Text>
+                <Text> Public Information </Text>
                 <View style={styles.markWrap}>
                   <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
                 </View>
                 <TouchableOpacity style={styles.changePic} onPress={() => this.changeProfPic()}>
                   <Text> Change Profile Photo</Text>
                 </TouchableOpacity>
-                <TextInput
-                  placeholder={this.state.name || 'Full name'}
-                  onChangeText={usr => this.setState({ tempName: usr })}
-                />
-                <TextInput
-                  placeholder={this.state.age || 'Age'}
-                  onChangeText={age => this.setState({ tempAge: age })}
-                />
-                <TextInput
-                  placeholder={this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`}
-                  onChangeText={bio => this.setState({ bio })}
-                />
+                <View style={styles.input}>
+                  <TextInput
+                    placeholder={this.state.name || 'Full name'}
+                    onChangeText={usr => this.setState({ tempName: usr })}
+                  />
+                  <TextInput
+                    placeholder={this.state.age || 'Age'}
+                    onChangeText={age => this.setState({ tempAge: age })}
+                  />
+                  <TextInput
+                    placeholder={this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`}
+                    onChangeText={bio => this.setState({ bio })}
+                    multiline={true}
+                    numberOfLines={10}
+                  />
+                </View>
               </View>
-              <Text> Private Info </Text>
+              <View style={styles.private}>
+                <Text> Private Information </Text>
+              </View>
               <TouchableOpacity onPress={() => this.saveChanges(navigate)}>
                 <Text style={[styles.button, styles.greenButton]}>Save changes</Text>
               </TouchableOpacity>

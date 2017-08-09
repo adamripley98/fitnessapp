@@ -8,14 +8,18 @@ import {
   Text,
   View,
   Image,
+  TextInput,
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
+import Stars from 'react-native-stars';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
 const locationPic = require('./logos/location.png');
+const emp = require('./logos/emptystar.png');
+const full = require('./logos/starrating.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -43,11 +47,13 @@ const styles = StyleSheet.create({
         height,
     },
     button: {
-        borderRadius: 4,
-        padding: 20,
+        borderRadius: 10,
+        padding: 10,
         textAlign: 'center',
-        marginBottom: 20,
+        alignItems: 'center',
+        // marginBottom: 10,
         color: '#fff',
+        backgroundColor: 'transparent',
     },
     greenButton: {
         backgroundColor: '#4CD964',
@@ -112,9 +118,18 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
+    textBox: {
+        borderWidth: 2,
+        height: 150,
+        margin: 20,
+        // padding: 100,
+        // width: width - 30,
+        backgroundColor: 'white',
+        opacity: 0.5,
+    },
 });
 
-class UserProfileScreen extends React.Component {
+class RateTrainerScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -132,94 +147,76 @@ class UserProfileScreen extends React.Component {
             if (!user) {
                 navigate('Log');
             } else {
-                console.log('user is', user);
-                console.log('what is state', this.state);
                 const userRef = firebase.database().ref('/users/' + user.uid);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
-                    console.log('snapshot inside user', snapshot);
                     this.setState({
-                        emailVerified: user.emailVerified,
                         name: user.displayName,
                         profPic: user.photoURL,
                         userId: user.uid,
-                        age: snapshot.val().age,
-                        bio: snapshot.val().bio,
+                        trainer: 'Brian',
+                        stars: 0,
+                        feedback: null,
                     });
-                    console.log('what is state', this.state);
                 });
             }
         });
     }
 
-    verifyEmail = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
-            console.log('verification email sent');
-            alert('Verification email sent!');
-        }).catch((error) => {
-            alert('Error sending verification email');
-            console.log('error sending verification email', error);
-        });
-    }
-
-    logout = () => {
-        firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-        }).catch((error) => {
-        // An error happened.
-            alert(error.message);
-        });
-    }
-
-    editProf = (navigate) => {
-        navigate('EditUserProfile');
+    submit = (navigate) => {
+        if (this.state.stars === 0) {
+            alert('Enter a star rating');
+        } else if (this.state.feedback === null) {
+            alert('Enter some feedback');
+        } else {
+            console.log('star rating:', this.state.stars);
+            console.log('feedback', this.state.feedback);
+            this.setState({ stars: 0 });
+            this.setState({ feedback: null });
+            // TODO: update firebase trainer profile with given rating and feedback.
+            // TODO: send trainer feedback email
+            navigate('UserProfile');
+        }
     }
 
     render() {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
             <Image
               source={background}
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-            {this.state.emailVerified === false ?
-              <TouchableOpacity onPress={() => this.verifyEmail()}>
-                <Text style={styles.banner}> Click here to verify your email!</Text>
-              </TouchableOpacity> :
-              <View />}
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>{this.state.name.split(' ')[0] || 'dood'}, give your trainer {this.state.trainer} a rating and some feedback!</Text>
               </View>
-              <View style={styles.pdrofile}>
-                <View style={styles.markWrap}>
-                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-                </View>
-                <View style={styles.markBio}>
-                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
-                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.markWrap}>
-                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  {/* <View>
-                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
-                    <Text style={styles.location}> Current Location </Text>
-                  </View> */}
-                  <View style={styles.bio}>
-                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
-                  </View>
-                </View>
+              <View style={{ alignItems: 'center' }}>
+                <Stars
+                  half={false}
+                  rating={0}
+                  update={val => this.setState({ stars: val })}
+                  spacing={7}
+                  starSize={50}
+                  count={5}
+                  fullStar={full}
+                  emptyStar={emp}
+                />
               </View>
+              <View style={styles.textBox}>
+                <TextInput
+                  placeholder={`Give ${this.state.trainer} some feedback`}
+                  onChangeText={feedback => this.setState({ feedback })}
+                  multiline={true}
+                  numberOfLines={10}
+                />
+              </View>
+              <TouchableOpacity onPress={() => this.submit(navigate)}>
+                <Text style={styles.button}>Submit Rating</Text>
+              </TouchableOpacity>
             </Image>
-            <TouchableOpacity onPress={() => this.logout()}>
-              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
-            </TouchableOpacity>
           </View>
         );
     }
   }
 
-module.exports = UserProfileScreen;
+module.exports = RateTrainerScreen;

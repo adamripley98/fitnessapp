@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         paddingVertical: 25,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 15,
+        marginBottom: 5,
     },
     signin: {
         justifyContent: 'center',

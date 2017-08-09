@@ -12,6 +12,7 @@ import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
 import MessagesScreen from './components/MessagesScreen';
 import PaymentScreen from './components/PaymentScreen';
+import RateTrainerScreen from './components/RateTrainerScreen';
 
 import { firebaseApp } from '../firebase';
 
@@ -60,6 +61,9 @@ const myApp = StackNavigator({
     },
     Payment: {
         screen: PaymentScreen,
+    },
+    Rating: {
+        screen: RateTrainerScreen,
     },
 }, { initialRouteName: 'Log' });
 

@@ -14,20 +14,29 @@ import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
+const editProfPic = require('./logos/editprof.png');
+const locationPic = require('./logos/location.png');
 
 const styles = StyleSheet.create({
     banner: {
+        justifyContent: 'center',
+        alignItems: 'center',
         width,
         height: 30,
-        margin: 7,
+        textAlign: 'center',
         paddingTop: 10,
-        backgroundColor: '#656964',
+        paddingBottom: 30,
+        backgroundColor: '#f44336',
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        shadowColor: 'black',
+        shadowOffset: { height: 3, width: 3 },
+    },
+    cont: {
+        flex: 1,
     },
     container: {
-        marginTop: 40,
-        padding: 10,
         flex: 1,
-        flexDirection: 'column',
     },
     background: {
         width,
@@ -46,34 +55,63 @@ const styles = StyleSheet.create({
     blueButton: {
         backgroundColor: '#34AADC',
     },
+    bg: {
+        paddingTop: 30,
+        width: null,
+        height: null,
+    },
     centering: {
-        flex: 1,
+        backgroundColor: 'transparent',
+        fontSize: 35,
+        marginTop: 60,
+        marginBottom: 30,
+        alignContent: 'center',
+    },
+    markWrap: {
         justifyContent: 'center',
         alignItems: 'center',
     },
-    markWrap: {
-        flex: 1,
-        paddingVertical: 10,
-        borderWidth: 5,
-        borderRadius: 10,
+    markBio: {
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     mark: {
-        width: 140,
-        height: 140,
-        // flex: 1,
-        borderWidth: 4,
-        borderRadius: 70,
+        width: 160,
+        height: 160,
+        borderWidth: 3,
+        borderRadius: 80,
+        backgroundColor: '#FFAB91',
     },
-
-    // markWrap: {
-    //     flex: 1,
-    //     paddingVertical: 30,
-    // },
-    // mark: {
-    //     width: null,
-    //     height: null,
-    //     flex: 1,
-    // },
+    name: {
+        fontSize: 20,
+        marginTop: 20,
+        backgroundColor: 'transparent',
+    },
+    icon: {
+        width: 30,
+        height: 30,
+        marginLeft: 150,
+    },
+    bio: {
+        backgroundColor: 'transparent',
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
+        borderColor: '#424242',
+        height: 60,
+        width: width - 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        paddingTop: 40,
+        paddingBottom: 40,
+    },
+    location: {
+        fontSize: 15,
+    },
+    profile: {
+        paddingTop: 30,
+        backgroundColor: '#FFAB91',
+    },
 });
 
 class UserProfileScreen extends React.Component {
@@ -142,24 +180,43 @@ class UserProfileScreen extends React.Component {
         return (
           <View style={styles.container}>
             {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
+            <Image
+              source={background}
+              style={[styles.cont, styles.bg]}
+              resizeMode="cover"
+            >
             {this.state.emailVerified === false ?
               <TouchableOpacity onPress={() => this.verifyEmail()}>
                 <Text style={styles.banner}> Click here to verify your email!</Text>
               </TouchableOpacity> :
               <View />}
-            <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
-            <View>
-              <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-            </View>
-            <Text> {this.state.name} </Text>
-            <Text> Age: {this.state.age || '?'} </Text>
-            <Text> Short bio: {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
-            <TouchableOpacity onPress={() => this.editProf(navigate)}>
-              <Text> Edit profile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.logout()}>
+              <View style={styles.markBio}>
+                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+              </View>
+              <View style={styles.pdrofile}>
+                <View style={styles.markWrap}>
+                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
+                </View>
+                <View style={styles.markBio}>
+                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
+                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.markWrap}>
+                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
+                  {/* <View>
+                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
+                    <Text style={styles.location}> Current Location </Text>
+                  </View> */}
+                  <View style={styles.bio}>
+                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
+                  </View>
+                </View>
+              </View>
+            </Image>
+            {/* <TouchableOpacity onPress={() => this.logout()}>
               <Text style={[styles.button, styles.greenButton]}>Log out</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         );
     }

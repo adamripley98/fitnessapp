@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     button: {
         position: 'absolute',
         top: 20,
-        padding: 10,
+        left: 10,
+        padding: 0,
     },
     caption: {
         fontSize: 20,

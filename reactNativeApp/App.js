@@ -3,13 +3,15 @@ import { StyleSheet, Text, View } from 'react-native';
 import Login from './components/Login';
 import Map from './components/Map';
 import Basic from './components/Basic';
-import Modals from './components/Modal';
+import Home from './components/Home';
+import HomeV2 from './components/HomeV2';
+import ModalBox from './components/ModalBox';
 
 export default class App extends React.Component {
     render() {
         return (
           <View style={styles.container}>
-            <Basic />
+            <HomeV2 />
           </View>
         );
     }

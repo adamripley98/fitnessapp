@@ -2,76 +2,85 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Dimensions,
-  StyleSheet,
+  TouchableOpacity,
   ScrollView,
   View,
   Image,
   Text,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import Orientation from 'react-native-orientation';
+import menuStyles from './MenuStyle';
 
 const window = Dimensions.get('window');
 const uri1 = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
 const uri = 'http://www.pngpix.com/wp-content/uploads/2016/10/PNGPIX-COM-Duck-PNG-Transparent-Image-1-500x587.png';
 const profPic = '../assets/jchen.png';
 
-const styles = StyleSheet.create({
-    menu: {
-        flex: 1,
-        width: window.width,
-        height: window.height,
-        backgroundColor: 'gray',
-        padding: 20,
-    },
-    avatarContainer: {
-        marginBottom: 20,
-        marginTop: 20,
-    },
-    avatar: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
-        flex: 1,
-    },
-    name: {
-        position: 'absolute',
-        left: 70,
-        top: 20,
-    },
-    item: {
-        fontSize: 14,
-        fontWeight: '300',
-        paddingTop: 5,
-    },
-});
 
-export default function Menu({ onItemSelected }) {
-    return (
-      <ScrollView scrollsToTop={false} style={styles.menu}>
-        <View style={styles.avatarContainer}>
-          <Image
-            style={styles.avatar}
-            source={{ uri }}
-          />
-          <Text style={styles.name}>Jeffrey Chen</Text>
-        </View>
+const xIcon = require('../assets/icons/xIcon.png');
 
-        <Text
-          onPress={() => onItemSelected('About')}
-          style={styles.item}
-        >
-        About
-      </Text>
 
-        <Text
-          onPress={() => onItemSelected('Contacts')}
-          style={styles.item}
-        >
-        Contacts
-      </Text>
-      </ScrollView>
-    );
+export default class Menu extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    xButton = () => (
+      <View style={{
+          position: 'absolute',
+          top: 10,
+          right: 0,
+      }}
+      >
+        <TouchableOpacity onPress={() => this.props.xPressed()}>
+          <View>
+            <Image
+              source={xIcon}
+              style={{ width: 20, height: 20 }}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+    render() {
+        return (
+          <ScrollView scrollEnabled={false} scrollsToTop={false} style={menuStyles.menu}>
+            {this.xButton()}
+
+            <View style={menuStyles.avatarContainer}>
+              <Image
+                style={menuStyles.avatar}
+                source={{ uri }}
+              />
+              <Text style={menuStyles.name}>Jeffrey Chen</Text>
+            </View>
+
+            <Text
+              onPress={() => this.props.onItemSelected('Map')}
+              style={menuStyles.item}
+            >
+              Map
+            </Text>
+
+            <Text
+              onPress={() => this.props.onItemSelected('Profile')}
+              style={menuStyles.item}
+            >
+              Profile
+            </Text>
+
+            <Text
+              onPress={() => this.props.onItemSelected('Payment')}
+              style={menuStyles.item}
+            >
+              Payment
+            </Text>
+          </ScrollView>
+        );
+    }
 }
 
 Menu.propTypes = {
     onItemSelected: PropTypes.func.isRequired,
+    xPressed: PropTypes.func.isRequired,
 };

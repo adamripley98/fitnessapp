@@ -14,7 +14,7 @@ import Orientation from 'react-native-orientation';
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
 import Map from './Map';
-import Profile from './Profile';
+import UserProfileScreen from './UserProfileScreen';
 import Payment from './Payment';
 
 const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
@@ -82,8 +82,14 @@ const styles = StyleSheet.create({
 });
 
 export default class Basic extends Component {
+    static navigationOptions = {
+        title: 'Home',
+        header: null,
+    };
     constructor(props) {
         super(props);
+
+        const { navigate } = this.props.navigation;
 
         this.toggle = this.toggle.bind(this);
 
@@ -158,8 +164,8 @@ export default class Basic extends Component {
         switch (this.state.selectedItem) {
             case 'Map':
                 return (<Map />);
-            case 'Profile':
-                return (<Profile />);
+            case 'UserProfileScreen':
+                return (<UserProfileScreen />);
             case 'Payment':
                 return (<Payment />);
             default:

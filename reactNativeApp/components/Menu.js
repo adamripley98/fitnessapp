@@ -63,7 +63,7 @@ export default class Menu extends React.Component {
             </Text>
 
             <Text
-              onPress={() => this.props.onItemSelected('Profile')}
+              onPress={() => this.props.onItemSelected('UserProfileScreen')}
               style={menuStyles.item}
             >
               Profile

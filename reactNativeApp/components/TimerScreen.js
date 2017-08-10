@@ -186,7 +186,7 @@ class TimerScreen extends React.Component {
             sessionLength: this.state.totalSeconds,
         };
         firebase.database().ref('/users/' + this.state.userId + '/trainingSessions').push({
-            testSession: latestSession,
+            session: latestSession,
         });
         navigate('Rating');
     }

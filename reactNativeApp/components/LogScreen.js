@@ -109,7 +109,7 @@ export default class LogScreen extends React.Component {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((usr) => {
             if (usr) {
-                navigate('HomeV2');
+                navigate('Messages');
             }
         });
     }
@@ -132,7 +132,8 @@ export default class LogScreen extends React.Component {
       })
       .then(() => {
           if (noErr) {
-              navigate('UserProfile');
+              console.log('logging in');
+              navigate('Messenger');
           }
       });
     }

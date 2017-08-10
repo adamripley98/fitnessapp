@@ -10,6 +10,7 @@ import {
   Image,
   TextInput,
 } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 import React from 'react';
 import firebase from 'firebase';
 
@@ -76,7 +77,7 @@ class MessagesScreen extends React.Component {
         super(props);
         this.state = {
             name: '',
-            userId: '',
+            userId: null,
             threadId: null,
             currentMessage: null,
         };
@@ -109,8 +110,6 @@ class MessagesScreen extends React.Component {
 
 
     sendMessage = () => {
-        console.log('message sent');
-        console.log('messages', this.state.currentMessage);
         const messageToSend = {
             userId: this.state.userId,
             body: this.state.currentMessage,
@@ -141,11 +140,30 @@ class MessagesScreen extends React.Component {
 
     displayMessages = () => {
         const ref = firebase.database().ref(`threads/${this.state.threadId}/messages`);
+        const messages = [];
         ref.on('value', (snapshot) => {
-            console.log(snapshot.val());
             for (const key in snapshot.val()) {
-                console.log(snapshot.val()[key].body);
+                if (snapshot.val()[key].userId === this.state.userId) {
+                    messages.push(snapshot.val()[key].body);
+                }
             }
+        });
+        return (
+          <List>
+            {
+              messages.map(item => (
+                <Text>{item}</Text>
+              ))
+            }
+          </List>
+        );
+    }
+
+    signOut = () => {
+        firebase.auth().signOut().then(() => {
+            console.log('Signed out');
+        }, (error) => {
+            console.log('Sign out failed', error);
         });
     }
 
@@ -154,6 +172,7 @@ class MessagesScreen extends React.Component {
         return (
           <View style={styles.container}>
             <Text style={styles.centering}>Here are your messages, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+            {this.displayMessages()}
             <TextInput
               placeholder={'Send a message'}
               onChangeText={message => this.setState({ currentMessage: message })}
@@ -167,6 +186,9 @@ class MessagesScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.displayMessages()}>
               <Text style={[styles.button, styles.greenButton]}>Log Message</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.signOut()}>
+              <Text style={[styles.button, styles.greenButton, { backgroundColor: 'red' }]}>Sign Out</Text>
             </TouchableOpacity>
           </View>
         );

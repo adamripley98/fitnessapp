@@ -10,6 +10,7 @@ import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
+import Messenger from './components/Messenger';
 import MessagesScreen from './components/MessagesScreen';
 import PaymentScreen from './components/PaymentScreen';
 import RateTrainerScreen from './components/RateTrainerScreen';
@@ -86,6 +87,9 @@ const myApp = StackNavigator({
     HomeV2: {
         screen: HomeV2,
     },
-}, { initialRouteName: 'Log' });
+    Messenger: {
+        screen: Messenger,
+    },
+}, { initialRouteName: 'Messenger' });
 
 export default myApp;

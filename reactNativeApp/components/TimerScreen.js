@@ -1,18 +1,13 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
   View,
   Image,
-  TextInput,
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
-import Stars from 'react-native-stars';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
@@ -134,18 +129,29 @@ class TimerScreen extends React.Component {
         super(props);
         this.state = {
             totalSeconds: 0,
-            hours: 0,
             minutes: 0,
             seconds: 0,
+            trainer: 'Brian',
         };
     }
 
     componentWillMount() {
+      // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
             } else {
+                const userRef = firebase.database().ref('/users/' + user.uid);
+                console.log('WHAT IS USER ID INSIDE EDIT', user.uid);
+                userRef.on('value', (snapshot) => {
+                    console.log('snapshot trainingSesh inside timer', snapshot.val().trainingSessions);
+                    this.setState({
+                        userId: user.uid,
+                        trainingSessions: snapshot.val().trainingSessions || [],
+                    });
+                    console.log('trainingsesh', this.state.trainingSessions);
+                });
                 // starts timer
                 this.start();
             }
@@ -153,17 +159,15 @@ class TimerScreen extends React.Component {
     }
 
     CountTimer = () => {
-        console.log('happening every second');
-        let totalSeconds = this.state.totalSeconds;
-        let hours = Math.floor(totalSeconds / 3600);
-        let minutes = Math.floor((totalSeconds - hours * 3600)/ 60);
-        let seconds = totalSeconds - (hours * 3600 + minutes * 60);
+        // console.log('happening every second');
+        const totalSeconds = this.state.totalSeconds + 1;
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds - (minutes * 60);
         this.setState({
             totalSeconds,
-            hours,
             minutes,
             seconds,
-        })
+        });
     }
 
     start = () => {
@@ -172,12 +176,31 @@ class TimerScreen extends React.Component {
     }
 
     stop = (navigate) => {
-        console.log('session stopped', this.state.hours, this.state.minutes, this.state.seconds, this.state.totalSeconds);
+        console.log('session stopped', this.state.minutes, this.state.seconds, this.state.totalSeconds);
         clearInterval(timerVar);
         // TODO: stop timer, update firebase with time of session
         // TODO: use time elapsed in payment algorithm calculations,
         // TODO: navigate to rating page
-        navigate('UserProfile');
+        const latestSession = {
+            trainer: this.state.trainer,
+            sessionLength: this.state.totalSeconds,
+        };
+        firebase.database().ref('/users/' + this.state.userId + '/trainingSessions').push({
+            testSession: latestSession,
+        });
+        navigate('Rating');
+    }
+
+    displayTime = (min, sec) => {
+        let secStr = sec;
+        let minStr = min;
+        if (sec < 10) {
+            secStr = `0${sec}`;
+        }
+        if (min < 10) {
+            minStr = `0${min}`;
+        }
+        return (<Text style={styles.centering}>{minStr}:{secStr}</Text>);
     }
 
     render() {
@@ -190,7 +213,8 @@ class TimerScreen extends React.Component {
               resizeMode="cover"
             >
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Training session length: 0:00</Text>
+                <Text style={styles.centering}>Training session with {this.state.trainer}:</Text>
+                {this.displayTime(this.state.minutes, this.state.seconds)}
               </View>
               <TouchableOpacity onPress={() => this.stop(navigate)}>
                 <Text style={styles.button}>Stop Session!</Text>

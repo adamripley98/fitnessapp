@@ -1,16 +1,13 @@
 import React from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
   Dimensions,
   TextInput,
-  Button,
   TouchableOpacity,
-  Component,
 } from 'react-native';
 import firebase from 'firebase';
 import { firebaseApp } from '../../firebase';

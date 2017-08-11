@@ -1,8 +1,5 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
@@ -14,15 +11,8 @@ import React from 'react';
 import firebase from 'firebase';
 import Exponent from 'expo';
 
-import firebaseApp from '../../firebase';
-
-const database = firebaseApp.database;
-
-const ImagePicker = require('react-native-image-picker');
-
 const { width, height } = Dimensions.get('window');
 
-const brian = 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAxcAAAAJGNlMDkxMDJhLTUzMGEtNDhmMC04YzNhLWVmYWQ0YTc5MThiYw.jpg';
 const background = require('./logos/bkg.jpg');
 
 const styles = StyleSheet.create({

@@ -1,8 +1,5 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
@@ -15,7 +12,6 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
-const locationPic = require('./logos/location.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -182,7 +178,6 @@ class UserProfileScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
             <Image
               source={background}
               style={[styles.cont, styles.bg]}
@@ -207,10 +202,6 @@ class UserProfileScreen extends React.Component {
                 </View>
                 <View style={styles.markWrap}>
                   <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  {/* <View>
-                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
-                    <Text style={styles.location}> Current Location </Text>
-                  </View> */}
                   <View style={styles.bio}>
                     <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
                   </View>

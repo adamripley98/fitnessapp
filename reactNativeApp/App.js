@@ -1,11 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, AppRegistry, TouchableOpacity } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import firebase from 'firebase';
-
-// import Map from './components/Map';
-// import Basic from './components/Basic';
-// import Modals from './components/Modal';
 import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
@@ -16,8 +11,6 @@ import RateTrainerScreen from './components/RateTrainerScreen';
 import TimerScreen from './components/TimerScreen';
 import TrainerProfileScreen from './components/TrainerProfileScreen';
 import TrainerEditProfileScreen from './components/TrainerEditProfileScreen';
-
-import { firebaseApp } from '../firebase';
 
 const styles = StyleSheet.create({
     container: {

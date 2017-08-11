@@ -1,8 +1,5 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
@@ -15,7 +12,6 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
-const locationPic = require('./logos/location.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -186,7 +182,6 @@ class TrainerProfileScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
             <Image
               source={background}
               style={[styles.cont, styles.bg]}

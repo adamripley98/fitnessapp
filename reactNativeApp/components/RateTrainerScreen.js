@@ -1,8 +1,5 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
@@ -16,8 +13,6 @@ import Stars from 'react-native-stars';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
-const editProfPic = require('./logos/editprof.png');
-const locationPic = require('./logos/location.png');
 const emp = require('./logos/empStar.png');
 const full = require('./logos/fullStar.png');
 const half = require('./logos/halfStar.png');
@@ -52,7 +47,6 @@ const styles = StyleSheet.create({
         padding: 10,
         textAlign: 'center',
         alignItems: 'center',
-        // marginBottom: 10,
         color: '#fff',
         backgroundColor: 'transparent',
     },
@@ -156,7 +150,6 @@ class RateTrainerScreen extends React.Component {
             if (!user) {
                 navigate('Log');
             } else {
-                // const userRef = firebase.database().ref('/users/' + user.uid);
                 const sessionRef = firebase.database().ref('/users/' + user.uid + '/trainingSessions/' + this.props.navigation.state.params.sessionKey);
                 sessionRef.on('value', (snapshot) => {
                     console.log('what is snapshot inside rate', snapshot.val());
@@ -218,7 +211,6 @@ class RateTrainerScreen extends React.Component {
             >
               <View style={styles.markBio}>
                 {this.renderInfo()}
-                {/* <Text style={styles.centering}>{this.state.name.split(' ')[0] || 'dood'}, give {this.state.trainer} a rating and some feedback!</Text> */}
               </View>
               <View style={{ alignItems: 'center' }}>
                 <Stars

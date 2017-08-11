@@ -1,19 +1,15 @@
 import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Component,
 } from 'react-native';
-import { RadioButtons, SegmentedControls } from 'react-native-radio-buttons';
+import { SegmentedControls } from 'react-native-radio-buttons';
 
 import firebase from 'firebase';
-import { firebaseApp } from '../../firebase';
 
 const background = require('./logos/bkg.jpg');
 const personIcon = require('./logos/signup_person.png');
@@ -196,21 +192,7 @@ export default class RegisterScreen extends React.Component {
             selectedOption,
         });
     }
-
-    renderOption = (option, selected, onSelect, index) => {
-        const style = selected ? { fontWeight: 'bold' } : {};
-        return (
-          <TouchableOpacity onPress={onSelect} key={index}>
-            <Text style={style}>{option}</Text>
-          </TouchableOpacity>
-        );
-    }
-
-    renderContainer = (optionNodes) => {
-        return <View>{optionNodes}</View>;
-    }
-
-
+    
     render() {
         const { navigate } = this.props.navigation;
         return (

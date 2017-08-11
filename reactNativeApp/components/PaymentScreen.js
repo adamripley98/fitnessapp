@@ -1,21 +1,14 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
   View,
-  Image,
-  TextInput,
-  Button,
   Platform,
   NativeModules,
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
-import Expo from 'expo';
 
 const { width, height } = Dimensions.get('window');
 

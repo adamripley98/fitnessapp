@@ -8,10 +8,16 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
+import { SegmentedControls } from 'react-native-radio-buttons';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
+
+const options = [
+    'Yes',
+    'No',
+];
 
 const styles = StyleSheet.create({
     banner: {
@@ -147,12 +153,20 @@ class TrainerCertificationScreen extends React.Component {
         });
     }
 
+    setSelectedOption = (selectedOption) => {
+        this.setState({
+            selectedOption,
+        });
+    }
+
     getCertified = (navigate) => {
         // TODO: actual certification, update in firebase, navigate back to trainer profile
-        firebase.database().ref('/users/' + this.state.userId).update({
-            isCertified: true,
-        });
-        console.log('You have been certified! Congrats!');
+        if (this.state.selectedOption === 'Yes') {
+            firebase.database().ref('/users/' + this.state.userId).update({
+                isCertified: true,
+            });
+            console.log('You have been certified! Congrats!');
+        }
         navigate('TrainerProfile');
     }
 
@@ -166,8 +180,19 @@ class TrainerCertificationScreen extends React.Component {
               resizeMode="cover"
             >
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Get certified, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>do u even lift, {this.state.name.split(' ')[0] || 'dood'}?</Text>
               </View>
+              <SegmentedControls
+                tint={'#f80046'}
+                selectedTint={'white'}
+                backTint={'#1e2126'}
+                options={options}
+                allowFontScaling={false} // default: true
+                onSelection={this.setSelectedOption.bind(this)}
+                selectedOption={this.state.selectedOption}
+                optionStyle={{ fontFamily: 'AvenirNext-Medium' }}
+                optionContainerStyle={{ flex: 1 }}
+              />
             </Image>
             <TouchableOpacity onPress={() => this.getCertified(navigate)}>
               <Text style={[styles.button, styles.greenButton]}>Get certified</Text>

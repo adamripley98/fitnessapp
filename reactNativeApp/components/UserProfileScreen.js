@@ -141,8 +141,8 @@ class UserProfileScreen extends React.Component {
                             name: user.displayName,
                             profPic: user.photoURL,
                             userId: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
+                            age: snapshot.val().age || '999',
+                            bio: snapshot.val().bio || 'Test Bio',
                         });
                     }
                     console.log('what is state', this.state);

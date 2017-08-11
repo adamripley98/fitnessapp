@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class TrainerProfileScreen extends React.Component {
+class TrainerCertificationScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -129,10 +129,7 @@ class TrainerProfileScreen extends React.Component {
             if (!user) {
                 navigate('Log');
             } else {
-                console.log('user is', user);
-                console.log('what is state', this.state);
                 const userRef = firebase.database().ref('/users/' + user.uid);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
@@ -140,47 +137,23 @@ class TrainerProfileScreen extends React.Component {
                             navigate('UserProfile');
                         }
                         this.setState({
-                            emailVerified: user.emailVerified,
                             name: user.displayName,
-                            profPic: user.photoURL,
                             userId: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
                             isCertified: snapshot.val().isCertified,
                         });
                     }
-                    console.log('what is state inside trainer prof', this.state);
                 });
             }
         });
     }
 
-    verifyEmail = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
-            console.log('verification email sent');
-            alert('Verification email sent!');
-        }).catch((error) => {
-            alert('Error sending verification email');
-            console.log('error sending verification email', error);
-        });
-    }
-
-    logout = () => {
-        firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-        }).catch((error) => {
-        // An error happened.
-            alert(error.message);
-        });
-    }
-
-    editProf = (navigate) => {
-        navigate('TrainerEditProfile');
-    }
-
     getCertified = (navigate) => {
-        console.log('getting certified');
-        navigate('TrainerCertification');
+        // TODO: actual certification, update in firebase, navigate back to trainer profile
+        firebase.database().ref('/users/' + this.state.userId).update({
+            isCertified: true,
+        });
+        console.log('You have been certified! Congrats!');
+        navigate('TrainerProfile');
     }
 
     render() {
@@ -192,42 +165,16 @@ class TrainerProfileScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-              {this.state.emailVerified === false ?
-                <TouchableOpacity onPress={() => this.verifyEmail()}>
-                  <Text style={styles.banner}> Click here to verify your email!</Text>
-                </TouchableOpacity> :
-                <View />}
-              {this.state.isCertified === false ?
-                <TouchableOpacity onPress={() => this.getCertified(navigate)}>
-                  <Text style={styles.banner}> Get certified before training clients!</Text>
-                </TouchableOpacity> :
-                <View />}
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Trainer Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
-              </View>
-              <View style={styles.pdrofile}>
-                <View style={styles.markWrap}>
-                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-                </View>
-                <View style={styles.markBio}>
-                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
-                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.markWrap}>
-                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  <View style={styles.bio}>
-                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
-                  </View>
-                </View>
+                <Text style={styles.centering}>Get certified, {this.state.name.split(' ')[0] || 'dood'}!</Text>
               </View>
             </Image>
-            <TouchableOpacity onPress={() => this.logout()}>
-              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
+            <TouchableOpacity onPress={() => this.getCertified(navigate)}>
+              <Text style={[styles.button, styles.greenButton]}>Get certified</Text>
             </TouchableOpacity>
           </View>
         );
     }
   }
 
-module.exports = TrainerProfileScreen;
+module.exports = TrainerCertificationScreen;

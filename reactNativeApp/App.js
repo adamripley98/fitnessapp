@@ -11,6 +11,7 @@ import RateTrainerScreen from './components/RateTrainerScreen';
 import TimerScreen from './components/TimerScreen';
 import TrainerProfileScreen from './components/TrainerProfileScreen';
 import TrainerEditProfileScreen from './components/TrainerEditProfileScreen';
+import TrainerCertificationScreen from './components/TrainerCertificationScreen';
 
 const styles = StyleSheet.create({
     container: {
@@ -69,6 +70,9 @@ const myApp = StackNavigator({
     },
     TrainerEditProfile: {
         screen: TrainerEditProfileScreen,
+    },
+    TrainerCertification: {
+        screen: TrainerCertificationScreen,
     },
 }, { initialRouteName: 'Log' });
 

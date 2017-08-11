@@ -114,7 +114,7 @@ export default class LogScreen extends React.Component {
                 const userRef = firebase.database().ref('/users/' + usr.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside log', snapshot.val());
-                    this.setState({ isTrainer: snapshot.val().isTrainer });
+                    this.setState({ isTrainer: snapshot.val().isTrainer || 'idk yet' });
                     if (snapshot.val().isTrainer === true) {
                         navigate('TrainerProfile');
                     } else if (snapshot.val().isTrainer === false) {

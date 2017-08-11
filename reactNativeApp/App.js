@@ -14,6 +14,8 @@ import MessagesScreen from './components/MessagesScreen';
 import PaymentScreen from './components/PaymentScreen';
 import RateTrainerScreen from './components/RateTrainerScreen';
 import TimerScreen from './components/TimerScreen';
+import TrainerProfileScreen from './components/TrainerProfileScreen';
+import TrainerEditProfileScreen from './components/TrainerEditProfileScreen';
 
 import { firebaseApp } from '../firebase';
 
@@ -68,7 +70,13 @@ const myApp = StackNavigator({
     },
     Timer: {
         screen: TimerScreen,
-    }
+    },
+    TrainerProfile: {
+        screen: TrainerProfileScreen,
+    },
+    TrainerEditProfile: {
+        screen: TrainerEditProfileScreen,
+    },
 }, { initialRouteName: 'Log' });
 
 export default myApp;

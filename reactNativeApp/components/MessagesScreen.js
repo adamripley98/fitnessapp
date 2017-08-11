@@ -82,7 +82,7 @@ class MessagesScreen extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {

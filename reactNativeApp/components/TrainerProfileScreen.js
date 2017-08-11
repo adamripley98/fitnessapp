@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class UserProfileScreen extends React.Component {
+class TrainerProfileScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -140,6 +140,9 @@ class UserProfileScreen extends React.Component {
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
+                        if (!snapshot.val().isTrainer) {
+                            navigate('TrainerProfile');
+                        }
                         this.setState({
                             emailVerified: user.emailVerified,
                             name: user.displayName,
@@ -147,9 +150,10 @@ class UserProfileScreen extends React.Component {
                             userId: user.uid,
                             age: snapshot.val().age,
                             bio: snapshot.val().bio,
+                            isCertified: snapshot.val().isCertified,
                         });
                     }
-                    console.log('what is state', this.state);
+                    console.log('what is state inside trainer prof', this.state);
                 });
             }
         });
@@ -175,7 +179,7 @@ class UserProfileScreen extends React.Component {
     }
 
     editProf = (navigate) => {
-        navigate('EditUserProfile');
+        navigate('TrainerEditProfile');
     }
 
     render() {
@@ -194,7 +198,7 @@ class UserProfileScreen extends React.Component {
               </TouchableOpacity> :
               <View />}
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>Trainer Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
               </View>
               <View style={styles.pdrofile}>
                 <View style={styles.markWrap}>
@@ -207,10 +211,6 @@ class UserProfileScreen extends React.Component {
                 </View>
                 <View style={styles.markWrap}>
                   <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  {/* <View>
-                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
-                    <Text style={styles.location}> Current Location </Text>
-                  </View> */}
                   <View style={styles.bio}>
                     <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
                   </View>
@@ -225,4 +225,4 @@ class UserProfileScreen extends React.Component {
     }
   }
 
-module.exports = UserProfileScreen;
+module.exports = TrainerProfileScreen;

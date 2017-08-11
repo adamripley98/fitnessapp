@@ -47,6 +47,7 @@
     "react-native-image-picker": "^0.26.3",
     "react-native-maps": "^0.15.3",
     "react-native-modal": "^2.5.0",
+    "react-native-radio-buttons": "^1.0.0",
     "react-native-side-menu": "^1.0.2",
     "react-native-stars": "^1.0.2",
     "react-navigation": "^1.0.0-beta.11",

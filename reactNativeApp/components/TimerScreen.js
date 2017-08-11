@@ -135,7 +135,7 @@ class TimerScreen extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
       // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {

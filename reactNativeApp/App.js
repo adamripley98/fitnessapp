@@ -20,6 +20,8 @@ import { firebaseApp } from '../firebase';
 // JEFFREY'S THING
 // import { StyleSheet, Text, View } from 'react-native';
 import HomeV2 from './components/HomeV2';
+import HomeV3 from './components/HomeV3';
+
 //
 // export default class App extends React.Component {
 //     render() {
@@ -85,6 +87,9 @@ const myApp = StackNavigator({
     },
     HomeV2: {
         screen: HomeV2,
+    },
+    HomeV3: {
+        screen: HomeV3,
     },
 }, { initialRouteName: 'Log' });
 

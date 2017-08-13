@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class HomeV2 extends Component {
+export default class HomeV3 extends Component {
     static navigationOptions = {
         title: 'Home',
         header: null,

@@ -139,6 +139,7 @@ export default class LogScreen extends React.Component {
     }
 
     reg(navigate) {
+        console.log(navigate);
         navigate('Register');
     }
 

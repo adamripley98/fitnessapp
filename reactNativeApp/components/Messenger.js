@@ -5,12 +5,18 @@ import {
   Text,
   View,
 } from 'react-native';
+import firebase from 'firebase';
+import $ from 'jquery';
 
 import { GiftedChat, Actions, Bubble } from 'react-native-gifted-chat';
 import CustomActions from './CustomActions';
 import CustomView from './CustomView';
 
 export default class Example extends React.Component {
+    static navigationOptions = {
+        title: 'Messenger',
+        header: null,
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -18,6 +24,7 @@ export default class Example extends React.Component {
             loadEarlier: true,
             typingText: null,
             isLoadingEarlier: false,
+            currentThread: this.props.navigation.state.params.currentThread,
         };
 
         this._isMounted = false;
@@ -33,9 +40,15 @@ export default class Example extends React.Component {
 
     componentWillMount() {
         this._isMounted = true;
-        this.setState(() => ({
-            messages: require('./data/messages.js'),
-        }));
+        const ref = firebase.database().ref(`threads/${this.state.currentThread}/messages`);
+        ref.on('value', (snapshot) => {
+            console.log('snapshot', snapshot.val());
+            const snapArr = $.map(snapshot.val(), item => [item]);
+            this.setState(() => ({
+                messages: snapArr,
+            }));
+            console.log(this.state.messages);
+        });
     }
 
     componentWillUnmount() {
@@ -171,6 +184,7 @@ export default class Example extends React.Component {
     }
 
     render() {
+        const { navigate } = this.props.navigation;
         return (
           <GiftedChat
             messages={this.state.messages}

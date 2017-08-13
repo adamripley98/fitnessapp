@@ -90,6 +90,9 @@ const myApp = StackNavigator({
     Messenger: {
         screen: Messenger,
     },
-}, { initialRouteName: 'Messenger' });
+    MessagesScreen: {
+        screen: MessagesScreen,
+    },
+}, { initialRouteName: 'MessagesScreen' });
 
 export default myApp;

@@ -98,6 +98,6 @@ const myApp = StackNavigator({
     MessagesScreen: {
         screen: MessagesScreen,
     },
-}, { initialRouteName: 'HomeV3' });
+}, { initialRouteName: 'MessagesScreen' });
 
 export default myApp;

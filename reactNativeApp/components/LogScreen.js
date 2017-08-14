@@ -8,6 +8,8 @@ import {
   Dimensions,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import firebase from 'firebase';
 import { firebaseApp } from '../../firebase';
@@ -105,6 +107,8 @@ export default class LogScreen extends React.Component {
             email: '',
             password: '',
         };
+        this.focusNextField = this.focusNextField.bind(this);
+        this.inputs = {};
     }
 
     componentDidMount() {
@@ -171,6 +175,10 @@ export default class LogScreen extends React.Component {
         console.log('forgot password!');
     }
 
+    focusNextField(id) {
+        this.inputs[id].focus();
+    }
+
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -191,6 +199,14 @@ export default class LogScreen extends React.Component {
                     autoCorrect={false}
                     style={styles.input}
                     onChangeText={usr => this.setState({ email: usr })}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                        this.focusNextField('two');
+                    }}
+                    returnKeyType={'next'}
+                    ref={(input) => {
+                        this.inputs.one = input;
+                    }}
                   />
                 </View>
                 <View style={styles.inputWrap}>
@@ -205,6 +221,14 @@ export default class LogScreen extends React.Component {
                     style={styles.input}
                     onChangeText={psw => this.setState({ password: psw })}
                     secureTextEntry
+                    blurOnSubmit={true}
+                    onSubmitEditing={() => {
+                        this.focusNextField('three');
+                    }}
+                    returnKeyType={'done'}
+                    ref={(input) => {
+                        this.inputs.two = input;
+                    }}
                   />
                 </View>
                 <TouchableOpacity activeOpacity={0.5}>

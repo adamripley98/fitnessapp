@@ -165,16 +165,6 @@ export default class UserProfileScreen extends React.Component {
         });
     }
 
-    verifyEmail = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
-            console.log('verification email sent');
-            alert('Verification email sent!');
-        }).catch((error) => {
-            alert('Error sending verification email');
-            console.log('error sending verification email', error);
-        });
-    }
-
     editProf = (navigate) => {
         navigate('EditUserProfile');
     }
@@ -197,11 +187,6 @@ export default class UserProfileScreen extends React.Component {
                   />
                 </TouchableOpacity>
               </View>
-              {this.state.emailVerified === false ?
-                <TouchableOpacity onPress={() => this.verifyEmail()}>
-                  <Text style={styles.banner}> Click here to verify your email!</Text>
-                </TouchableOpacity> :
-                <View />}
               <View style={styles.markBio}>
                 <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
               </View>

@@ -5,6 +5,8 @@ import {
   View,
   Image,
   TouchableOpacity,
+  TouchableHighlight,
+  Dimensions,
 } from 'react-native';
 import ModalBox from 'react-native-modalbox';
 import Drawer from 'react-native-drawer';
@@ -15,6 +17,8 @@ import Menu from './Menu';
 import Map from './MapScreen';
 
 const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
+
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     button: {
@@ -75,6 +79,20 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(0, 0, 0, 0.1)',
         width: '98%',
         height: '100%',
+    },
+    banner: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width,
+        height: 30,
+        textAlign: 'center',
+        paddingTop: 10,
+        paddingBottom: 30,
+        backgroundColor: '#f44336',
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        shadowColor: 'black',
+        shadowOffset: { height: 3, width: 3 },
     },
 });
 
@@ -138,6 +156,16 @@ export default class HomeV3 extends Component {
         });
     }
 
+    verifyEmail = () => {
+        firebase.auth().currentUser.sendEmailVerification().then(() => {
+            console.log('verification email sent');
+            alert('Verification email sent!');
+        }).catch((error) => {
+            alert('Error sending verification email');
+            console.log('error sending verification email', error);
+        });
+    }
+
     menuButton = () => (
       <TouchableOpacity
         onPress={this.toggle}
@@ -151,14 +179,14 @@ export default class HomeV3 extends Component {
     )
     bottomButton = () => (
       <View style={styles.bottomModalButton}>
-        <TouchableOpacity
+        <TouchableHighlight
           style={{ width: '100%', display: 'flex', alignItems: 'center' }}
           onPress={() => this.setState({ bottomModalIsOpen: true })}
         >
           <View style={styles.bottomButton}>
             <Text style={{ fontSize: 30 }}>Gyms</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
       </View>
     );
     bottomModalFrame = () => (
@@ -201,6 +229,11 @@ export default class HomeV3 extends Component {
             })}
           >
             <View style={styles.container}>
+              {this.state.emailVerified === false ?
+                <TouchableOpacity onPress={() => this.verifyEmail()}>
+                  <Text style={styles.banner}> Click here to verify your email!</Text>
+                </TouchableOpacity> :
+                <View />}
               <Map />
               {this.bottomButton()}
               {this.bottomModalFrame()}

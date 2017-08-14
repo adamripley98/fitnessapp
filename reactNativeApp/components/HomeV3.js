@@ -5,18 +5,14 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
-import SideMenu from 'react-native-side-menu';
 import ModalBox from 'react-native-modalbox';
-import Orientation from 'react-native-orientation';
 import Drawer from 'react-native-drawer';
+import firebase from 'firebase';
 
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
-import Map from './Map';
-import UserProfileScreen from './UserProfileScreen';
-import Payment from './Payment';
+import Map from './MapScreen';
 
 const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
@@ -90,8 +86,6 @@ export default class HomeV3 extends Component {
     constructor(props) {
         super(props);
 
-        const { navigate } = this.props.navigation;
-
         this.toggle = this.toggle.bind(this);
 
         this.state = {
@@ -101,9 +95,36 @@ export default class HomeV3 extends Component {
         };
     }
 
-    toggle() {
+    componentDidMount() {
+        const { navigate } = this.props.navigation;
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('Log');
+            } else {
+                this.setState({
+                    emailVerified: user.emailVerified,
+                    name: user.displayName,
+                    profPic: user.photoURL,
+                    userId: user.uid,
+                });
+                console.log('what is state', this.state);
+            }
+        });
+    }
+
+    onMenuItemSelected = (item) => {
+        const { navigate } = this.props.navigation;
         this.setState({
-            isOpen: !this.state.isOpen,
+            isOpen: false,
+            selectedItem: item,
+        });
+        navigate(item);
+        console.log('this is item', item);
+    }
+
+    onMenuXPressed = () => {
+        this.setState({
+            isOpen: false,
         });
     }
 
@@ -111,15 +132,9 @@ export default class HomeV3 extends Component {
         this.setState({ isOpen });
     }
 
-    onMenuItemSelected = item =>
-    this.setState({
-        isOpen: false,
-        selectedItem: item,
-    });
-
-    onMenuXPressed = () => {
+    toggle() {
         this.setState({
-            isOpen: false,
+            isOpen: !this.state.isOpen,
         });
     }
 
@@ -161,40 +176,17 @@ export default class HomeV3 extends Component {
         </View>
       </ModalBox>
     );
-    mainPageRender = () => {
-        switch (this.state.selectedItem) {
-            case 'Map':
-                return (<Map />);
-            case 'UserProfileScreen':
-                return (<UserProfileScreen />);
-            case 'Payment':
-                return (<Payment />);
-            default:
-                return (<Map />);
-        }
-    }
 
     render() {
+        const { navigate } = this.props.navigation;
+
         const menu = (<Menu
           onItemSelected={this.onMenuItemSelected}
           xPressed={this.onMenuXPressed}
+          name={this.state.name}
+          profPic={this.state.profPic}
         />);
 
-        // <View style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }}>
-        //   <SideMenu
-        //     menu={menu}
-        //     isOpen={this.state.isOpen}
-        //     onChange={isOpen => this.updateMenuState(isOpen)}
-        //     openMenuOffset={Dimensions.get('window').width}
-        //   >
-        //     <View style={styles.container}>
-        //       {this.mainPageRender()}
-        //     </View>
-        //     {this.menuButton()}
-        { this.bottomButton(); }
-        { this.bottomModalFrame(); }
-        //   </SideMenu>
-        // </View>
         return (
           <Drawer
             open={this.state.isOpen}
@@ -209,7 +201,7 @@ export default class HomeV3 extends Component {
             })}
           >
             <View style={styles.container}>
-              {this.mainPageRender()}
+              <Map />
               {this.bottomButton()}
               {this.bottomModalFrame()}
             </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AppRegistry } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
@@ -12,22 +12,11 @@ import TimerScreen from './components/TimerScreen';
 import TrainerProfileScreen from './components/TrainerProfileScreen';
 import TrainerEditProfileScreen from './components/TrainerEditProfileScreen';
 import TrainerCertificationScreen from './components/TrainerCertificationScreen';
-
+import MapScreen from './components/MapScreen';
 // JEFFREY'S THING
 // import { StyleSheet, Text, View } from 'react-native';
 import HomeV2 from './components/HomeV2';
 import HomeV3 from './components/HomeV3';
-
-//
-// export default class App extends React.Component {
-//     render() {
-//         return (
-//           <View style={styles.container}>
-//             <HomeV2 />
-//           </View>
-//         );
-//     }
-// }
 
 const styles = StyleSheet.create({
     container: {
@@ -47,7 +36,7 @@ class App extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            <HomeV2 />
+            <HomeV3 />
           </View>
         );
     }
@@ -95,6 +84,9 @@ const myApp = StackNavigator({
     },
     TrainerCertification: {
         screen: TrainerCertificationScreen,
+    },
+    Map: {
+        screen: MapScreen,
     },
 }, { initialRouteName: 'Log' });
 

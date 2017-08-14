@@ -12,6 +12,7 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
+const backIcon = require('./logos/back.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -108,6 +109,18 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
+    headerIconView: {
+        marginLeft: 10,
+        backgroundColor: 'transparent',
+    },
+    headerBackButtonView: {
+        width: 25,
+        height: 25,
+    },
+    backButtonIcon: {
+        width: 25,
+        height: 25,
+    },
 });
 
 export default class UserProfileScreen extends React.Component {
@@ -115,6 +128,7 @@ export default class UserProfileScreen extends React.Component {
         title: 'Welcome',
         header: null,
     };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -161,15 +175,6 @@ export default class UserProfileScreen extends React.Component {
         });
     }
 
-    logout = () => {
-        firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-        }).catch((error) => {
-        // An error happened.
-            alert(error.message);
-        });
-    }
-
     editProf = (navigate) => {
         navigate('EditUserProfile');
     }
@@ -183,6 +188,15 @@ export default class UserProfileScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
+              <View style={styles.headerIconView}>
+                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
+                  <Image
+                    source={backIcon}
+                    style={styles.backButtonIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
               {this.state.emailVerified === false ?
                 <TouchableOpacity onPress={() => this.verifyEmail()}>
                   <Text style={styles.banner}> Click here to verify your email!</Text>
@@ -208,9 +222,6 @@ export default class UserProfileScreen extends React.Component {
                 </View>
               </View>
             </Image>
-            <TouchableOpacity onPress={() => this.logout()}>
-              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
-            </TouchableOpacity>
           </View>
         );
     }

@@ -295,9 +295,6 @@ class EditUserProfileScreen extends React.Component {
                   </View>
                 </View>
               </View>
-              <View style={styles.private}>
-                <Text> Private Information </Text>
-              </View>
               <TouchableOpacity onPress={() => this.saveChanges(navigate)}>
                 <Text style={[styles.button, styles.greenButton]}>Save changes</Text>
               </TouchableOpacity>

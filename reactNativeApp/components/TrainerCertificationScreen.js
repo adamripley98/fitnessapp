@@ -8,11 +8,16 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
+import { SegmentedControls } from 'react-native-radio-buttons';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
+const editProfPic = require('./logos/editprof.png');
 
-let timerVar = null;
+const options = [
+    'Yes',
+    'No',
+];
 
 const styles = StyleSheet.create({
     banner: {
@@ -40,13 +45,11 @@ const styles = StyleSheet.create({
         height,
     },
     button: {
-        borderRadius: 10,
-        padding: 10,
+        borderRadius: 4,
+        padding: 20,
         textAlign: 'center',
-        alignItems: 'center',
-        // marginBottom: 10,
+        marginBottom: 20,
         color: '#fff',
-        backgroundColor: 'transparent',
     },
     greenButton: {
         backgroundColor: '#4CD964',
@@ -111,16 +114,9 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
-    textBox: {
-        borderWidth: 2,
-        height: 150,
-        margin: 20,
-        backgroundColor: 'white',
-        opacity: 0.5,
-    },
 });
 
-class TimerScreen extends React.Component {
+class TrainerCertificationScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -128,10 +124,7 @@ class TimerScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            totalSeconds: 0,
-            minutes: 0,
-            seconds: 0,
-            trainer: 'Brian',
+            name: '',
         };
     }
 
@@ -143,65 +136,38 @@ class TimerScreen extends React.Component {
                 navigate('Log');
             } else {
                 const userRef = firebase.database().ref('/users/' + user.uid);
-                console.log('WHAT IS USER ID INSIDE EDIT', user.uid);
                 userRef.on('value', (snapshot) => {
-                    console.log('snapshot trainingSesh inside timer', snapshot.val().trainingSessions);
-                    this.setState({
-                        userId: user.uid,
-                        trainingSessions: snapshot.val().trainingSessions || [],
-                    });
-                    console.log('trainingsesh', this.state.trainingSessions);
+                    console.log('snapshot inside user', snapshot);
+                    if (snapshot !== null) {
+                        if (!snapshot.val().isTrainer) {
+                            navigate('UserProfile');
+                        }
+                        this.setState({
+                            name: user.displayName,
+                            userId: user.uid,
+                            isCertified: snapshot.val().isCertified,
+                        });
+                    }
                 });
-                // starts timer
-                this.start();
             }
         });
     }
 
-    CountTimer = () => {
-        // console.log('happening every second');
-        const totalSeconds = this.state.totalSeconds + 1;
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds - (minutes * 60);
+    setSelectedOption = (selectedOption) => {
         this.setState({
-            totalSeconds,
-            minutes,
-            seconds,
+            selectedOption,
         });
     }
 
-    start = () => {
-        console.log('timer started');
-        timerVar = setInterval(this.CountTimer, 1000);
-    }
-
-    stop = (navigate) => {
-        console.log('session stopped', this.state.minutes, this.state.seconds, this.state.totalSeconds);
-        clearInterval(timerVar);
-        // TODO: use time elapsed in payment algorithm calculations
-        const currentSessionKey = firebase.database().ref().child('trainingSessions').push().key;
-        const latestSession = {
-            trainer: this.state.trainer,
-            sessionLength: this.state.totalSeconds,
-            paidYet: false,
-            sessionKey: currentSessionKey,
-        };
-        firebase.database().ref('/users/' + this.state.userId + '/trainingSessions/' + currentSessionKey).set({
-            session: latestSession,
-        });
-        navigate('Rating', { sessionKey: currentSessionKey });
-    }
-
-    displayTime = (min, sec) => {
-        let secStr = sec;
-        let minStr = min;
-        if (sec < 10) {
-            secStr = `0${sec}`;
+    getCertified = (navigate) => {
+        // TODO: actual certification, update in firebase, navigate back to trainer profile
+        if (this.state.selectedOption === 'Yes') {
+            firebase.database().ref('/users/' + this.state.userId).update({
+                isCertified: true,
+            });
+            console.log('You have been certified! Congrats!');
         }
-        if (min < 10) {
-            minStr = `0${min}`;
-        }
-        return (<Text style={styles.centering}>{minStr}:{secStr}</Text>);
+        navigate('TrainerProfile');
     }
 
     render() {
@@ -214,16 +180,26 @@ class TimerScreen extends React.Component {
               resizeMode="cover"
             >
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Training session with {this.state.trainer}:</Text>
-                {this.displayTime(this.state.minutes, this.state.seconds)}
+                <Text style={styles.centering}>do u even lift, {this.state.name.split(' ')[0] || 'dood'}?</Text>
               </View>
-              <TouchableOpacity onPress={() => this.stop(navigate)}>
-                <Text style={styles.button}>Stop Session!</Text>
-              </TouchableOpacity>
+              <SegmentedControls
+                tint={'#f80046'}
+                selectedTint={'white'}
+                backTint={'#1e2126'}
+                options={options}
+                allowFontScaling={false} // default: true
+                onSelection={this.setSelectedOption.bind(this)}
+                selectedOption={this.state.selectedOption}
+                optionStyle={{ fontFamily: 'AvenirNext-Medium' }}
+                optionContainerStyle={{ flex: 1 }}
+              />
             </Image>
+            <TouchableOpacity onPress={() => this.getCertified(navigate)}>
+              <Text style={[styles.button, styles.greenButton]}>Get certified</Text>
+            </TouchableOpacity>
           </View>
         );
     }
   }
 
-module.exports = TimerScreen;
+module.exports = TrainerCertificationScreen;

@@ -1,16 +1,15 @@
 import React from 'react';
 
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
   Dimensions,
   TextInput,
-  Button,
   TouchableOpacity,
-  Component,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import firebase from 'firebase';
 import { firebaseApp } from '../../firebase';
@@ -101,14 +100,33 @@ export default class LogScreen extends React.Component {
         header: null,
     };
     constructor(props) {
+      // firebase.auth().signOut();
+
         super(props);
         this.state = {
             email: '',
             password: '',
         };
+        this.focusNextField = this.focusNextField.bind(this);
+        this.inputs = {};
+    }
+
+    componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((usr) => {
             if (usr) {
+                // const userRef = firebase.database().ref(`/users/${usr.uid}`);
+                // userRef.on('value', (snapshot) => {
+                //     console.log('snapshot inside log', snapshot.val());
+                //     this.setState({ isTrainer: snapshot.val().isTrainer || 'idk yet' });
+                //     if (snapshot.val().isTrainer === true) {
+                //         navigate('TrainerProfile');
+                //     } else if (snapshot.val().isTrainer === false) {
+                //         navigate('UserProfile');
+                //     } else {
+                //         console.log('SOMETHING WEIRD IS HAPPENING');
+                //     }
+                // });
                 navigate('HomeV3');
             }
         });
@@ -132,12 +150,18 @@ export default class LogScreen extends React.Component {
       })
       .then(() => {
           if (noErr) {
-              navigate('UserProfile');
+              if (this.state.isTrainer === true) {
+                  navigate('TrainerProfile');
+              } else if (this.state.isTrainer === false) {
+                  navigate('UserProfile');
+              } else {
+                  console.log('something weird happening');
+              }
           }
       });
     }
 
-    reg(navigate) {
+    reg = (navigate) => {
         navigate('Register');
     }
 
@@ -150,6 +174,10 @@ export default class LogScreen extends React.Component {
             console.log('error:', error);
         });
         console.log('forgot password!');
+    }
+
+    focusNextField(id) {
+        this.inputs[id].focus();
     }
 
     render() {
@@ -172,6 +200,14 @@ export default class LogScreen extends React.Component {
                     autoCorrect={false}
                     style={styles.input}
                     onChangeText={usr => this.setState({ email: usr })}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                        this.focusNextField('two');
+                    }}
+                    returnKeyType={'next'}
+                    ref={(input) => {
+                        this.inputs.one = input;
+                    }}
                   />
                 </View>
                 <View style={styles.inputWrap}>
@@ -186,6 +222,14 @@ export default class LogScreen extends React.Component {
                     style={styles.input}
                     onChangeText={psw => this.setState({ password: psw })}
                     secureTextEntry
+                    blurOnSubmit
+                    onSubmitEditing={() => {
+                        this.focusNextField('three');
+                    }}
+                    returnKeyType={'done'}
+                    ref={(input) => {
+                        this.inputs.two = input;
+                    }}
                   />
                 </View>
                 <TouchableOpacity activeOpacity={0.5}>

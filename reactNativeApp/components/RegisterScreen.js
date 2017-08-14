@@ -1,21 +1,25 @@
 import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   Image,
   TextInput,
   TouchableOpacity,
-  Component,
 } from 'react-native';
+import { SegmentedControls } from 'react-native-radio-buttons';
+
 import firebase from 'firebase';
-import { firebaseApp } from '../../firebase';
 
 const background = require('./logos/bkg.jpg');
 const personIcon = require('./logos/signup_person.png');
 const lockIcon = require('./logos/signup_lock.png');
 const emailIcon = require('./logos/signup_email.png');
+
+const options = [
+    'User',
+    'Trainer',
+];
 
 const styles = StyleSheet.create({
     container: {
@@ -113,6 +117,7 @@ export default class RegisterScreen extends React.Component {
             email: '',
             password: '',
             confirmPassword: '',
+            selectedOption: null,
         };
     }
     componentWillUnmount() {
@@ -129,6 +134,7 @@ export default class RegisterScreen extends React.Component {
     }
 
     register(navigate) {
+        console.log('what is selected', this.state.selectedOption);
         let noErr = true;
         if (!this.state.name || !this.state.email || !this.state.password ||
           !this.state.confirmPassword) {
@@ -137,6 +143,8 @@ export default class RegisterScreen extends React.Component {
             alert('Passwords must match');
         } else if (this.state.name.indexOf(' ') === -1) {
             alert('Please enter full name');
+        } else if (!this.state.selectedOption) {
+            alert('Select User or Trainer');
         } else {
             firebase.auth().createUserWithEmailAndPassword(this.state.email,
         this.state.password).catch((error) => {
@@ -153,13 +161,22 @@ export default class RegisterScreen extends React.Component {
                 }).then(() => {
                   // update successful
                     console.log('curUser', curUser);
-                    firebase.database().ref(`/users/${curUser.uid}`).set({
-                        fullName: this.state.name,
-                        age: '99',
-                        bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
-                    });
-                    return 'done';
-                }).then(() => {
+                    if (this.state.selectedOption === 'Trainer') {
+                        firebase.database().ref(`/users/${curUser.uid}`).set({
+                            isCertified: false,
+                            isTrainer: true,
+                            fullName: this.state.name,
+                            age: '99',
+                            bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm here to help you get more fit!`,
+                        });
+                    } else {
+                        firebase.database().ref(`/users/${curUser.uid}`).set({
+                            isTrainer: false,
+                            fullName: this.state.name,
+                            age: '99',
+                            bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
+                        });
+                    }
                     navigate('Log');
                 }).catch((e) => {
                     alert('error');
@@ -170,6 +187,12 @@ export default class RegisterScreen extends React.Component {
         }
     }
 
+    setSelectedOption = (selectedOption) => {
+        this.setState({
+            selectedOption,
+        });
+    }
+    
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -186,7 +209,17 @@ export default class RegisterScreen extends React.Component {
                 </View>
 
               </View>
-
+              <SegmentedControls
+                tint={'#f80046'}
+                selectedTint={'white'}
+                backTint={'#1e2126'}
+                options={options}
+                allowFontScaling={false} // default: true
+                onSelection={this.setSelectedOption.bind(this)}
+                selectedOption={this.state.selectedOption}
+                optionStyle={{ fontFamily: 'AvenirNext-Medium' }}
+                optionContainerStyle={{ flex: 1 }}
+              />
               <View style={styles.inputsContainer}>
 
                 <View style={styles.inputContainer}>

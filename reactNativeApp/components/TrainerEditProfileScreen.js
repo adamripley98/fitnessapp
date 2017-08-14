@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class EditUserProfileScreen extends React.Component {
+class TrainerEditProfileScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -240,7 +240,7 @@ class EditUserProfileScreen extends React.Component {
                 bio: this.state.bio,
             });
         }).then(() => {
-            navigate('UserProfile');
+            navigate('TrainerProfile');
         })
         .catch((e) => {
             alert('error');
@@ -265,7 +265,7 @@ class EditUserProfileScreen extends React.Component {
                 </TouchableOpacity> :
                 <View />}
               <View style={styles.public}>
-                <Text> Public Information </Text>
+                <Text> Trainer Public Information </Text>
                 <View style={styles.markWrap}>
                   <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
                 </View>
@@ -287,7 +287,7 @@ class EditUserProfileScreen extends React.Component {
                   </View>
                   <View style={styles.textBox}>
                     <TextInput
-                      placeholder={`${this.state.name.split(' ')[0]}, explain your fitness goals.`}
+                      placeholder={`${this.state.name.split(' ')[0]}, explain your expertise.`}
                       onChangeText={bio => this.setState({ bio })}
                       multiline={true}
                       numberOfLines={10}
@@ -307,4 +307,4 @@ class EditUserProfileScreen extends React.Component {
     }
   }
 
-module.exports = EditUserProfileScreen;
+module.exports = TrainerEditProfileScreen;

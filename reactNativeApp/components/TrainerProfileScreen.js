@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class UserProfileScreen extends React.Component {
+class TrainerProfileScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -131,21 +131,25 @@ export default class UserProfileScreen extends React.Component {
             } else {
                 console.log('user is', user);
                 console.log('what is state', this.state);
-                const userRef = firebase.database().ref(`/users/${user.uid}`);
+                const userRef = firebase.database().ref('/users/' + user.uid);
                 console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
+                        if (!snapshot.val().isTrainer) {
+                            navigate('UserProfile');
+                        }
                         this.setState({
                             emailVerified: user.emailVerified,
                             name: user.displayName,
                             profPic: user.photoURL,
                             userId: user.uid,
-                            age: snapshot.val().age || '999',
-                            bio: snapshot.val().bio || 'Test Bio',
+                            age: snapshot.val().age,
+                            bio: snapshot.val().bio,
+                            isCertified: snapshot.val().isCertified,
                         });
                     }
-                    console.log('what is state', this.state);
+                    console.log('what is state inside trainer prof', this.state);
                 });
             }
         });
@@ -171,7 +175,12 @@ export default class UserProfileScreen extends React.Component {
     }
 
     editProf = (navigate) => {
-        navigate('EditUserProfile');
+        navigate('TrainerEditProfile');
+    }
+
+    getCertified = (navigate) => {
+        console.log('getting certified');
+        navigate('TrainerCertification');
     }
 
     render() {
@@ -188,8 +197,13 @@ export default class UserProfileScreen extends React.Component {
                   <Text style={styles.banner}> Click here to verify your email!</Text>
                 </TouchableOpacity> :
                 <View />}
+              {this.state.isCertified === false ?
+                <TouchableOpacity onPress={() => this.getCertified(navigate)}>
+                  <Text style={styles.banner}> Get certified before training clients!</Text>
+                </TouchableOpacity> :
+                <View />}
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>Trainer Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
               </View>
               <View style={styles.pdrofile}>
                 <View style={styles.markWrap}>
@@ -215,3 +229,5 @@ export default class UserProfileScreen extends React.Component {
         );
     }
   }
+
+module.exports = TrainerProfileScreen;

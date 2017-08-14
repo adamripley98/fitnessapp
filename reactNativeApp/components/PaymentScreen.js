@@ -1,21 +1,14 @@
 import {
-  ActivityIndicator,
-  AsyncStorage,
   TouchableOpacity,
-  Component,
   StyleSheet,
   Dimensions,
   Text,
   View,
-  Image,
-  TextInput,
-  Button,
   Platform,
   NativeModules,
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
-import Expo from 'expo';
 
 const { width, height } = Dimensions.get('window');
 
@@ -85,7 +78,7 @@ class PaymentScreen extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {

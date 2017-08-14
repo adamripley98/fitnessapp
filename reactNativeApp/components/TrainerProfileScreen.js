@@ -12,7 +12,6 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
-const backIcon = require('./logos/back.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -109,26 +108,13 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
-    headerIconView: {
-        marginLeft: 10,
-        backgroundColor: 'transparent',
-    },
-    headerBackButtonView: {
-        width: 25,
-        height: 25,
-    },
-    backButtonIcon: {
-        width: 25,
-        height: 25,
-    },
 });
 
-export default class UserProfileScreen extends React.Component {
+class TrainerProfileScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
     };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -145,21 +131,25 @@ export default class UserProfileScreen extends React.Component {
             } else {
                 console.log('user is', user);
                 console.log('what is state', this.state);
-                const userRef = firebase.database().ref(`/users/${user.uid}`);
+                const userRef = firebase.database().ref('/users/' + user.uid);
                 console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
+                        if (!snapshot.val().isTrainer) {
+                            navigate('UserProfile');
+                        }
                         this.setState({
                             emailVerified: user.emailVerified,
                             name: user.displayName,
                             profPic: user.photoURL,
                             userId: user.uid,
-                            age: snapshot.val().age || '999',
-                            bio: snapshot.val().bio || 'Test Bio',
+                            age: snapshot.val().age,
+                            bio: snapshot.val().bio,
+                            isCertified: snapshot.val().isCertified,
                         });
                     }
-                    console.log('what is state', this.state);
+                    console.log('what is state inside trainer prof', this.state);
                 });
             }
         });
@@ -175,8 +165,22 @@ export default class UserProfileScreen extends React.Component {
         });
     }
 
+    logout = () => {
+        firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+        }).catch((error) => {
+        // An error happened.
+            alert(error.message);
+        });
+    }
+
     editProf = (navigate) => {
-        navigate('EditUserProfile');
+        navigate('TrainerEditProfile');
+    }
+
+    getCertified = (navigate) => {
+        console.log('getting certified');
+        navigate('TrainerCertification');
     }
 
     render() {
@@ -188,22 +192,18 @@ export default class UserProfileScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-              <View style={styles.headerIconView}>
-                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
-                  <Image
-                    source={backIcon}
-                    style={styles.backButtonIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
               {this.state.emailVerified === false ?
                 <TouchableOpacity onPress={() => this.verifyEmail()}>
                   <Text style={styles.banner}> Click here to verify your email!</Text>
                 </TouchableOpacity> :
                 <View />}
+              {this.state.isCertified === false ?
+                <TouchableOpacity onPress={() => this.getCertified(navigate)}>
+                  <Text style={styles.banner}> Get certified before training clients!</Text>
+                </TouchableOpacity> :
+                <View />}
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>Trainer Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
               </View>
               <View style={styles.pdrofile}>
                 <View style={styles.markWrap}>
@@ -222,7 +222,12 @@ export default class UserProfileScreen extends React.Component {
                 </View>
               </View>
             </Image>
+            <TouchableOpacity onPress={() => this.logout()}>
+              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
+            </TouchableOpacity>
           </View>
         );
     }
   }
+
+module.exports = TrainerProfileScreen;

@@ -8,9 +8,9 @@ import {
   Image,
   Text,
 } from 'react-native';
+import firebase from 'firebase';
 import LinearGradient from 'react-native-linear-gradient';
 import Orientation from 'react-native-orientation';
-import firebase from 'firebase';
 
 import menuStyles from './MenuStyle';
 
@@ -24,18 +24,10 @@ const xIcon = require('../assets/icons/xIcon.png');
 
 
 export default class Menu extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-        };
-    }
-
-    componentWillMount() {
-        firebase.auth().onAuthStateChanged((user) => {
-            this.setState({ name: user.displayName });
-        });
-    }
+    static navigationOptions = {
+        title: 'Welcome',
+        header: null,
+    };
 
     xButton = () => (
       <View style={{
@@ -55,6 +47,15 @@ export default class Menu extends React.Component {
       </View>
     )
 
+    logout = () => {
+        firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+        }).catch((error) => {
+        // An error happened.
+            alert(error.message);
+        });
+    }
+
     render() {
         return (
           <ScrollView scrollEnabled={false} scrollsToTop={false} style={menuStyles.menu}>
@@ -63,9 +64,9 @@ export default class Menu extends React.Component {
             <View style={menuStyles.avatarContainer}>
               <Image
                 style={menuStyles.avatar}
-                source={{ uri }}
+                source={{ uri: this.props.profPic }}
               />
-              <Text style={menuStyles.name}>{this.state.name}</Text>
+              <Text style={menuStyles.name}>{this.props.name}</Text>
             </View>
 
             <Text
@@ -76,7 +77,7 @@ export default class Menu extends React.Component {
             </Text>
 
             <Text
-              onPress={() => this.props.onItemSelected('UserProfileScreen')}
+              onPress={() => this.props.onItemSelected('UserProfile')}
               style={menuStyles.item}
             >
               Profile
@@ -87,6 +88,12 @@ export default class Menu extends React.Component {
               style={menuStyles.item}
             >
               Payment
+            </Text>
+            <Text
+              onPress={() => this.logout()}
+              style={menuStyles.item}
+            >
+              Logout
             </Text>
           </ScrollView>
         );

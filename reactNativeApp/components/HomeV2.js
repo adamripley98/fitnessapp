@@ -13,7 +13,7 @@ import Orientation from 'react-native-orientation';
 
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
-import Map from './Map';
+import Map from './MapScreen';
 import UserProfileScreen from './UserProfileScreen';
 import Payment from './Payment';
 
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export default class Basic extends Component {
+export default class HomeV2 extends Component {
     static navigationOptions = {
         title: 'Home',
         header: null,

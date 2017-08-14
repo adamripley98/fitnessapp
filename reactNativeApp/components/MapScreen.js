@@ -6,7 +6,7 @@ import MapStyle from './mapStyle.json';
 
 const currentLocation = require('../assets/icons/currentLocationFYTOrange.png');
 
-export default class Map extends React.Component {
+export default class MapScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

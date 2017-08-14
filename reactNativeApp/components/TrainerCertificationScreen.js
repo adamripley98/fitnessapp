@@ -8,11 +8,16 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
+import { SegmentedControls } from 'react-native-radio-buttons';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
-const backIcon = require('./logos/back.png');
+
+const options = [
+    'Yes',
+    'No',
+];
 
 const styles = StyleSheet.create({
     banner: {
@@ -109,26 +114,13 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
-    headerIconView: {
-        marginLeft: 10,
-        backgroundColor: 'transparent',
-    },
-    headerBackButtonView: {
-        width: 25,
-        height: 25,
-    },
-    backButtonIcon: {
-        width: 25,
-        height: 25,
-    },
 });
 
-export default class UserProfileScreen extends React.Component {
+class TrainerCertificationScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
     };
-
     constructor(props) {
         super(props);
         this.state = {
@@ -143,40 +135,39 @@ export default class UserProfileScreen extends React.Component {
             if (!user) {
                 navigate('Log');
             } else {
-                console.log('user is', user);
-                console.log('what is state', this.state);
-                const userRef = firebase.database().ref(`/users/${user.uid}`);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
+                const userRef = firebase.database().ref('/users/' + user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
+                        if (!snapshot.val().isTrainer) {
+                            navigate('UserProfile');
+                        }
                         this.setState({
-                            emailVerified: user.emailVerified,
                             name: user.displayName,
-                            profPic: user.photoURL,
                             userId: user.uid,
-                            age: snapshot.val().age || '999',
-                            bio: snapshot.val().bio || 'Test Bio',
+                            isCertified: snapshot.val().isCertified,
                         });
                     }
-                    console.log('what is state', this.state);
                 });
             }
         });
     }
 
-    verifyEmail = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
-            console.log('verification email sent');
-            alert('Verification email sent!');
-        }).catch((error) => {
-            alert('Error sending verification email');
-            console.log('error sending verification email', error);
+    setSelectedOption = (selectedOption) => {
+        this.setState({
+            selectedOption,
         });
     }
 
-    editProf = (navigate) => {
-        navigate('EditUserProfile');
+    getCertified = (navigate) => {
+        // TODO: actual certification, update in firebase, navigate back to trainer profile
+        if (this.state.selectedOption === 'Yes') {
+            firebase.database().ref('/users/' + this.state.userId).update({
+                isCertified: true,
+            });
+            console.log('You have been certified! Congrats!');
+        }
+        navigate('TrainerProfile');
     }
 
     render() {
@@ -188,41 +179,27 @@ export default class UserProfileScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-              <View style={styles.headerIconView}>
-                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
-                  <Image
-                    source={backIcon}
-                    style={styles.backButtonIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-              {this.state.emailVerified === false ?
-                <TouchableOpacity onPress={() => this.verifyEmail()}>
-                  <Text style={styles.banner}> Click here to verify your email!</Text>
-                </TouchableOpacity> :
-                <View />}
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>do u even lift, {this.state.name.split(' ')[0] || 'dood'}?</Text>
               </View>
-              <View style={styles.pdrofile}>
-                <View style={styles.markWrap}>
-                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-                </View>
-                <View style={styles.markBio}>
-                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
-                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.markWrap}>
-                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  <View style={styles.bio}>
-                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
-                  </View>
-                </View>
-              </View>
+              <SegmentedControls
+                tint={'#f80046'}
+                selectedTint={'white'}
+                backTint={'#1e2126'}
+                options={options}
+                allowFontScaling={false} // default: true
+                onSelection={this.setSelectedOption.bind(this)}
+                selectedOption={this.state.selectedOption}
+                optionStyle={{ fontFamily: 'AvenirNext-Medium' }}
+                optionContainerStyle={{ flex: 1 }}
+              />
             </Image>
+            <TouchableOpacity onPress={() => this.getCertified(navigate)}>
+              <Text style={[styles.button, styles.greenButton]}>Get certified</Text>
+            </TouchableOpacity>
           </View>
         );
     }
   }
+
+module.exports = TrainerCertificationScreen;

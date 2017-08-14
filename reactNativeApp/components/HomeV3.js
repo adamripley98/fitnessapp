@@ -10,6 +10,7 @@ import {
 import SideMenu from 'react-native-side-menu';
 import ModalBox from 'react-native-modalbox';
 import Orientation from 'react-native-orientation';
+import Drawer from 'react-native-drawer';
 
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
@@ -179,22 +180,41 @@ export default class HomeV3 extends Component {
           xPressed={this.onMenuXPressed}
         />);
 
+        // <View style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }}>
+        //   <SideMenu
+        //     menu={menu}
+        //     isOpen={this.state.isOpen}
+        //     onChange={isOpen => this.updateMenuState(isOpen)}
+        //     openMenuOffset={Dimensions.get('window').width}
+        //   >
+        //     <View style={styles.container}>
+        //       {this.mainPageRender()}
+        //     </View>
+        //     {this.menuButton()}
+        { this.bottomButton(); }
+        { this.bottomModalFrame(); }
+        //   </SideMenu>
+        // </View>
         return (
-          <View style={{ height: Dimensions.get('window').height, width: Dimensions.get('window').width }}>
-            <SideMenu
-              menu={menu}
-              isOpen={this.state.isOpen}
-              onChange={isOpen => this.updateMenuState(isOpen)}
-              openMenuOffset={Dimensions.get('window').width}
-            >
-              <View style={styles.container}>
-                {this.mainPageRender()}
-              </View>
-              {this.menuButton()}
+          <Drawer
+            open={this.state.isOpen}
+            type="overlay"
+            content={menu}
+            tapToClose
+            openDrawerOffset={0.2} // 20% gap on the right side of drawer
+            panCloseMask={0.2}
+            closedDrawerOffset={-3}
+            tweenHandler={ratio => ({
+                main: { opacity: (2 - ratio) / 2 },
+            })}
+          >
+            <View style={styles.container}>
+              {this.mainPageRender()}
               {this.bottomButton()}
               {this.bottomModalFrame()}
-            </SideMenu>
-          </View>
+            </View>
+            {this.menuButton()}
+          </Drawer>
         );
     }
 }

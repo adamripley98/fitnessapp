@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Orientation from 'react-native-orientation';
+import firebase from 'firebase';
+
 import menuStyles from './MenuStyle';
 
 const window = Dimensions.get('window');
@@ -24,7 +26,17 @@ const xIcon = require('../assets/icons/xIcon.png');
 export default class Menu extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            name: '',
+        };
     }
+
+    componentWillMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+            this.setState({ name: user.displayName });
+        });
+    }
+
     xButton = () => (
       <View style={{
           position: 'absolute',
@@ -42,6 +54,7 @@ export default class Menu extends React.Component {
         </TouchableOpacity>
       </View>
     )
+
     render() {
         return (
           <ScrollView scrollEnabled={false} scrollsToTop={false} style={menuStyles.menu}>
@@ -52,7 +65,7 @@ export default class Menu extends React.Component {
                 style={menuStyles.avatar}
                 source={{ uri }}
               />
-              <Text style={menuStyles.name}>Jeffrey Chen</Text>
+              <Text style={menuStyles.name}>{this.state.name}</Text>
             </View>
 
             <Text

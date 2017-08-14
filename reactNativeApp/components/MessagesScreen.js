@@ -113,11 +113,11 @@ class MessagesScreen extends React.Component {
     sendMessage = () => {
         const messageToSend = {
             _id: Math.round(Math.random() * 1000000),
-            text: 'Boi boi boi',
+            text: this.state.currentMessage,
             createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
             user: {
-                _id: 2,
-                name: 'React Native',
+                _id: this.state.userId,
+                name: this.state.name,
             },
         };
         console.log(messageToSend);

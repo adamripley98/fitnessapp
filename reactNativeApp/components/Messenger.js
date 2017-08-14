@@ -7,12 +7,12 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 import $ from 'jquery';
-
 import { GiftedChat, Actions, Bubble } from 'react-native-gifted-chat';
+
 import CustomActions from './CustomActions';
 import CustomView from './CustomView';
 
-export default class Example extends React.Component {
+export default class Messenger extends React.Component {
     static navigationOptions = {
         title: 'Messenger',
         header: null,

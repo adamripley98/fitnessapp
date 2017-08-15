@@ -11,7 +11,6 @@ import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
-const editProfPic = require('./logos/editprof.png');
 const backIcon = require('./logos/back.png');
 
 const styles = StyleSheet.create({
@@ -40,11 +39,25 @@ const styles = StyleSheet.create({
         height,
     },
     button: {
-        borderRadius: 4,
-        padding: 20,
+        borderRadius: 10,
+        padding: 10,
         textAlign: 'center',
-        marginBottom: 20,
+        alignItems: 'center',
+        // marginBottom: 10,
         color: '#fff',
+        backgroundColor: 'transparent',
+    },
+    headerIconView: {
+        marginLeft: 10,
+        backgroundColor: 'transparent',
+    },
+    headerBackButtonView: {
+        width: 25,
+        height: 25,
+    },
+    backButtonIcon: {
+        width: 25,
+        height: 25,
     },
     greenButton: {
         backgroundColor: '#4CD964',
@@ -109,9 +122,16 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
+    textBox: {
+        borderWidth: 2,
+        height: 150,
+        margin: 20,
+        backgroundColor: 'white',
+        opacity: 0.5,
+    },
 });
 
-class TrainerProfileScreen extends React.Component {
+class PaymentSettingsScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -124,40 +144,14 @@ class TrainerProfileScreen extends React.Component {
     }
 
     componentDidMount() {
-      // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
             } else {
-                console.log('user is', user);
-                console.log('what is state', this.state);
-                const userRef = firebase.database().ref('/users/' + user.uid);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
-                userRef.on('value', (snapshot) => {
-                    console.log('snapshot inside user', snapshot);
-                    if (snapshot !== null) {
-                        if (!snapshot.val().isTrainer) {
-                            navigate('UserProfile');
-                        }
-                        this.setState({
-                            emailVerified: user.emailVerified,
-                            name: user.displayName,
-                            profPic: user.photoURL,
-                            userId: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
-                            isCertified: snapshot.val().isCertified,
-                        });
-                    }
-                    console.log('what is state inside trainer prof', this.state);
-                });
+                console.log('in');
             }
         });
-    }
-
-    editProf = (navigate) => {
-        navigate('TrainerEditProfile');
     }
 
     render() {
@@ -179,23 +173,7 @@ class TrainerProfileScreen extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Trainer Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
-              </View>
-              <View style={styles.pdrofile}>
-                <View style={styles.markWrap}>
-                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-                </View>
-                <View style={styles.markBio}>
-                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
-                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.markWrap}>
-                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  <View style={styles.bio}>
-                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
-                  </View>
-                </View>
+                <Text style={styles.centering}>Card Settings</Text>
               </View>
             </Image>
           </View>
@@ -203,4 +181,4 @@ class TrainerProfileScreen extends React.Component {
     }
   }
 
-module.exports = TrainerProfileScreen;
+module.exports = PaymentSettingsScreen;

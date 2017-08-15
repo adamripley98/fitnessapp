@@ -127,6 +127,15 @@ export default class LogScreen extends React.Component {
                 //         console.log('SOMETHING WEIRD IS HAPPENING');
                 //     }
                 // });
+                // const userRef = firebase.database().ref(`/users/${usr.uid}`);
+                // userRef.on('value', (snapshot) => {
+                //     if (snapshot.val().isTrainer) {
+                //         this.setState({
+                //             isTrainer: snapshot.val().isTrainer,
+                //         });
+                //         navigate('HomeV3', { isTrain: this.state.isTrainer });
+                //     }
+                // });
                 navigate('HomeV3');
             }
         });

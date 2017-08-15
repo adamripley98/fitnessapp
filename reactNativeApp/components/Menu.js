@@ -74,20 +74,37 @@ export default class Menu extends React.Component {
             >
               Map
             </Text>
+            {console.log('istrainer???', this.props.isTrainer)}
+            {
+              this.props.isTrainer === false ?
+                <Text
+                  onPress={() => this.props.onItemSelected('UserProfile')}
+                  style={menuStyles.item}
+                >
+              User Profile
+                </Text> :
+                <Text
+                  onPress={() => this.props.onItemSelected('TrainerProfile')}
+                  style={menuStyles.item}
+                >
+                  Trainer Profile
+                </Text>
+          }
 
             <Text
-              onPress={() => this.props.onItemSelected('UserProfile')}
+              onPress={() => this.props.onItemSelected('PaymentSettings')}
               style={menuStyles.item}
             >
-              Profile
+              Payment Settings
             </Text>
 
             <Text
-              onPress={() => this.props.onItemSelected('Payment')}
+              onPress={() => this.props.onItemSelected('Messages')}
               style={menuStyles.item}
             >
-              Payment
+              Messages
             </Text>
+
             <Text
               onPress={() => this.logout()}
               style={menuStyles.item}

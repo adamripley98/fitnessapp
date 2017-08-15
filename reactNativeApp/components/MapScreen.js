@@ -1,12 +1,17 @@
 import React from 'react';
 import { Animated, StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import firebase from 'firebase';
 
 import MapStyle from './mapStyle.json';
 
 const currentLocation = require('../assets/icons/currentLocationFYTOrange.png');
 
 export default class MapScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Home',
+        header: null,
+    };
     constructor(props) {
         super(props);
         this.state = {
@@ -34,6 +39,11 @@ export default class MapScreen extends React.Component {
     getCurrentCoords() {
         navigator.geolocation.getCurrentPosition(
             (success) => {
+                const userId = firebase.auth().currentUser.uid;
+                firebase.database().ref('/users/' + userId).update({
+                    latitude: success.coords.latitude,
+                    longitude: success.coords.longitude,
+                });
                 this.setState({
                     currentRegion: new MapView.AnimatedRegion({
                         latitude: success.coords.latitude,
@@ -48,6 +58,7 @@ export default class MapScreen extends React.Component {
             {},
         );
     }
+
     moveToCurrentCoords() {
         navigator.geolocation.getCurrentPosition(
             (success) => {

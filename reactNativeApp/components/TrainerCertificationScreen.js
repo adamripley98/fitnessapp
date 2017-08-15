@@ -140,7 +140,7 @@ class TrainerCertificationScreen extends React.Component {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
                         if (!snapshot.val().isTrainer) {
-                            navigate('UserProfile');
+                            navigate('HomeV3');
                         }
                         this.setState({
                             name: user.displayName,

@@ -13,6 +13,7 @@ import TrainerProfileScreen from './components/TrainerProfileScreen';
 import TrainerEditProfileScreen from './components/TrainerEditProfileScreen';
 import TrainerCertificationScreen from './components/TrainerCertificationScreen';
 import MapScreen from './components/MapScreen';
+import PaymentSettingsScreen from './components/PaymentSettingsScreen';
 // JEFFREY'S THING
 // import { StyleSheet, Text, View } from 'react-native';
 import HomeV2 from './components/HomeV2';
@@ -87,6 +88,9 @@ const myApp = StackNavigator({
     },
     Map: {
         screen: MapScreen,
+    },
+    PaymentSettings: {
+        screen: PaymentSettingsScreen,
     },
 }, { initialRouteName: 'Log' });
 

@@ -196,15 +196,6 @@ class EditUserProfileScreen extends React.Component {
         });
     }
 
-    verifyEmail = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
-            console.log('verification email sent');
-        }).catch((error) => {
-            alert('Error sending verification email');
-            console.log('error sending verification email', error);
-        });
-    }
-
     changeProfPic = async () => {
         console.log('profile pic changed!');
         const result = await Exponent.ImagePicker.launchImageLibraryAsync({
@@ -259,11 +250,6 @@ class EditUserProfileScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-              {this.state.emailVerified === false ?
-                <TouchableOpacity onPress={() => this.verifyEmail()}>
-                  <Text style={styles.banner}> Click here to verify your email!</Text>
-                </TouchableOpacity> :
-                <View />}
               <View style={styles.public}>
                 <Text> Public Information </Text>
                 <View style={styles.markWrap}>

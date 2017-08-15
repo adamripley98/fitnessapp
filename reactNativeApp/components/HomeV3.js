@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
         width,
         height: 30,
         textAlign: 'center',
-        paddingTop: 10,
+        paddingTop: 20,
+        // marginTop: 50,
         paddingBottom: 30,
         backgroundColor: '#f44336',
         shadowOpacity: 0.75,
@@ -110,22 +111,34 @@ export default class HomeV3 extends Component {
             isOpen: false,
             selectedItem: 'Map',
             bottomModalIsOpen: false,
+            nearby: [],
         };
     }
 
     componentDidMount() {
         const { navigate } = this.props.navigation;
+        this.calcDistance(37.7749, 122.4194, 45, -122.406417);
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
             } else {
-                this.setState({
-                    emailVerified: user.emailVerified,
-                    name: user.displayName,
-                    profPic: user.photoURL,
-                    userId: user.uid,
+                const userRef = firebase.database().ref(`/users/${user.uid}`);
+                userRef.on('value', (snapshot) => {
+                    if (snapshot.val()) {
+                        console.log('what is snapVALLLL', snapshot.val());
+                        this.setState({
+                            emailVerified: user.emailVerified,
+                            name: user.displayName,
+                            profPic: user.photoURL,
+                            userId: user.uid,
+                            isTrainer: snapshot.val().isTrainer,
+                            isCertified: snapshot.val().isCertified,
+                            userLat: snapshot.val().latitude,
+                            userLong: snapshot.val().longitude,
+                        });
+                    }
                 });
-                console.log('what is state', this.state);
+
             }
         });
     }
@@ -137,7 +150,6 @@ export default class HomeV3 extends Component {
             selectedItem: item,
         });
         navigate(item);
-        console.log('this is item', item);
     }
 
     onMenuXPressed = () => {
@@ -166,6 +178,38 @@ export default class HomeV3 extends Component {
         });
     }
 
+    getCertified = (navigate) => {
+        console.log('getting certified');
+        navigate('TrainerCertification');
+    }
+
+    calcDistance = (lat1, lon1, lat2, lon2) => {
+        const radlat1 = Math.PI * lat1 / 180;
+        const radlat2 = Math.PI * lat2 / 180;
+        const theta = lon1 - lon2;
+        const radtheta = Math.PI * theta / 180;
+        let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        console.log('You are', dist.toFixed(2), 'miles apart!');
+        return dist.toFixed(2);
+    }
+
+    certBanner = (navigate) => {
+      if (this.state.isTrainer === false) {
+          console.log('not a trainer');
+      } else {
+          if (this.state.isCertified === true) {
+            console.log('cert?', this.state.isCertified);
+            console.log('already certified');
+          } else {
+              return (<TouchableOpacity onPress={() => this.getCertified(navigate)}>
+                <Text style={styles.banner}> Get certified before training clients!</Text>
+              </TouchableOpacity>)
+          }
+      }
+    }
     menuButton = () => (
       <TouchableOpacity
         onPress={this.toggle}
@@ -205,14 +249,35 @@ export default class HomeV3 extends Component {
       </ModalBox>
     );
 
+    findTrainers = () => {
+        firebase.database().ref('/users/').once('value').then((snapshot) => {
+            const users = snapshot.val();
+            const nearby = [];
+            for (let key in users) {
+                let user = users[key];
+                // calculates mile distance of trainers or users
+                if (user.isTrainer !== this.state.isTrainer) {
+                    const distance = this.calcDistance(this.state.userLat, this.state.userLong,
+                      user.latitude, user.longitude);
+                    if (distance <= 5) {
+                        console.log(user.fullName, 'is only', distance, 'miles away!');
+                        nearby.push(user);
+                    }
+                }
+            }
+            this.setState({ nearby });
+            console.log('nearby are', this.state.nearby);
+        });
+    }
+
     render() {
         const { navigate } = this.props.navigation;
-
         const menu = (<Menu
           onItemSelected={this.onMenuItemSelected}
           xPressed={this.onMenuXPressed}
           name={this.state.name}
           profPic={this.state.profPic}
+          isTrainer={this.state.isTrainer}
         />);
 
         return (
@@ -234,6 +299,10 @@ export default class HomeV3 extends Component {
                   <Text style={styles.banner}> Click here to verify your email!</Text>
                 </TouchableOpacity> :
                 <View />}
+              {this.certBanner(navigate)}
+              <TouchableOpacity onPress={() => this.findTrainers()}>
+                <Text style={styles.banner}>Find Partner</Text>
+              </TouchableOpacity>
               <Map />
               {this.bottomButton()}
               {this.bottomModalFrame()}

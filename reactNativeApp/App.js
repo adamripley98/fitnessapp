@@ -5,6 +5,7 @@ import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
+import Messenger from './components/Messenger';
 import MessengerV2 from './components/MessengerV2';
 import MessagesScreen from './components/MessagesScreen';
 import MessagesScreenV2 from './components/MessagesScreenV2';
@@ -68,9 +69,6 @@ const myApp = StackNavigator({
     MessagesV2: {
         screen: MessagesScreenV2,
     },
-    MessengerV2: {
-        screen: MessengerV2,
-    },
     Payment: {
         screen: PaymentScreen,
     },
@@ -104,6 +102,18 @@ const myApp = StackNavigator({
     PaymentSettings: {
         screen: PaymentSettingsScreen,
     },
-}, { initialRouteName: 'MessagesV2' });
+    Messenger: {
+        screen: Messenger,
+    },
+    MessengerV2: {
+        screen: MessengerV2,
+    },
+    MessagesScreen: {
+        screen: MessagesScreen,
+    },
+    MessagesScreenV2: {
+        screen: MessagesScreenV2,
+    },
+}, { initialRouteName: 'MessagesScreenV2' });
 
 export default myApp;

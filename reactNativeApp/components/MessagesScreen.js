@@ -10,6 +10,7 @@ import {
   Image,
   TextInput,
 } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 import React from 'react';
 import firebase from 'firebase';
 
@@ -69,17 +70,19 @@ const styles = StyleSheet.create({
 
 class MessagesScreen extends React.Component {
     static navigationOptions = {
-        title: 'Welcome',
+        title: 'Messages Screen',
         header: null,
     };
     constructor(props) {
         super(props);
         this.state = {
             name: '',
-            userId: '',
+            userId: null,
             threadId: null,
             currentMessage: null,
+            messages: [],
         };
+        const { navigate } = this.props.navigation;
     }
 
     componentDidMount() {
@@ -109,12 +112,16 @@ class MessagesScreen extends React.Component {
 
 
     sendMessage = () => {
-        console.log('message sent');
-        console.log('messages', this.state.currentMessage);
         const messageToSend = {
-            userId: this.state.userId,
-            body: this.state.currentMessage,
+            _id: Math.round(Math.random() * 1000000),
+            text: this.state.currentMessage,
+            createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+            user: {
+                _id: this.state.userId,
+                name: this.state.name,
+            },
         };
+        console.log('THE MESSAGE BEING SENT', messageToSend);
         if (this.state.currentMessage) {
             firebase.database().ref(`threads/${this.state.threadId}/messages`).push(messageToSend);
             this.setState({ currentMessage: null });
@@ -122,30 +129,60 @@ class MessagesScreen extends React.Component {
     }
 
     createThread = () => {
-        const firstMessage = {
-            userId: 'TRIM_BOT',
-            body: 'This is the start of your conversation with your trainer',
-        };
         const threadsRef = firebase.database().ref('threads/');
+        const firstMessage = {
+            _id: Math.round(Math.random() * 1000000),
+            text: 'This is the first message!',
+            createdAt: new Date(),
+            user: {
+                _id: 'trim_bot',
+                name: 'TRIM BOT',
+            },
+        };
         threadsRef.once('value').then((snapshot) => {
             const threads = snapshot.val();
-            if (true) {
-                const newThreadKey = threadsRef.push({
-                    users: [this.state.userId],
-                }).key;
-                firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
-                this.setState({ threadId: newThreadKey });
-            }
+            const newThreadKey = threadsRef.push({
+                users: [this.state.userId],
+            }).key;
+            firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            this.setState({ threadId: newThreadKey });
+            console.log('NEW THREAD CREATED', this.state.threadId);
         });
+    }
+
+    navigateToThread = (navigate) => {
+        navigate('MessengerV2', { currentThread: this.state.threadId });
     }
 
     displayMessages = () => {
         const ref = firebase.database().ref(`threads/${this.state.threadId}/messages`);
         ref.on('value', (snapshot) => {
-            console.log(snapshot.val());
+            // console.log('THIS IS THE SNAPSHOT VALUE', snapshot.val());
             for (const key in snapshot.val()) {
-                console.log(snapshot.val()[key].body);
+                if (snapshot.val()[key].userId === this.state.userId) {
+                    this.state.messages.push(snapshot.val()[key].text);
+                }
             }
+        });
+        return (
+          <View>
+            <Text>LIST</Text>
+            <List>
+              {
+                this.state.messages.map(item => (
+                  <Text>{item}</Text>
+                ))
+              }
+            </List>
+          </View>
+        );
+    }
+
+    signOut = () => {
+        firebase.auth().signOut().then(() => {
+            console.log('Signed out');
+        }, (error) => {
+            console.log('Sign out failed', error);
         });
     }
 
@@ -154,12 +191,13 @@ class MessagesScreen extends React.Component {
         return (
           <View style={styles.container}>
             <Text style={styles.centering}>Here are your messages, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+            {this.displayMessages()}
             <TextInput
               placeholder={'Send a message'}
               onChangeText={message => this.setState({ currentMessage: message })}
               value={this.state.currentMessage}
             />
-            <TouchableOpacity onPress={() => this.createThread()}>
+            <TouchableOpacity onPress={() => this.createThread(navigate)}>
               <Text style={[styles.button, styles.greenButton]}>Create Thread</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.sendMessage()}>
@@ -167,6 +205,12 @@ class MessagesScreen extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.displayMessages()}>
               <Text style={[styles.button, styles.greenButton]}>Log Message</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.navigateToThread(navigate)}>
+              <Text style={[styles.button, styles.greenButton, { backgroundColor: 'blue' }]}>Navigate To Thread</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.signOut()}>
+              <Text style={[styles.button, styles.greenButton, { backgroundColor: 'red' }]}>Sign Out</Text>
             </TouchableOpacity>
           </View>
         );

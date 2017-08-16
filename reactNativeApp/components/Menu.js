@@ -11,6 +11,7 @@ import {
 import firebase from 'firebase';
 import LinearGradient from 'react-native-linear-gradient';
 import Orientation from 'react-native-orientation';
+
 import menuStyles from './MenuStyle';
 
 const window = Dimensions.get('window');

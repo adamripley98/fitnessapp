@@ -160,13 +160,8 @@ export default class LogScreen extends React.Component {
       })
       .then(() => {
           if (noErr) {
-              if (this.state.isTrainer === true) {
-                  navigate('TrainerProfile');
-              } else if (this.state.isTrainer === false) {
-                  navigate('UserProfile');
-              } else {
-                  console.log('something weird happening');
-              }
+              console.log('logging in');
+              navigate('Messenger');
           }
       });
     }

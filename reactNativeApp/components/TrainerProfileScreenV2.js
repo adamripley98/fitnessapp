@@ -28,11 +28,15 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOffset: { height: 3, width: 3 },
     },
-    cont: {
+    content: {
         flex: 1,
+        paddingTop: 20,
+        width: null,
+        height: null,
     },
     container: {
         flex: 1,
+        justifyContent: 'center',
     },
     background: {
         width,
@@ -51,36 +55,38 @@ const styles = StyleSheet.create({
     blueButton: {
         backgroundColor: '#34AADC',
     },
-    bg: {
-        paddingTop: 30,
-        width: null,
-        height: null,
-    },
     centering: {
         backgroundColor: 'transparent',
         fontSize: 35,
-        marginTop: 60,
-        marginBottom: 30,
+        marginTop: 10,
         alignContent: 'center',
     },
     markWrap: {
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 10,
     },
     markBio: {
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'transparent',
+        marginTop: 3,
     },
     mark: {
         width: 160,
         height: 160,
-        borderWidth: 3,
-        borderRadius: 80,
+        borderWidth: 2,
+        borderRadius: 79,
         backgroundColor: '#FFAB91',
     },
     name: {
         fontSize: 20,
-        marginTop: 20,
+        marginTop: 0,
+        backgroundColor: 'transparent',
+    },
+    age: {
+        fontSize: 15,
+        marginTop: 0,
         backgroundColor: 'transparent',
     },
     icon: {
@@ -89,17 +95,13 @@ const styles = StyleSheet.create({
         marginLeft: 150,
     },
     bio: {
+        marginTop: 10,
         backgroundColor: 'transparent',
         borderTopWidth: 2,
-        borderBottomWidth: 2,
         borderColor: '#424242',
-        height: 60,
-        width: width - 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        paddingTop: 40,
-        paddingBottom: 40,
+        padding: 5,
+        margin: 1,
+        width: width - 3,
     },
     location: {
         fontSize: 15,
@@ -108,11 +110,27 @@ const styles = StyleSheet.create({
         paddingTop: 30,
         backgroundColor: '#FFAB91',
     },
+    ledBox: {
+        height: 30,
+        width: '25%',
+        margin: 10,
+        flex: 1,
+        alignItems: 'center',
+    },
+    ledGreen: {
+        margin: 0,
+        width: 10,
+        height: 10,
+        backgroundColor: '#ABFF00',
+        borderRadius: 80,
+        // boxShadow: rgba(0, 0, 0, 0.2) 0 -1 7 1, inset #006 0 -1 9, '#3F8CFF' 0 2 14,
+        shadowColor: 'rgba(0, 0, 0, 0.2)',
+    },
 });
 
 class TrainerProfileScreen extends React.Component {
     static navigationOptions = {
-        title: 'Welcome',
+        title: 'Your Trainer',
         header: null,
     };
     constructor(props) {
@@ -122,7 +140,7 @@ class TrainerProfileScreen extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
       // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
@@ -183,44 +201,92 @@ class TrainerProfileScreen extends React.Component {
         navigate('TrainerCertification');
     }
 
+    createThread = (navigate) => {
+        const threadsRef = firebase.database().ref('threads/');
+        const firstMessage = {
+            _id: Math.round(Math.random() * 1000000),
+            text: 'This is the first message!',
+            createdAt: new Date(),
+            user: {
+                _id: 'trim_bot',
+                name: 'TRIM BOT',
+            },
+        };
+        threadsRef.once('value').then((snapshot) => {
+            const threads = snapshot.val();
+            const newThreadKey = threadsRef.push({
+                users: [
+                    this.state.userId,
+                    this.state.name,
+                ],
+                createdAt: new Date(),
+            }).key;
+            firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            this.setState({ threadId: newThreadKey });
+            console.log('NEW THREAD CREATED', this.state.threadId);
+        });
+    }
+
+    navigateToThread = (navigate) => {
+        navigate('MessengerV2', { currentThread: this.state.threadId });
+    }
+
     render() {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
             <Image
               source={background}
-              style={[styles.cont, styles.bg]}
+              style={styles.content}
               resizeMode="cover"
             >
-              {this.state.emailVerified === false ?
-                <TouchableOpacity onPress={() => this.verifyEmail()}>
-                  <Text style={styles.banner}> Click here to verify your email!</Text>
-                </TouchableOpacity> :
-                <View />}
-              {this.state.isCertified === false ?
-                <TouchableOpacity onPress={() => this.getCertified(navigate)}>
-                  <Text style={styles.banner}> Get certified before training clients!</Text>
-                </TouchableOpacity> :
-                <View />}
+              <View style={styles.markWrap}>
+                <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
+              </View>
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Trainer Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+                <Text style={styles.centering}>{this.state.name}</Text>
+              </View>
+              <View style={[styles.markBio, { flexDirection: 'row' }]}>
+                <Text>Status: </Text>
+                <View style={styles.ledGreen} />
+                <Text> (Online)</Text>
               </View>
               <View style={styles.pdrofile}>
                 <View style={styles.markWrap}>
-                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-                </View>
-                <View style={styles.markBio}>
-                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
-                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.markWrap}>
-                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
+                  <Text style={styles.age}> Age: {this.state.age || '?'} </Text>
                   <View style={styles.bio}>
-                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
+                    <Text> {this.state.bio || `My name is ${this.state.name.split(' ')[0]}, and I'm here to help you get more fit!`} </Text>
+                  </View>
+                  <View style={{
+                      backgroundColor: 'transparent',
+                      borderWidth: 1,
+                      borderColor: 'black',
+                      padding: 5,
+                      margin: 1,
+                      width: width - 3,
+                  }}
+                  >
+                    <Text>This is where I will tell you a bit about myself because this is the about me</Text>
+                  </View>
+                  <View style={{
+                      backgroundColor: 'transparent',
+                      borderWidth: 1,
+                      borderColor: 'black',
+                      padding: 5,
+                      margin: 1,
+                      width: width - 3,
+                  }}
+                  >
+                    <Text>This is where I will tell you a bit about my favorite exercises because this is the favorite exercises part</Text>
                   </View>
                 </View>
               </View>
+              <TouchableOpacity onPress={() => this.createThread(navigate)}>
+                <Text style={[styles.button, styles.greenButton]}>Create Thread</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.navigateToThread(navigate)}>
+                <Text style={[styles.button, styles.greenButton, { backgroundColor: 'blue' }]}>Navigate To Thread</Text>
+              </TouchableOpacity>
             </Image>
           </View>
         );

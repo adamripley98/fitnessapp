@@ -138,7 +138,6 @@ export default class HomeV3 extends Component {
                         });
                     }
                 });
-
             }
         });
     }
@@ -156,10 +155,6 @@ export default class HomeV3 extends Component {
         this.setState({
             isOpen: false,
         });
-    }
-
-    updateMenuState(isOpen) {
-        this.setState({ isOpen });
     }
 
     toggle() {
@@ -200,8 +195,8 @@ export default class HomeV3 extends Component {
         firebase.database().ref('/users/').once('value').then((snapshot) => {
             const users = snapshot.val();
             const nearby = [];
-            for (let key in users) {
-                let user = users[key];
+            for (const key in users) {
+                const user = users[key];
                 // calculates mile distance of trainers or users
                 if (user.isTrainer !== this.state.isTrainer) {
                     const distance = this.calcDistance(this.state.userLat, this.state.userLong,
@@ -219,19 +214,18 @@ export default class HomeV3 extends Component {
     }
 
     certBanner = (navigate) => {
-      if (this.state.isTrainer === false) {
-          console.log('not a trainer');
-      } else {
-          if (this.state.isCertified === true) {
+        if (this.state.isTrainer === false) {
+            console.log('not a trainer');
+        } else if (this.state.isCertified === true) {
             console.log('cert?', this.state.isCertified);
             console.log('already certified');
-          } else {
-              return (<TouchableOpacity onPress={() => this.getCertified(navigate)}>
-                <Text style={styles.banner}> Get certified before training clients!</Text>
-              </TouchableOpacity>)
-          }
-      }
+        } else {
+            return (<TouchableOpacity onPress={() => this.getCertified(navigate)}>
+              <Text style={styles.banner}> Get certified before training clients!</Text>
+            </TouchableOpacity>);
+        }
     }
+
     menuButton = () => (
       <TouchableOpacity
         onPress={this.toggle}
@@ -243,6 +237,7 @@ export default class HomeV3 extends Component {
         />
       </TouchableOpacity>
     )
+
     bottomButton = () => (
       <View style={styles.bottomModalButton}>
         <TouchableHighlight
@@ -258,6 +253,7 @@ export default class HomeV3 extends Component {
         </TouchableHighlight>
       </View>
     );
+
     bottomModalFrame = () => (
       <ModalBox
         style={styles.bottomModal}

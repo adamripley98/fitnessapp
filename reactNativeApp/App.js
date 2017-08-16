@@ -5,11 +5,14 @@ import RegisterScreen from './components/RegisterScreen';
 import LogScreen from './components/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
+import MessengerV2 from './components/MessengerV2';
 import MessagesScreen from './components/MessagesScreen';
+import MessagesScreenV2 from './components/MessagesScreenV2';
 import PaymentScreen from './components/PaymentScreen';
 import RateTrainerScreen from './components/RateTrainerScreen';
 import TimerScreen from './components/TimerScreen';
 import TrainerProfileScreen from './components/TrainerProfileScreen';
+import TrainerProfileScreenV2 from './components/TrainerProfileScreenV2';
 import TrainerEditProfileScreen from './components/TrainerEditProfileScreen';
 import TrainerCertificationScreen from './components/TrainerCertificationScreen';
 import MapScreen from './components/MapScreen';
@@ -62,6 +65,12 @@ const myApp = StackNavigator({
     Messages: {
         screen: MessagesScreen,
     },
+    MessagesV2: {
+        screen: MessagesScreenV2,
+    },
+    MessengerV2: {
+        screen: MessengerV2,
+    },
     Payment: {
         screen: PaymentScreen,
     },
@@ -80,6 +89,9 @@ const myApp = StackNavigator({
     TrainerProfile: {
         screen: TrainerProfileScreen,
     },
+    TrainerProfileV2: {
+        screen: TrainerProfileScreenV2,
+    },
     TrainerEditProfile: {
         screen: TrainerEditProfileScreen,
     },
@@ -92,6 +104,6 @@ const myApp = StackNavigator({
     PaymentSettings: {
         screen: PaymentSettingsScreen,
     },
-}, { initialRouteName: 'Log' });
+}, { initialRouteName: 'MessagesV2' });
 
 export default myApp;

@@ -36,16 +36,18 @@ export default class BottomModal extends Component {
 
     renderProf = (prof) => {
         return (
-          <View key={Math.random()} style={styles.container}>
-            <Image
-              source={{ uri: prof.photoURL }}
-              style={styles.backButtonIcon}
-              resizeMode="contain"
-            />
-            <Text>{prof.fullName}</Text>
-            <Text>Rating: 5/5</Text>
-            <Text>{prof.miles} miles away</Text>
-          </View>
+          <TouchableOpacity key={Math.random()}>
+            <View style={styles.container}>
+              <Image
+                source={{ uri: prof.photoURL }}
+                style={styles.backButtonIcon}
+                resizeMode="contain"
+              />
+              <Text>{prof.fullName}</Text>
+              <Text>Rating: 5/5</Text>
+              <Text>{prof.miles} miles away</Text>
+            </View>
+          </TouchableOpacity>
         );
     }
 

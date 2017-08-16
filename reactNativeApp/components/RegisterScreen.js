@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SegmentedControls } from 'react-native-radio-buttons';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import firebase from 'firebase';
 
@@ -225,7 +226,7 @@ export default class RegisterScreen extends React.Component {
                 optionContainerStyle={{ flex: 1 }}
               />
               <View style={styles.inputsContainer}>
-
+                <KeyboardAwareScrollView>
                 <View style={styles.inputContainer}>
                   <View style={styles.iconContainer}>
                     <Image
@@ -300,7 +301,7 @@ export default class RegisterScreen extends React.Component {
                     onChangeText={psw => this.setState({ confirmPassword: psw })}
                   />
                 </View>
-
+                </KeyboardAwareScrollView>
               </View>
 
               <View style={styles.footerContainer}>

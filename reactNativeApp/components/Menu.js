@@ -68,12 +68,6 @@ export default class Menu extends React.Component {
               <Text style={menuStyles.name}>{this.props.name}</Text>
             </View>
 
-            <Text
-              onPress={() => this.props.onItemSelected('Map')}
-              style={menuStyles.item}
-            >
-              Map
-            </Text>
             {console.log('istrainer???', this.props.isTrainer)}
             {
               this.props.isTrainer === false ?

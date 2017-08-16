@@ -167,7 +167,7 @@ class TrainerCertificationScreen extends React.Component {
             });
             console.log('You have been certified! Congrats!');
         }
-        navigate('TrainerProfile');
+        navigate('HomeV3');
     }
 
     render() {

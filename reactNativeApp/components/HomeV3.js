@@ -196,6 +196,28 @@ export default class HomeV3 extends Component {
         return dist.toFixed(2);
     }
 
+    findPartners = () => {
+        firebase.database().ref('/users/').once('value').then((snapshot) => {
+            const users = snapshot.val();
+            const nearby = [];
+            for (let key in users) {
+                let user = users[key];
+                // calculates mile distance of trainers or users
+                if (user.isTrainer !== this.state.isTrainer) {
+                    const distance = this.calcDistance(this.state.userLat, this.state.userLong,
+                      user.latitude, user.longitude);
+                    if (distance <= 5) {
+                        console.log(user.fullName, 'is only', distance, 'miles away!');
+                        user.miles = distance;
+                        nearby.push(user);
+                    }
+                }
+            }
+            this.setState({ nearby });
+            console.log('nearby are', this.state.nearby);
+        });
+    }
+
     certBanner = (navigate) => {
       if (this.state.isTrainer === false) {
           console.log('not a trainer');
@@ -225,10 +247,13 @@ export default class HomeV3 extends Component {
       <View style={styles.bottomModalButton}>
         <TouchableHighlight
           style={{ width: '100%', display: 'flex', alignItems: 'center' }}
-          onPress={() => this.setState({ bottomModalIsOpen: true })}
+          onPress={() => {
+              this.setState({ bottomModalIsOpen: true });
+              this.findPartners();
+          }}
         >
           <View style={styles.bottomButton}>
-            <Text style={{ fontSize: 30 }}>Gyms</Text>
+            <Text style={{ fontSize: 30 }}>Trainers</Text>
           </View>
         </TouchableHighlight>
       </View>
@@ -243,32 +268,11 @@ export default class HomeV3 extends Component {
         swipeArea={100}
       >
         <View style={styles.bottomModal}>
-          <Text>Basic modal on Home</Text>
-          <BottomModal />
+          <Text>These trainers are nearby</Text>
+          <BottomModal nearby={this.state.nearby} />
         </View>
       </ModalBox>
     );
-
-    findTrainers = () => {
-        firebase.database().ref('/users/').once('value').then((snapshot) => {
-            const users = snapshot.val();
-            const nearby = [];
-            for (let key in users) {
-                let user = users[key];
-                // calculates mile distance of trainers or users
-                if (user.isTrainer !== this.state.isTrainer) {
-                    const distance = this.calcDistance(this.state.userLat, this.state.userLong,
-                      user.latitude, user.longitude);
-                    if (distance <= 5) {
-                        console.log(user.fullName, 'is only', distance, 'miles away!');
-                        nearby.push(user);
-                    }
-                }
-            }
-            this.setState({ nearby });
-            console.log('nearby are', this.state.nearby);
-        });
-    }
 
     render() {
         const { navigate } = this.props.navigation;
@@ -300,9 +304,6 @@ export default class HomeV3 extends Component {
                 </TouchableOpacity> :
                 <View />}
               {this.certBanner(navigate)}
-              <TouchableOpacity onPress={() => this.findTrainers()}>
-                <Text style={styles.banner}>Find Partner</Text>
-              </TouchableOpacity>
               <Map />
               {this.bottomButton()}
               {this.bottomModalFrame()}

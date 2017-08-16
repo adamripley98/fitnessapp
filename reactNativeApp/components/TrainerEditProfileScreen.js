@@ -238,9 +238,10 @@ class TrainerEditProfileScreen extends React.Component {
                 fullName: this.state.name,
                 age: this.state.age,
                 bio: this.state.bio,
+                photoURL: this.state.profPic,
             });
         }).then(() => {
-            navigate('TrainerProfile');
+            navigate('HomeV3');
         })
         .catch((e) => {
             alert('error');

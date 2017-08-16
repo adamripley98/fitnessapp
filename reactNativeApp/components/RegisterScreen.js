@@ -168,6 +168,7 @@ export default class RegisterScreen extends React.Component {
                             fullName: this.state.name,
                             age: '99',
                             bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm here to help you get more fit!`,
+                            photoURL: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
                         });
                     } else {
                         firebase.database().ref(`/users/${curUser.uid}`).set({
@@ -175,6 +176,7 @@ export default class RegisterScreen extends React.Component {
                             fullName: this.state.name,
                             age: '99',
                             bio: `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`,
+                            photoURL: 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
                         });
                     }
                     navigate('Log');
@@ -192,7 +194,7 @@ export default class RegisterScreen extends React.Component {
             selectedOption,
         });
     }
-    
+
     render() {
         const { navigate } = this.props.navigation;
         return (

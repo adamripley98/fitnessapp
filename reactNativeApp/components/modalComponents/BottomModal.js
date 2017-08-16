@@ -1,27 +1,66 @@
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, View, ScrollView, Dimensions } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet, View, ScrollView, Dimensions, Image } from 'react-native';
 import Modal from 'react-native-modal';
 import ModalBox from 'react-native-modalbox';
 
-import styles from '../ModalStyle';
+import styless from '../ModalStyle';
+
+const editProfPic = require('../logos/editprof.png');
 
 const screen = Dimensions.get('window');
 
+const styles = StyleSheet.create({
+    backButtonIcon: {
+        width: 80,
+        height: 80,
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        marginBottom: 20,
+    },
+});
 export default class BottomModal extends Component {
+
+    sortByDistance = (nearby) => {
+        nearby.sort((a, b) => {
+            if (a.miles < b.miles) {
+                return -1;
+            }
+            return 1;
+        });
+        return nearby;
+    }
+
+    renderProf = (prof) => {
+        return (
+          <View key={Math.random()} style={styles.container}>
+            <Image
+              source={{ uri: prof.photoURL }}
+              style={styles.backButtonIcon}
+              resizeMode="contain"
+            />
+            <Text>{prof.fullName}</Text>
+            <Text>Rating: 5/5</Text>
+            <Text>{prof.miles} miles away</Text>
+          </View>
+        );
+    }
+
     renderList() {
         const list = [];
-
-        for (let i = 0; i < 50; i++) {
-            list.push(<Text key={i}>Elem {i}</Text>);
-        }
-
+        const nearby = [...this.props.nearby];
+        const nearbySorted = this.sortByDistance(nearby);
+        nearbySorted.forEach((prof) => {
+            list.push(this.renderProf(prof));
+        });
         return list;
     }
     render() {
         return (
-          <View style={styles.bottomModal}>
-            <Text>Basic modal</Text>
-            <Text>Basic modal</Text>
+          <View style={styless.bottomModal}>
             <ScrollView
               showsVerticalScrollIndicator={false}
               decelerationRate={'fast'}

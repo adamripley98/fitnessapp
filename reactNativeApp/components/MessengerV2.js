@@ -5,26 +5,23 @@ import {
   Text,
   View,
 } from 'react-native';
-import firebase from 'firebase';
-import $ from 'jquery';
+
 import { GiftedChat, Actions, Bubble } from 'react-native-gifted-chat';
+import firebase from 'firebase';
 
 import CustomActions from './CustomActions';
 import CustomView from './CustomView';
 
-export default class Messenger extends React.Component {
-    static navigationOptions = {
-        title: 'Messenger',
-        header: null,
-    };
+export default class Example extends React.Component {
     constructor(props) {
         super(props);
+        this.params = this.props.navigation.state.params;
         this.state = {
             messages: [],
             loadEarlier: true,
             typingText: null,
             isLoadingEarlier: false,
-            currentThread: this.props.navigation.state.params.currentThread,
+            currentThread: this.params.currentThread,
         };
 
         this._isMounted = false;
@@ -38,19 +35,28 @@ export default class Messenger extends React.Component {
         this._isAlright = null;
     }
 
-    nameGenerator() {
-        const letters = 'abcdefghijklmnopqrstuvwxyz';
-        const lettersArr = letters.split('');
-    }
-
     componentWillMount() {
         this._isMounted = true;
         const ref = firebase.database().ref(`threads/${this.state.currentThread}/messages`);
         ref.on('value', (snapshot) => {
             console.log('snapshot', snapshot.val());
             this.setState(() => ({
-                messages: this.state.messages.slice(0).push(snapshot.val()),
+                messages: Object.values(snapshot.val()).reverse(),
             }));
+        });
+        console.log('messenger thread', this.state.currentThread);
+    }
+
+    componentDidMount() {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('Log');
+            } else {
+                this.setState({
+                    name: user.displayName,
+                    userId: user.uid,
+                });
+            }
         });
     }
 
@@ -75,41 +81,17 @@ export default class Messenger extends React.Component {
     }
 
     onSend(messages = []) {
-        this.setState(previousState => ({
-            messages: GiftedChat.append(previousState.messages, messages),
-        }));
-
-    // for demo purpose
-        this.answerDemo(messages);
-    }
-
-    answerDemo(messages) {
-        if (messages.length > 0) {
-            if ((messages[0].image || messages[0].location) || !this._isAlright) {
-                this.setState(previousState => ({
-                    typingText: 'React Native is typing',
-                }));
-            }
-        }
-
-        setTimeout(() => {
-            if (this._isMounted === true) {
-                if (messages.length > 0) {
-                    if (messages[0].image) {
-                        this.onReceive('Nice picture!');
-                    } else if (messages[0].location) {
-                        this.onReceive('My favorite place');
-                    } else if (!this._isAlright) {
-                        this._isAlright = true;
-                        this.onReceive('Alright');
-                    }
-                }
-            }
-
-            this.setState(previousState => ({
-                typingText: null,
-            }));
-        }, 1000);
+        const messageToSend = messages[0].text;
+        const messageObjToSend = {
+            _id: Math.round(Math.random() * 1000000),
+            text: messageToSend,
+            createdAt: new Date(),
+            user: {
+                _id: this.state.userId,
+                name: this.state.name,
+            },
+        };
+        firebase.database().ref(`threads/${this.state.currentThread}/messages`).push(messageObjToSend);
     }
 
     onReceive(text) {
@@ -121,7 +103,7 @@ export default class Messenger extends React.Component {
                 user: {
                     _id: 2,
                     name: 'React Native',
-            // avatar: 'https://facebook.github.io/react/img/logo_og.png',
+                    // avatar: 'https://facebook.github.io/react/img/logo_og.png',
                 },
             }),
         }));
@@ -187,28 +169,23 @@ export default class Messenger extends React.Component {
     }
 
     render() {
-        const { navigate } = this.props.navigation;
-        console.log('messages', this.state.messages);
-        // return (
-        //   <GiftedChat
-        //     messages={this.state.messages}
-        //     onSend={this.onSend}
-        //     loadEarlier={this.state.loadEarlier}
-        //     onLoadEarlier={this.onLoadEarlier}
-        //     isLoadingEarlier={this.state.isLoadingEarlier}
-        //
-        //     user={{
-        //         _id: 1, // sent messages should have same user._id
-        //     }}
-        //
-        //     renderActions={this.renderCustomActions}
-        //     renderBubble={this.renderBubble}
-        //     renderCustomView={this.renderCustomView}
-        //     renderFooter={this.renderFooter}
-        //   />
-        // );
         return (
-          <Text>{this.state.currentThread}</Text>
+          <GiftedChat
+            messages={this.state.messages}
+            onSend={this.onSend}
+            loadEarlier={this.state.loadEarlier}
+            onLoadEarlier={this.onLoadEarlier}
+            isLoadingEarlier={this.state.isLoadingEarlier}
+
+            user={{
+                _id: this.state.userId,
+            }}
+
+            // renderActions={this.renderCustomActions}
+            renderBubble={this.renderBubble}
+            renderCustomView={this.renderCustomView}
+            renderFooter={this.renderFooter}
+          />
         );
     }
 }

@@ -107,7 +107,6 @@ export default class HomeV3 extends Component {
                     profPic: user.photoURL,
                     userId: user.uid,
                 });
-                console.log('what is state', this.state);
             }
         });
     }

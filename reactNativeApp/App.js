@@ -6,7 +6,9 @@ import LogScreen from './components/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
 import Messenger from './components/Messenger';
+import MessengerV2 from './components/MessengerV2';
 import MessagesScreen from './components/MessagesScreen';
+import MessagesScreenV2 from './components/MessagesScreenV2';
 import PaymentScreen from './components/PaymentScreen';
 import RateTrainerScreen from './components/RateTrainerScreen';
 import TimerScreen from './components/TimerScreen';
@@ -92,9 +94,15 @@ const myApp = StackNavigator({
     Messenger: {
         screen: Messenger,
     },
+    MessengerV2: {
+        screen: MessengerV2,
+    },
     MessagesScreen: {
         screen: MessagesScreen,
     },
-}, { initialRouteName: 'MessagesScreen' });
+    MessagesScreenV2: {
+        screen: MessagesScreenV2,
+    },
+}, { initialRouteName: 'MessagesScreenV2' });
 
 export default myApp;

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class MessagesScreen extends React.Component {
+export default class MessagesScreenV2 extends React.Component {
     static navigationOptions = {
         title: 'Messages Screen',
         header: null,
@@ -80,7 +80,7 @@ class MessagesScreen extends React.Component {
             userId: null,
             threadId: null,
             currentMessage: null,
-            messages: [],
+            threads: [],
         };
         const { navigate } = this.props.navigation;
     }
@@ -110,7 +110,6 @@ class MessagesScreen extends React.Component {
         });
     }
 
-
     sendMessage = () => {
         const messageToSend = {
             _id: Math.round(Math.random() * 1000000),
@@ -128,6 +127,16 @@ class MessagesScreen extends React.Component {
         }
     }
 
+    displayMessages = () => (
+      <List>
+        {this.state.threads.map(item => (
+          <ListItem
+            title={}
+          />
+        ))}
+      </List>
+    )
+
     createThread = () => {
         const threadsRef = firebase.database().ref('threads/');
         const firstMessage = {
@@ -142,7 +151,11 @@ class MessagesScreen extends React.Component {
         threadsRef.once('value').then((snapshot) => {
             const threads = snapshot.val();
             const newThreadKey = threadsRef.push({
-                users: [this.state.userId],
+                users: [
+                    this.state.userId,
+                    this.state.name,
+                ],
+                createdAt: new Date(),
             }).key;
             firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
             this.setState({ threadId: newThreadKey });
@@ -150,32 +163,63 @@ class MessagesScreen extends React.Component {
         });
     }
 
-    navigateToThread = (navigate) => {
-        navigate('MessengerV2', { currentThread: this.state.threadId });
+    createArtificialThread = () => {
+        const fakeTrainerID = 'fake_trainer_id';
+        const fakeTrainerName = 'Chad MuscleMan';
+        const threadsRef = firebase.database().ref('threads/');
+        const firstMessage = {
+            _id: Math.round(Math.random() * 1000000),
+            text: 'This is the first message!',
+            createdAt: new Date(),
+            user: {
+                _id: 'trim_bot',
+                name: 'TRIM BOT',
+            },
+        };
+        threadsRef.once('value').then((snapshot) => {
+            const threads = snapshot.val();
+            const newThreadKey = threadsRef.push({
+                users: [
+                    this.state.userId,
+                    this.state.name,
+                    fakeTrainerID,
+                    fakeTrainerName,
+                ],
+                createdAt: new Date(),
+            }).key;
+            firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            this.setState({ threadId: newThreadKey });
+            console.log('NEW THREAD CREATED', this.state.threadId);
+        });
     }
 
-    displayMessages = () => {
-        const ref = firebase.database().ref(`threads/${this.state.threadId}/messages`);
-        ref.on('value', (snapshot) => {
-            // console.log('THIS IS THE SNAPSHOT VALUE', snapshot.val());
-            for (const key in snapshot.val()) {
-                if (snapshot.val()[key].userId === this.state.userId) {
-                    this.state.messages.push(snapshot.val()[key].text);
-                }
-            }
+    logThreads = () => {
+        const threadsRef = firebase.database().ref('threads/');
+        threadsRef.once('value').then((snapshot) => {
+            const threads = snapshot.val();
+            // const newThreadKey = threadsRef.push({
+            //     users: [this.state.userId],
+            // }).key;
+            // firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            // this.setState({ threadId: newThreadKey });
+            console.log('THREADS:', threads);
         });
-        return (
-          <View>
-            <Text>LIST</Text>
-            <List>
-              {
-                this.state.messages.map(item => (
-                  <Text>{item}</Text>
-                ))
-              }
-            </List>
-          </View>
-        );
+    }
+
+    logSortedThreads = () => {
+        const fakeTrainerID = 'fake_trainer_id';
+        const fakeTrainerName = 'Chad MuscleMan';
+        const threadsRef = firebase.database().ref('threads/');
+        threadsRef.once('value').then((snapshot) => {
+            const threads = Object.values(snapshot.val());
+            const filteredThreads = threads.filter(thread => thread.users.indexOf(fakeTrainerID) !== -1);
+            this.setState({ threads: filteredThreads });
+            console.log('FILTERED THREADS:', this.state.threads);
+        });
+    }
+
+    navigateToThread = (navigate) => {
+        navigate('MessengerV2', { currentThread: this.state.threadId });
     }
 
     signOut = () => {
@@ -200,21 +244,19 @@ class MessagesScreen extends React.Component {
             <TouchableOpacity onPress={() => this.createThread(navigate)}>
               <Text style={[styles.button, styles.greenButton]}>Create Thread</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.sendMessage()}>
-              <Text style={[styles.button, styles.greenButton]}>Send Message</Text>
+            <TouchableOpacity onPress={() => this.createArtificialThread()}>
+              <Text style={[styles.button, styles.greenButton]}>Create Artificial Thread</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.displayMessages()}>
-              <Text style={[styles.button, styles.greenButton]}>Log Message</Text>
+            <TouchableOpacity onPress={() => this.logThreads()}>
+              <Text style={[styles.button, styles.greenButton]}>Log Threads</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.logSortedThreads()}>
+              <Text style={[styles.button, styles.greenButton]}>Log Sorted Threads</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.navigateToThread(navigate)}>
               <Text style={[styles.button, styles.greenButton, { backgroundColor: 'blue' }]}>Navigate To Thread</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.signOut()}>
-              <Text style={[styles.button, styles.greenButton, { backgroundColor: 'red' }]}>Sign Out</Text>
-            </TouchableOpacity>
           </View>
         );
     }
-  }
-
-module.exports = MessagesScreen;
+}

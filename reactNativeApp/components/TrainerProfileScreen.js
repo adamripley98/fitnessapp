@@ -131,7 +131,7 @@ class TrainerProfileScreen extends React.Component {
             } else {
                 console.log('user is', user);
                 console.log('what is state', this.state);
-                const userRef = firebase.database().ref('/users/' + user.uid);
+                const userRef = firebase.database().ref(`/users/${user.uid}`);
                 console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);

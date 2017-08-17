@@ -111,7 +111,7 @@ export default class HomeV3 extends Component {
         this.state = {
             isOpen: false,
             selectedItem: 'Map',
-            bottomModalIsOpen: false,
+            bottomModalIsOpen: true,
             nearby: [],
         };
     }
@@ -233,7 +233,7 @@ export default class HomeV3 extends Component {
     menuButton = () => (
       <TouchableOpacity
         onPress={() => this.toggle()}
-        style={[styles.button, { zIndex: 0 }]}
+        style={styles.button}
       >
         <Image
           source={hamburgerIcon}

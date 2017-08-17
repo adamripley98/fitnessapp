@@ -91,7 +91,7 @@ export default class MapScreen extends React.Component {
                   customMapStyle={MapStyle}
                 />
                 <MapView.Marker
-                  coordinate={{ latitude: 3217.797834, longitude: -122.406417 }}
+                  coordinate={{ latitude: 37.787834, longitude: -122.406417 }}
                 >
                   <Image source={pic} />
                 </MapView.Marker>

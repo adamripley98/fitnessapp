@@ -16,6 +16,7 @@ const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
 const locationPic = require('./logos/location.png');
+const backIcon = require('./logos/back.png');
 
 const styles = StyleSheet.create({
     banner: {

@@ -11,7 +11,7 @@ import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
-const editProfPic = require('./logos/editprof.png');
+const backIcon = require('./logos/back.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
         height: 10,
         backgroundColor: '#ABFF00',
         borderRadius: 80,
-        // boxShadow: rgba(0, 0, 0, 0.2) 0 -1 7 1, inset #006 0 -1 9, '#3F8CFF' 0 2 14,
         shadowColor: 'rgba(0, 0, 0, 0.2)',
     },
 });
@@ -135,14 +134,18 @@ class TrainerProfileScreen extends React.Component {
     };
     constructor(props) {
         super(props);
+        const { state } = this.props.navigation;
         this.state = {
-            userName: '',
-            trainerName: '',
+            age: state.params.prof.age,
+            bio: state.params.prof.bio,
+            profPic: state.params.prof.photoURL,
+            fullName: state.params.prof.fullName,
         };
     }
 
     componentWillMount() {
       // firebase.auth().signOut();
+        const { state } = this.props.navigation;
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
@@ -150,69 +153,34 @@ class TrainerProfileScreen extends React.Component {
             } else {
                 console.log('user is', user);
                 console.log('what is state', this.state);
-                const userRef = firebase.database().ref(`/users/${user.uid}`);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
-                userRef.on('value', (snapshot) => {
-                    console.log('snapshot inside user', snapshot);
-                    if (snapshot !== null) {
-                        if (!snapshot.val().isTrainer) {
-                            navigate('UserProfile');
-                        }
-                        this.setState({
-                            userID: user.uid,
-                            userName: user.displayName,
-                            trainerID: 'fillerTrainerID',
-                            trainerName: 'Trainer Boi',
-                        });
-                        // BELOW SHOULD BE FOR THE TRAINER
-                        // this.setState({
-                        //     emailVerified: user.emailVerified,
-                        //     name: user.displayName,
-                        //     profPic: user.photoURL,
-                        //     userId: user.uid,
-                        //     age: snapshot.val().age,
-                        //     bio: snapshot.val().bio,
-                        //     isCertified: snapshot.val().isCertified,
-                        // });
-                    }
-                    console.log('what is state inside trainer prof', this.state);
-                });
+                // const userRef = firebase.database().ref(`/users/${user.uid}`);
+                // console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
+                // userRef.on('value', (snapshot) => {
+                //     console.log('snapshot inside user', snapshot);
+                //     if (snapshot !== null) {
+                //         // BELOW SHOULD BE FOR THE TRAINER
+                //         // this.setState({
+                //         //     emailVerified: user.emailVerified,
+                //         //     name: user.displayName,
+                //         //     profPic: user.photoURL,
+                //         //     userId: user.uid,
+                //         //     age: snapshot.val().age,
+                //         //     bio: snapshot.val().bio,
+                //         //     isCertified: snapshot.val().isCertified,
+                //         // });
+                //     }
+                //     console.log('what is state inside trainer prof', this.state);
+                // });
+
+                console.log('stat', this.state.age, this.state.bio, this.state.fullName, this.state.profPic);
             }
         });
-    }
-
-    verifyEmail = () => {
-        firebase.auth().currentUser.sendEmailVerification().then(() => {
-            console.log('verification email sent');
-            alert('Verification email sent!');
-        }).catch((error) => {
-            alert('Error sending verification email');
-            console.log('error sending verification email', error);
-        });
-    }
-
-    logout = () => {
-        firebase.auth().signOut().then(() => {
-        // Sign-out successful.
-        }).catch((error) => {
-        // An error happened.
-            alert(error.message);
-        });
-    }
-
-    editProf = (navigate) => {
-        navigate('TrainerEditProfile');
-    }
-
-    getCertified = (navigate) => {
-        console.log('getting certified');
-        navigate('TrainerCertification');
     }
 
     createThread = (navigate) => {
         const threadsRef = firebase.database().ref('threads/');
         const firstMessage = {
-            _id: Math.round(Math.random() * 1000000),
+            _id: Math.random(),
             text: 'This is the first message!',
             createdAt: new Date(),
             user: {
@@ -245,6 +213,9 @@ class TrainerProfileScreen extends React.Component {
 
     render() {
         const { navigate } = this.props.navigation;
+        const { state } = this.props.navigation;
+        console.log('plz print prof', state.params.prof)
+        console.log('this.state.AGE', state.params.prof.age, this.state.age);
         return (
           <View style={styles.container}>
             <Image
@@ -252,11 +223,20 @@ class TrainerProfileScreen extends React.Component {
               style={styles.content}
               resizeMode="cover"
             >
+              <View style={styles.headerIconView}>
+                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
+                  <Image
+                    source={backIcon}
+                    style={styles.backButtonIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
               <View style={styles.markWrap}>
                 <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
               </View>
               <View style={styles.markBio}>
-                <Text style={styles.centering}>{this.state.trainerName}</Text>
+                <Text style={styles.centering}>{this.state.fullName.split(' ')[0]}</Text>
               </View>
               <View style={[styles.markBio, { flexDirection: 'row' }]}>
                 <Text>Status: </Text>
@@ -266,9 +246,6 @@ class TrainerProfileScreen extends React.Component {
               <View style={styles.pdrofile}>
                 <View style={styles.markWrap}>
                   <Text style={styles.age}> Age: {this.state.age || '?'} </Text>
-                  <View style={styles.bio}>
-                    <Text> {this.state.bio || `My name is ${this.state.trainerName.split(' ')[0]}, and I'm here to help you get more fit!`} </Text>
-                  </View>
                   <View style={{
                       backgroundColor: 'transparent',
                       borderWidth: 1,
@@ -278,18 +255,7 @@ class TrainerProfileScreen extends React.Component {
                       width: width - 3,
                   }}
                   >
-                    <Text>This is where I will tell you a bit about myself because this is the about me</Text>
-                  </View>
-                  <View style={{
-                      backgroundColor: 'transparent',
-                      borderWidth: 1,
-                      borderColor: 'black',
-                      padding: 5,
-                      margin: 1,
-                      width: width - 3,
-                  }}
-                  >
-                    <Text>This is where I will tell you a bit about my favorite exercises because this is the favorite exercises part</Text>
+                    <Text>{this.state.bio}</Text>
                   </View>
                 </View>
               </View>

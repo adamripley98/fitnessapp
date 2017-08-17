@@ -35,7 +35,10 @@ export default class BottomModal extends Component {
     }
 
     renderProf = prof => (
-      <TouchableOpacity key={Math.random()}>
+      <TouchableOpacity
+        key={Math.random()}
+        onPress={() => this.props.navigate('TrainerProfileV2', { prof })}
+      >
         <View style={styles.container}>
           <Image
             source={{ uri: prof.photoURL }}
@@ -45,7 +48,7 @@ export default class BottomModal extends Component {
           <Text>{prof.fullName}</Text>
           <Text>Rating: 5/5</Text>
           <Text>{prof.miles} miles away</Text>
-          <Text>ID: {prof.uid}</Text>
+          <Text>ID: {prof.uniqueId}</Text>
         </View>
       </TouchableOpacity>
     )

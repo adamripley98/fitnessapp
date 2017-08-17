@@ -277,7 +277,7 @@ export default class HomeV3 extends Component {
       </View>
     );
 
-    bottomModalFrame = () => (
+    bottomModalFrame = (navigate) => (
       <ModalBox
         style={styles.bottomModal}
         swipeToClose
@@ -288,7 +288,10 @@ export default class HomeV3 extends Component {
       >
         <View style={styles.bottomModal}>
           <Text>These trainers are nearby</Text>
-          <BottomModal nearby={this.state.nearby} />
+          <BottomModal
+            nearby={this.state.nearby}
+            navigate={navigate}
+           />
         </View>
       </ModalBox>
     );
@@ -329,7 +332,7 @@ export default class HomeV3 extends Component {
                 this.bottomTrainer()
             }
               {this.state.isTrainer === false ?
-                this.bottomModalFrame() :
+                this.bottomModalFrame(navigate) :
                 <View />
             }
             </View>

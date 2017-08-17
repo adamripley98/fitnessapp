@@ -12,6 +12,7 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const backIcon = require('./logos/back.png');
+const backIcon2 = require('./logos/backIcon2.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -204,11 +205,11 @@ export default class TrainerProfileScreenV2 extends React.Component {
                 ],
                 createdAt: new Date(),
             }).key;
-            firebase.database().ref('/users/' + this.state.trainerID).update({
+            firebase.database().ref(`/users/${this.state.trainerID}`).update({
                 clientConnected: newThreadKey,
             });
             firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
-            firebase.database().ref('/threads/' + newThreadKey).update({
+            firebase.database().ref(`/threads/${newThreadKey}`).update({
                 readyToStart: false,
             });
             this.setState({ threadId: newThreadKey });
@@ -234,8 +235,13 @@ export default class TrainerProfileScreenV2 extends React.Component {
               <View style={styles.headerIconView}>
                 <TouchableOpacity onPress={() => navigate('HomeV3', { currentModalState: true })} style={styles.headerBackButtonView}>
                   <Image
-                    source={backIcon}
-                    style={styles.backButtonIcon}
+                    source={backIcon2}
+                    style={{
+                        position: 'absolute',
+                        left: 8,
+                        height: 25,
+                        width: 25,
+                    }}
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
@@ -256,11 +262,14 @@ export default class TrainerProfileScreenV2 extends React.Component {
                   <Text style={styles.age}> Age: {this.state.age || '?'} </Text>
                   <View style={{
                       backgroundColor: 'transparent',
-                      borderWidth: 1,
+                      borderTopWidth: 1,
+                      borderBottomWidth: 1,
                       borderColor: 'black',
-                      padding: 5,
+                      padding: 10,
                       margin: 1,
-                      width: width - 3,
+                      marginTop: 10,
+                      marginBottom: 10,
+                      width: width - 10,
                   }}
                   >
                     <Text>{this.state.bio}</Text>

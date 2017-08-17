@@ -130,13 +130,14 @@ const styles = StyleSheet.create({
 
 class TrainerProfileScreen extends React.Component {
     static navigationOptions = {
-        title: 'Your Trainer',
+        title: 'Trainer',
         header: null,
     };
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            userName: '',
+            trainerName: '',
         };
     }
 
@@ -158,14 +159,21 @@ class TrainerProfileScreen extends React.Component {
                             navigate('UserProfile');
                         }
                         this.setState({
-                            emailVerified: user.emailVerified,
-                            name: user.displayName,
-                            profPic: user.photoURL,
-                            userId: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
-                            isCertified: snapshot.val().isCertified,
+                            userID: user.uid,
+                            userName: user.displayName,
+                            trainerID: 'fillerTrainerID',
+                            trainerName: 'Trainer Boi',
                         });
+                        // BELOW SHOULD BE FOR THE TRAINER
+                        // this.setState({
+                        //     emailVerified: user.emailVerified,
+                        //     name: user.displayName,
+                        //     profPic: user.photoURL,
+                        //     userId: user.uid,
+                        //     age: snapshot.val().age,
+                        //     bio: snapshot.val().bio,
+                        //     isCertified: snapshot.val().isCertified,
+                        // });
                     }
                     console.log('what is state inside trainer prof', this.state);
                 });
@@ -214,21 +222,25 @@ class TrainerProfileScreen extends React.Component {
         };
         threadsRef.once('value').then((snapshot) => {
             const threads = snapshot.val();
-            const newThreadKey = threadsRef.push({
-                users: [
-                    this.state.userId,
-                    this.state.name,
-                ],
-                createdAt: new Date(),
-            }).key;
-            firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
-            this.setState({ threadId: newThreadKey });
-            console.log('NEW THREAD CREATED', this.state.threadId);
+            console.log(threads);
+            // const newThreadKey = threadsRef.push({
+            //     users: [
+            //         {
+            //             id: this.state.userID,
+            //             name: this.state.userName,
+            //         },
+            //         {
+            //             id: this.state.trainerID,
+            //             name: this.state.trainerName,
+            //         },
+            //     ],
+            //     createdAt: new Date(),
+            // }).key;
+            // firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            // this.setState({ threadId: newThreadKey });
+            // console.log('NEW THREAD CREATED', this.state.threadId);
+            // navigate('MessengerV2', { currentThread: this.state.threadId });
         });
-    }
-
-    navigateToThread = (navigate) => {
-        navigate('MessengerV2', { currentThread: this.state.threadId });
     }
 
     render() {
@@ -244,7 +256,7 @@ class TrainerProfileScreen extends React.Component {
                 <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
               </View>
               <View style={styles.markBio}>
-                <Text style={styles.centering}>{this.state.name}</Text>
+                <Text style={styles.centering}>{this.state.trainerName}</Text>
               </View>
               <View style={[styles.markBio, { flexDirection: 'row' }]}>
                 <Text>Status: </Text>
@@ -255,7 +267,7 @@ class TrainerProfileScreen extends React.Component {
                 <View style={styles.markWrap}>
                   <Text style={styles.age}> Age: {this.state.age || '?'} </Text>
                   <View style={styles.bio}>
-                    <Text> {this.state.bio || `My name is ${this.state.name.split(' ')[0]}, and I'm here to help you get more fit!`} </Text>
+                    <Text> {this.state.bio || `My name is ${this.state.trainerName.split(' ')[0]}, and I'm here to help you get more fit!`} </Text>
                   </View>
                   <View style={{
                       backgroundColor: 'transparent',
@@ -282,10 +294,7 @@ class TrainerProfileScreen extends React.Component {
                 </View>
               </View>
               <TouchableOpacity onPress={() => this.createThread(navigate)}>
-                <Text style={[styles.button, styles.greenButton]}>Create Thread</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.navigateToThread(navigate)}>
-                <Text style={[styles.button, styles.greenButton, { backgroundColor: 'blue' }]}>Navigate To Thread</Text>
+                <Text style={[styles.button, styles.greenButton, { backgroundColor: 'blue' }]}>Train</Text>
               </TouchableOpacity>
             </Image>
           </View>

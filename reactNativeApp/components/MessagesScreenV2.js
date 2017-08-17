@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 
 export default class MessagesScreenV2 extends React.Component {
     static navigationOptions = {
-        title: 'Messages Screen',
+        title: 'Fuck off boi',
         header: null,
     };
     constructor(props) {

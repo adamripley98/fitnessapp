@@ -13,6 +13,10 @@ import CustomActions from './CustomActions';
 import CustomView from './CustomView';
 
 export default class Example extends React.Component {
+    static navigationOptions = {
+        title: 'Messenger',
+        header: null,
+    };
     constructor(props) {
         super(props);
         this.params = this.props.navigation.state.params;

@@ -15,7 +15,6 @@ import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
 import Map from './MapScreen';
 import UserProfileScreen from './UserProfileScreen';
-import Payment from './Payment';
 
 const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
@@ -166,8 +165,6 @@ export default class HomeV2 extends Component {
                 return (<Map />);
             case 'UserProfileScreen':
                 return (<UserProfileScreen />);
-            case 'Payment':
-                return (<Payment />);
             default:
                 return (<Map />);
         }

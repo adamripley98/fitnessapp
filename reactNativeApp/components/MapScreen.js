@@ -91,9 +91,10 @@ export default class MapScreen extends React.Component {
                   customMapStyle={MapStyle}
                 />
                 <MapView.Marker
-                  coordinate={marker}
-                  image={pic}
-                />
+                  coordinate={{ latitude: 37.787834, longitude: -122.406417 }}
+                >
+                  <Image source={pic} />
+                </MapView.Marker>
                 <TouchableOpacity
                   onPress={this.moveToCurrentCoords.bind(this)}
                   style={styles.currentLocation}

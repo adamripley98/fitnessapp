@@ -18,6 +18,97 @@ const editProfPic = require('./logos/editprof.png');
 const locationPic = require('./logos/location.png');
 const backIcon = require('./logos/back.png');
 
+export default class UserProfileScreen extends React.Component {
+    static navigationOptions = {
+        title: 'Welcome',
+        header: null,
+    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+        };
+    }
+
+    componentWillMount() {
+      // firebase.auth().signOut();
+        const { navigate } = this.props.navigation;
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('Log');
+            } else {
+                const userRef = firebase.database().ref(`/users/${user.uid}`);
+                userRef.on('value', (snapshot) => {
+                    if (snapshot !== null) {
+                        this.setState({
+                            emailVerified: user.emailVerified,
+                            name: user.displayName,
+                            profPic: user.photoURL,
+                            userId: user.uid,
+                            age: snapshot.val().age,
+                            bio: snapshot.val().bio,
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    editProf = (navigate) => {
+        navigate('EditUserProfile');
+    }
+
+    render() {
+        const { navigate } = this.props.navigation;
+        return (
+          <View style={styles.container}>
+            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
+            <Image
+              source={background}
+              style={[styles.cont, styles.bg]}
+              resizeMode="cover"
+            >
+              <View style={styles.headerIconView}>
+                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
+                  <Image
+                    source={backIcon}
+                    style={styles.backButtonIcon}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.markBio}>
+                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
+              </View>
+              <View style={styles.pdrofile}>
+                <View style={styles.markWrap}>
+                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
+                </View>
+                <View style={styles.markBio}>
+                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
+                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.markWrap}>
+                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
+                  {/* <View>
+                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
+                    <Text style={styles.location}> Current Location </Text>
+                  </View> */}
+                  <View style={styles.bio}>
+                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
+                  </View>
+                </View>
+              </View>
+            </Image>
+            {/* <TouchableOpacity onPress={() => this.logout()}>
+              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
+            </TouchableOpacity> */}
+          </View>
+        );
+    }
+}
+
 const styles = StyleSheet.create({
     banner: {
         justifyContent: 'center',
@@ -114,99 +205,3 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFAB91',
     },
 });
-
-export default class UserProfileScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Welcome',
-        header: null,
-    };
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-        };
-    }
-
-    componentWillMount() {
-      // firebase.auth().signOut();
-        const { navigate } = this.props.navigation;
-        firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                navigate('Log');
-            } else {
-                console.log('user is', user);
-                console.log('what is state', this.state);
-                const userRef = firebase.database().ref(`/users/${user.uid}`);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
-                userRef.on('value', (snapshot) => {
-                    console.log('snapshot inside user', snapshot);
-                    if (snapshot !== null) {
-                        this.setState({
-                            emailVerified: user.emailVerified,
-                            name: user.displayName,
-                            profPic: user.photoURL,
-                            userId: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
-                        });
-                    }
-                    console.log('what is state', this.state);
-                });
-            }
-        });
-    }
-
-    editProf = (navigate) => {
-        navigate('EditUserProfile');
-    }
-
-    render() {
-        const { navigate } = this.props.navigation;
-        return (
-          <View style={styles.container}>
-            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
-            <Image
-              source={background}
-              style={[styles.cont, styles.bg]}
-              resizeMode="cover"
-            >
-              <View style={styles.headerIconView}>
-                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
-                  <Image
-                    source={backIcon}
-                    style={styles.backButtonIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.markBio}>
-                <Text style={styles.centering}>Welcome, {this.state.name.split(' ')[0] || 'dood'}!</Text>
-              </View>
-              <View style={styles.pdrofile}>
-                <View style={styles.markWrap}>
-                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-                </View>
-                <View style={styles.markBio}>
-                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
-                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.markWrap}>
-                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
-                  {/* <View>
-                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
-                    <Text style={styles.location}> Current Location </Text>
-                  </View> */}
-                  <View style={styles.bio}>
-                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
-                  </View>
-                </View>
-              </View>
-            </Image>
-            {/* <TouchableOpacity onPress={() => this.logout()}>
-              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
-            </TouchableOpacity> */}
-          </View>
-        );
-    }
-  }

@@ -41,7 +41,7 @@ export default class MapScreen extends React.Component {
         navigator.geolocation.getCurrentPosition(
             (success) => {
                 const userId = firebase.auth().currentUser.uid;
-                firebase.database().ref('/users/' + userId).update({
+                firebase.database().ref(`/users/${userId}`).update({
                     latitude: success.coords.latitude,
                     longitude: success.coords.longitude,
                 });
@@ -76,8 +76,14 @@ export default class MapScreen extends React.Component {
             {},
         );
     }
+    // GOES AFTER MapView.Animated
+    // <MapView.Marker
+    //   coordinate={{ latitude: 37.787834, longitude: -122.406417 }}
+    // >
+    //   <Image source={pic} />
+    // </MapView.Marker>
     render() {
-        const marker = { latitude: 37.787834, longitude: -122.406417 }
+        const marker = { latitude: 37.787834, longitude: -122.406417 };
         if (this.state.currentRegion.latitude && this.state.currentRegion.longitude) {
             return (
               <View style={styles.container}>
@@ -90,11 +96,6 @@ export default class MapScreen extends React.Component {
                   provider={PROVIDER_GOOGLE}
                   customMapStyle={MapStyle}
                 />
-                <MapView.Marker
-                  coordinate={{ latitude: 37.787834, longitude: -122.406417 }}
-                >
-                  <Image source={pic} />
-                </MapView.Marker>
                 <TouchableOpacity
                   onPress={this.moveToCurrentCoords.bind(this)}
                   style={styles.currentLocation}

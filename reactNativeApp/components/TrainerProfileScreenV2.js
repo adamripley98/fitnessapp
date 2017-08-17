@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class TrainerProfileScreen extends React.Component {
+export default class TrainerProfileScreenV2 extends React.Component {
     static navigationOptions = {
         title: 'Trainer',
         header: null,
@@ -139,7 +139,8 @@ class TrainerProfileScreen extends React.Component {
             age: state.params.prof.age,
             bio: state.params.prof.bio,
             profPic: state.params.prof.photoURL,
-            fullName: state.params.prof.fullName,
+            trainerName: state.params.prof.fullName,
+            trainerID: state.params.prof.uniqueId,
         };
     }
 
@@ -153,31 +154,31 @@ class TrainerProfileScreen extends React.Component {
             } else {
                 console.log('user is', user);
                 console.log('what is state', this.state);
-                // const userRef = firebase.database().ref(`/users/${user.uid}`);
-                // console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
-                // userRef.on('value', (snapshot) => {
-                //     console.log('snapshot inside user', snapshot);
-                //     if (snapshot !== null) {
-                //         // BELOW SHOULD BE FOR THE TRAINER
-                //         // this.setState({
-                //         //     emailVerified: user.emailVerified,
-                //         //     name: user.displayName,
-                //         //     profPic: user.photoURL,
-                //         //     userId: user.uid,
-                //         //     age: snapshot.val().age,
-                //         //     bio: snapshot.val().bio,
-                //         //     isCertified: snapshot.val().isCertified,
-                //         // });
-                //     }
-                //     console.log('what is state inside trainer prof', this.state);
-                // });
+                const userRef = firebase.database().ref(`/users/${user.uid}`);
+                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
+                userRef.on('value', (snapshot) => {
+                    console.log('snapshot inside user', snapshot);
+                    if (snapshot !== null) {
+                        this.setState({
+                            emailVerified: user.emailVerified,
+                            userName: user.displayName,
+                            profPic: user.photoURL,
+                            userID: user.uid,
+                            age: snapshot.val().age,
+                            bio: snapshot.val().bio,
+                            isCertified: snapshot.val().isCertified,
+                        });
+                    }
+                    console.log('what is state inside trainer prof', this.state);
+                });
 
-                console.log('stat', this.state.age, this.state.bio, this.state.fullName, this.state.profPic);
+                console.log('stat', this.state.age, this.state.bio, this.state.trainerName, this.state.profPic);
             }
         });
     }
 
     createThread = (navigate) => {
+        console.log('creating');
         const threadsRef = firebase.database().ref('threads/');
         const firstMessage = {
             _id: Math.random(),
@@ -191,31 +192,33 @@ class TrainerProfileScreen extends React.Component {
         threadsRef.once('value').then((snapshot) => {
             const threads = snapshot.val();
             console.log(threads);
-            // const newThreadKey = threadsRef.push({
-            //     users: [
-            //         {
-            //             id: this.state.userID,
-            //             name: this.state.userName,
-            //         },
-            //         {
-            //             id: this.state.trainerID,
-            //             name: this.state.trainerName,
-            //         },
-            //     ],
-            //     createdAt: new Date(),
-            // }).key;
-            // firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
-            // this.setState({ threadId: newThreadKey });
-            // console.log('NEW THREAD CREATED', this.state.threadId);
-            // navigate('MessengerV2', { currentThread: this.state.threadId });
+            const newThreadKey = threadsRef.push({
+                users: [
+                    {
+                        id: this.state.userID,
+                        name: this.state.userName,
+                    },
+                    {
+                        id: this.state.trainerID,
+                        name: this.state.trainerName,
+                    },
+                ],
+                createdAt: new Date(),
+            }).key;
+            firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            this.setState({ threadId: newThreadKey });
+            console.log('NEW THREAD CREATED', this.state.threadId);
+            navigate('MessengerV2', { currentThread: this.state.threadId });
         });
+    }
+
+    test = () => {
+        console.log('TEST');
     }
 
     render() {
         const { navigate } = this.props.navigation;
         const { state } = this.props.navigation;
-        console.log('plz print prof', state.params.prof)
-        console.log('this.state.AGE', state.params.prof.age, this.state.age);
         return (
           <View style={styles.container}>
             <Image
@@ -224,7 +227,7 @@ class TrainerProfileScreen extends React.Component {
               resizeMode="cover"
             >
               <View style={styles.headerIconView}>
-                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
+                <TouchableOpacity onPress={() => navigate('HomeV3', { currentModalState: true })} style={styles.headerBackButtonView}>
                   <Image
                     source={backIcon}
                     style={styles.backButtonIcon}
@@ -236,7 +239,7 @@ class TrainerProfileScreen extends React.Component {
                 <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
               </View>
               <View style={styles.markBio}>
-                <Text style={styles.centering}>{this.state.fullName.split(' ')[0]}</Text>
+                <Text style={styles.centering}>{this.state.trainerName.split(' ')[0]}</Text>
               </View>
               <View style={[styles.markBio, { flexDirection: 'row' }]}>
                 <Text>Status: </Text>
@@ -260,12 +263,10 @@ class TrainerProfileScreen extends React.Component {
                 </View>
               </View>
               <TouchableOpacity onPress={() => this.createThread(navigate)}>
-                <Text style={[styles.button, styles.greenButton, { backgroundColor: 'blue' }]}>Train</Text>
+                <Text style={[styles.button, styles.greenButton, { backgroundColor: 'red' }]}>Train</Text>
               </TouchableOpacity>
             </Image>
           </View>
         );
     }
   }
-
-module.exports = TrainerProfileScreen;

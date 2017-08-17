@@ -104,7 +104,8 @@ export default class HomeV3 extends Component {
     };
     constructor(props) {
         super(props);
-
+        // this.params = this.props.navigation.state.params;
+        // const modalOpen = !!this.params.currentModalState;
         this.toggle = this.toggle.bind(this);
 
         this.state = {
@@ -125,7 +126,6 @@ export default class HomeV3 extends Component {
                 this.findPartners();
                 userRef.on('value', (snapshot) => {
                     if (snapshot.val()) {
-                        console.log('what is snapVALLLL', snapshot.val());
                         this.setState({
                             emailVerified: user.emailVerified,
                             name: user.displayName,
@@ -208,15 +208,12 @@ export default class HomeV3 extends Component {
                     const distance = this.calcDistance(this.state.userLat, this.state.userLong,
                       user.latitude, user.longitude);
                     if (distance <= 5) {
-                        console.log(user.fullName, 'is only', distance, 'miles away!');
-                        console.log('USER ID:', user._id);
                         user.miles = distance;
                         nearby.push(user);
                     }
                 }
             }
             this.setState({ nearby });
-            console.log('nearby are', this.state.nearby);
         });
     }
 
@@ -277,7 +274,7 @@ export default class HomeV3 extends Component {
       </View>
     );
 
-    bottomModalFrame = (navigate) => (
+    bottomModalFrame = navigate => (
       <ModalBox
         style={styles.bottomModal}
         swipeToClose
@@ -291,7 +288,7 @@ export default class HomeV3 extends Component {
           <BottomModal
             nearby={this.state.nearby}
             navigate={navigate}
-           />
+          />
         </View>
       </ModalBox>
     );
@@ -305,8 +302,6 @@ export default class HomeV3 extends Component {
           profPic={this.state.profPic}
           isTrainer={this.state.isTrainer}
         />);
-
-        console.log('is it open?', this.state.isOpen);
 
         return (
           <Drawer
@@ -323,7 +318,8 @@ export default class HomeV3 extends Component {
             })}
           >
             <View style={styles.container}>
-              {this.state.emailVerified === false ?
+              {/* BOTTOM SHOULD BE === true*/}
+              {this.state.emailVerified === true ?
                 <TouchableOpacity onPress={() => this.verifyEmail()}>
                   <Text style={styles.banner}> Click here to verify your email!</Text>
                 </TouchableOpacity> :

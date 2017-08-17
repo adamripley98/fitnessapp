@@ -15,9 +15,8 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
-const editProfile = require('./logos/editProfile.png');
 const locationPic = require('./logos/location.png');
-const backIcon2 = require('./logos/backIcon2.png');
+const backIcon = require('./logos/backIcon2.png');
 
 export default class UserProfileScreen extends React.Component {
     static navigationOptions = {
@@ -56,7 +55,6 @@ export default class UserProfileScreen extends React.Component {
     }
 
     editProf = (navigate) => {
-        console.log('EDITING USER PROFILE');
         navigate('EditUserProfile');
     }
 
@@ -64,70 +62,50 @@ export default class UserProfileScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
+            {/* <Image source={background} style={styles.background} resizeMode="cover" /> */}
             <Image
               source={background}
-              style={styles.content}
+              style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-              <TouchableOpacity
-                onPress={() => navigate('HomeV3', { currentModalState: true })}
-                style={{ height: 25, width: 25 }}
-              >
-                <Image
-                  source={backIcon2}
-                  style={{
-                      position: 'absolute',
-                      left: 8,
-                      height: 25,
-                      width: 25,
-                  }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.editProf(navigate)}
-                style={{ height: 25, width: 25, position: 'absolute', top: 20, right: 6 }}
-              >
-                <Image
-                  source={editProfile}
-                  style={{
-                      height: 25,
-                      width: 25,
-                  }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-              <View style={styles.markWrap}>
-                <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
-              </View>
-              <View style={styles.markBio}>
-                <Text style={styles.centering}>{this.state.name}</Text>
-              </View>
-              <View style={[styles.markBio, { flexDirection: 'row' }]}>
-                <Text>Status: </Text>
-                <View style={styles.ledGreen} />
-                <Text> (Online)</Text>
+              <View style={styles.headerIconView}>
+                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
+                  <Image
+                    source={backIcon}
+                    style={{
+                        position: 'absolute',
+                        left: 8,
+                        height: 25,
+                        width: 25,
+                    }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
               </View>
               <View style={styles.pdrofile}>
                 <View style={styles.markWrap}>
-                  <Text style={styles.age}> Age: {this.state.age || '?'} </Text>
-                  <View style={{
-                      backgroundColor: 'transparent',
-                      borderTopWidth: 1,
-                      borderColor: 'black',
-                      padding: 10,
-                      margin: 1,
-                      marginTop: 10,
-                      marginBottom: 10,
-                      width: width - 40,
-                  }}
-                  >
-                    <Text style={{ marginBottom: 5, fontSize: 15, fontStyle: 'italic', fontWeight: 'bold' }}>About Me</Text>
-                    <Text>{this.state.bio}</Text>
+                  <Image source={{ uri: this.state.profPic }} style={styles.mark} resizeMode="contain" />
+                </View>
+                <View style={styles.markBio}>
+                  <TouchableOpacity onPress={() => this.editProf(navigate)}>
+                    <Image style={styles.icon} source={editProfPic} resizeMode="contain" />
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.markWrap}>
+                  <Text style={styles.name}> {this.state.name}, {this.state.age || '?'} </Text>
+                  {/* <View>
+                    <Image style={styles.icon} source={locationPic} resizeMode="contain" />
+                    <Text style={styles.location}> Current Location </Text>
+                  </View> */}
+                  <View style={styles.bio}>
+                    <Text> {this.state.bio || `Hi! My name is ${this.state.name.split(' ')[0]}, and I'm looking to get more fit!`} </Text>
                   </View>
                 </View>
               </View>
             </Image>
+            {/* <TouchableOpacity onPress={() => this.logout()}>
+              <Text style={[styles.button, styles.greenButton]}>Log out</Text>
+            </TouchableOpacity> */}
           </View>
         );
     }
@@ -148,15 +126,11 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOffset: { height: 3, width: 3 },
     },
-    content: {
+    cont: {
         flex: 1,
-        paddingTop: 20,
-        width: null,
-        height: null,
     },
     container: {
         flex: 1,
-        justifyContent: 'center',
     },
     background: {
         width,
@@ -175,10 +149,16 @@ const styles = StyleSheet.create({
     blueButton: {
         backgroundColor: '#34AADC',
     },
+    bg: {
+        paddingTop: 20,
+        width: null,
+        height: null,
+    },
     centering: {
         backgroundColor: 'transparent',
         fontSize: 35,
-        marginTop: 10,
+        marginTop: 60,
+        marginBottom: 30,
         alignContent: 'center',
     },
     markWrap: {
@@ -189,24 +169,17 @@ const styles = StyleSheet.create({
     markBio: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'transparent',
-        marginTop: 3,
     },
     mark: {
         width: 160,
         height: 160,
-        borderWidth: 2,
-        borderRadius: 79,
+        borderWidth: 3,
+        borderRadius: 80,
         backgroundColor: '#FFAB91',
     },
     name: {
         fontSize: 20,
-        marginTop: 0,
-        backgroundColor: 'transparent',
-    },
-    age: {
-        fontSize: 15,
-        marginTop: 0,
+        marginTop: 20,
         backgroundColor: 'transparent',
     },
     icon: {
@@ -215,13 +188,17 @@ const styles = StyleSheet.create({
         marginLeft: 150,
     },
     bio: {
-        marginTop: 10,
         backgroundColor: 'transparent',
         borderTopWidth: 2,
+        borderBottomWidth: 2,
         borderColor: '#424242',
-        padding: 5,
-        margin: 1,
-        width,
+        height: 60,
+        width: width - 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+        paddingTop: 40,
+        paddingBottom: 40,
     },
     location: {
         fontSize: 15,
@@ -229,20 +206,5 @@ const styles = StyleSheet.create({
     profile: {
         paddingTop: 30,
         backgroundColor: '#FFAB91',
-    },
-    ledBox: {
-        height: 30,
-        width: '25%',
-        margin: 10,
-        flex: 1,
-        alignItems: 'center',
-    },
-    ledGreen: {
-        margin: 0,
-        width: 10,
-        height: 10,
-        backgroundColor: '#ABFF00',
-        borderRadius: 80,
-        shadowColor: 'rgba(0, 0, 0, 0.2)',
     },
 });

@@ -18,14 +18,17 @@ export default class Example extends React.Component {
         header: null,
     };
     constructor(props) {
+        console.log('l');
+
         super(props);
         this.params = this.props.navigation.state.params;
         this.state = {
             messages: [],
-            loadEarlier: true,
+            loadEarlier: false,
             typingText: null,
             isLoadingEarlier: false,
             currentThread: this.params.currentThread,
+            readyToStart: false,
         };
 
         this._isMounted = false;
@@ -40,6 +43,7 @@ export default class Example extends React.Component {
     }
 
     componentWillMount() {
+        const { navigate } = this.props.navigation;
         this._isMounted = true;
         const ref = firebase.database().ref(`threads/${this.state.currentThread}/messages`);
         ref.on('value', (snapshot) => {
@@ -47,6 +51,14 @@ export default class Example extends React.Component {
             this.setState(() => ({
                 messages: Object.values(snapshot.val()).reverse(),
             }));
+        });
+        const reff = firebase.database().ref(`threads/${this.state.currentThread}`);
+        reff.on('value', (snapshot) => {
+            console.log('tf is snapshotval here', snapshot.val().readyToStart);
+            if (snapshot.val().readyToStart === true) {
+                // console.log('uzers', snapshot.val().users);
+                navigate('Timer', { users: snapshot.val().users });
+            }
         });
         console.log('messenger thread', this.state.currentThread);
     }
@@ -85,9 +97,10 @@ export default class Example extends React.Component {
     }
 
     onSend(messages = []) {
+        const { navigate } = this.props.navigation;
         const messageToSend = messages[0].text;
         const messageObjToSend = {
-            _id: Math.round(Math.random() * 1000000),
+            _id: Math.random(),
             text: messageToSend,
             createdAt: new Date(),
             user: {
@@ -96,12 +109,20 @@ export default class Example extends React.Component {
             },
         };
         firebase.database().ref(`threads/${this.state.currentThread}/messages`).push(messageObjToSend);
+        if (messageToSend === 'START') {
+            console.log('yeeee');
+            this.setState({ readyToStart: true });
+            firebase.database().ref(`threads/${this.state.currentThread}`).update({
+                readyToStart: true,
+            });
+        }
     }
 
     onReceive(text) {
+        console.log('what is text', text);
         this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, {
-                _id: Math.round(Math.random() * 1000000),
+                _id: Math.random(),
                 text,
                 createdAt: new Date(),
                 user: {

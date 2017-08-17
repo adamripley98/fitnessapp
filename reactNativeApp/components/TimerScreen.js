@@ -58,30 +58,79 @@ class TimerScreen extends React.Component {
     };
     constructor(props) {
         super(props);
+        const { state } = this.props.navigation;
         this.state = {
             totalSeconds: 0,
             minutes: 0,
             seconds: 0,
-            trainer: 'Brian',
+            trainer: state.params.users[1],
+            user: state.params.users[0],
+            currentSessionKey: firebase.database().ref().child('trainingSessions').push().key,
         };
+        console.log('this id', this.state.trainer.id);
+        // const seshRef = firebase.database().ref('/users/' + this.state.trainer.id + '/trainingSessions/' + currentSessionKey);
+        // seshRef.update({
+        //     sessionFinished: false,
+        // });
     }
 
     componentDidMount() {
       // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
+        // const currentSessionKey = firebase.database().ref().child('trainingSessions').push().key;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
             } else {
                 const userRef = firebase.database().ref('/users/' + user.uid);
+                const seshRef = firebase.database().ref('/users/' + this.state.user.id + '/trainingSessions/' + this.state.currentSessionKey);
+                const seshRef2 = firebase.database().ref('/users/' + this.state.trainer.id + '/trainingSessions/' + this.state.currentSessionKey);
                 console.log('WHAT IS USER ID INSIDE EDIT', user.uid);
                 userRef.on('value', (snapshot) => {
+                    // console.log('user11', state.params.users[1].name);
                     console.log('snapshot trainingSesh inside timer', snapshot.val().trainingSessions);
                     this.setState({
                         userId: user.uid,
                         trainingSessions: snapshot.val().trainingSessions || [],
+                        isTrainer: snapshot.val().isTrainer,
                     });
                     console.log('trainingsesh', this.state.trainingSessions);
+                });
+                seshRef.on('value', (snapshot) => {
+                    if (snapshot.val()) {
+                        console.log('tfmate', snapshot.val());
+                        if (snapshot.val().sessionFinished === true) {
+                            console.log("SESSIONFINISHED1");
+                            if (this.state.isTrainer === true) {
+                                console.log('trainerfinished68');
+
+                                navigate('TrainerFinished', { sessionKey: this.state.currentSessionKey });
+                            } else if (this.state.isTrainer === false) {
+                              console.log('userfinished68');
+
+                                navigate('Rating', { sessionKey: this.state.currentSessionKey });
+                            } else {
+                                console.log('somethingweird');
+                            }
+                        }
+                    }
+                });
+                seshRef2.on('value', (snapshot) => {
+                    if (snapshot.val()) {
+                        console.log('tf mate2', snapshot.val());
+                        if (snapshot.val().sessionFinished === true) {
+                            console.log("SESSIONFINISHED2");
+                            if (this.state.isTrainer === true) {
+                                console.log('trainerfinished69');
+                                navigate('TrainerFinished', { sessionKey: this.state.currentSessionKey });
+                            } else if (this.state.isTrainer === false) {
+                                console.log('userfinished69');
+                                navigate('Rating', { sessionKey: this.state.currentSessionKey });
+                            } else {
+                                console.log('somethingweird');
+                            }
+                        }
+                    }
                 });
                 // starts timer
                 this.start();
@@ -109,17 +158,29 @@ class TimerScreen extends React.Component {
     stop = (navigate) => {
         console.log('session stopped', this.state.minutes, this.state.seconds, this.state.totalSeconds);
         clearInterval(timerVar);
-        const currentSessionKey = firebase.database().ref().child('trainingSessions').push().key;
+        // const currentSessionKey = firebase.database().ref().child('trainingSessions').push().key;
         const latestSession = {
             trainer: this.state.trainer,
+            user: this.state.user,
             sessionLength: this.state.totalSeconds,
             paidYet: false,
-            sessionKey: currentSessionKey,
+            sessionKey: this.state.currentSessionKey,
         };
-        firebase.database().ref('/users/' + this.state.userId + '/trainingSessions/' + currentSessionKey).set({
+        firebase.database().ref('/users/' + this.state.user.id + '/trainingSessions/' + this.state.currentSessionKey).update({
             session: latestSession,
+            sessionFinished: true,
         });
-        navigate('Rating', { sessionKey: currentSessionKey });
+        firebase.database().ref('/users/' + this.state.trainer.id + '/trainingSessions/' + this.state.currentSessionKey).update({
+            session: latestSession,
+            sessionFinished: true,
+        });
+        // if (this.state.isTrainer === true) {
+        //     navigate('TrainerFinished', { sessionKey: currentSessionKey });
+        // } else if (this.state.isTrainer === false) {
+        //     navigate('Rating', { sessionKey: currentSessionKey });
+        // } else {
+        //     console.log('somethingweird');
+        // }
     }
 
     displayTime = (min, sec) => {
@@ -136,6 +197,7 @@ class TimerScreen extends React.Component {
 
     render() {
         const { navigate } = this.props.navigation;
+        console.log('USER', this.state.user, 'TRAINER', this.state.trainer);
         return (
           <View style={styles.container}>
             <Image
@@ -144,7 +206,12 @@ class TimerScreen extends React.Component {
               resizeMode="cover"
             >
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Training session with {this.state.trainer}:</Text>
+                {this.state.isTrainer ?
+                  <Text style={styles.centering}>You've been training
+                     {this.state.user.name} for</Text>
+                : <Text style={styles.centering}>You've been training with
+                   {this.state.trainer.name} for</Text>
+              }
                 {this.displayTime(this.state.minutes, this.state.seconds)}
               </View>
               <TouchableOpacity onPress={() => this.stop(navigate)}>

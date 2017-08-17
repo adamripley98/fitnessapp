@@ -9,13 +9,9 @@ import {
 } from 'react-native';
 import React from 'react';
 import firebase from 'firebase';
-import Stars from 'react-native-stars';
 
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
-const emp = require('./logos/empStar.png');
-const full = require('./logos/fullStar.png');
-const half = require('./logos/halfStar.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -130,7 +126,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class RateTrainerScreen extends React.Component {
+class TrainerFinishedScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -160,7 +156,7 @@ class RateTrainerScreen extends React.Component {
                         this.setState({
                             name: user.displayName,
                             userId: user.uid,
-                            user: snapshot.val().session.user || 'ooo ooo',
+                            user: snapshot.val().session.user,
                             trainer: snapshot.val().session.trainer,
                             paidYet: snapshot.val().session.paidYet,
                             sessionLength: snapshot.val().session.sessionLength,
@@ -181,43 +177,15 @@ class RateTrainerScreen extends React.Component {
     }
 
     submit = (navigate) => {
-        if (this.state.stars === 0) {
-            alert('Enter a star rating');
-        } else if (this.state.feedback === null) {
-            alert('Enter some feedback');
-        } else {
-            console.log('star rating:', this.state.stars);
-            console.log('feedback', this.state.feedback);
-
-            // TODO: send trainer feedback email
-            const sessionRef = firebase.database().ref('/users/' + this.state.userId + '/trainingSessions/' + this.state.sessionKey + '/session');
-            const sessionRef2 = firebase.database().ref('/users/' + this.state.trainer.id + '/trainingSessions/' + this.state.sessionKey + '/session');
-            sessionRef.update({
-                paidYet: true,
-                stars: this.state.stars,
-                feedback: this.state.feedback,
-                price: this.state.price,
-            });
-            sessionRef2.update({
-                paidYet: true,
-                stars: this.state.stars,
-                feedback: this.state.feedback,
-                price: this.state.price,
-            });
-            this.setState({ stars: 0 });
-            this.setState({ feedback: null });
-            navigate('HomeV3');
-        }
+        navigate('HomeV3');
     }
 
     renderInfo = () => {
-        console.log('TRAINER9', this.state);
         const dollars = Math.round((this.state.sessionLength / 300) * 100) / 100;
         const min = Math.round(this.state.sessionLength / 60);
         console.log('$', dollars);
-        return (<Text style={styles.summary}>{this.state.name.split(' ')[0]}, thank you for training!
-          Your {min} minute long session will be ${this.state.price}.
-          Please give {this.state.trainer.name || 'dood'} a rating and some feedback!
+        return (<Text style={styles.summary}>{this.state.name.split(' ')[0]}, Good Work!
+          Your {min} minute long session earned you ${this.state.price}.
         </Text>);
     }
 
@@ -233,29 +201,8 @@ class RateTrainerScreen extends React.Component {
               <View style={styles.markBio}>
                 {this.renderInfo()}
               </View>
-              <View style={{ alignItems: 'center' }}>
-                <Stars
-                  half={true}
-                  rating={0}
-                  update={val => this.setState({ stars: val })}
-                  spacing={7}
-                  starSize={50}
-                  count={5}
-                  fullStar={full}
-                  emptyStar={emp}
-                  halfStar={half}
-                />
-              </View>
-              <View style={styles.textBox}>
-                <TextInput
-                  placeholder={`Give ${this.state.trainer.name} some feedback`}
-                  onChangeText={feedback => this.setState({ feedback })}
-                  multiline={true}
-                  numberOfLines={10}
-                />
-              </View>
               <TouchableOpacity onPress={() => this.submit(navigate)}>
-                <Text style={styles.button}>Submit Rating</Text>
+                <Text style={styles.button}>Finish</Text>
               </TouchableOpacity>
             </Image>
           </View>
@@ -263,4 +210,4 @@ class RateTrainerScreen extends React.Component {
     }
   }
 
-module.exports = RateTrainerScreen;
+module.exports = TrainerFinishedScreen;

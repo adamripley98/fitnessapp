@@ -49,7 +49,7 @@ export default class Menu extends React.Component {
 
     logout = () => {
         firebase.auth().signOut().then(() => {
-        // Sign-out successful.
+        // Sign-out successful
         }).catch((error) => {
         // An error happened.
             alert(error.message);
@@ -79,7 +79,7 @@ export default class Menu extends React.Component {
               User Profile
                 </Text> :
                 <Text
-                  onPress={() => this.props.onItemSelected('TrainerProfileV2')}
+                  onPress={() => this.props.onItemSelected('TrainerProfile')}
                   style={menuStyles.item}
                 >
                   Trainer Profile

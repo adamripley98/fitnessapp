@@ -42,8 +42,8 @@ export default class UserProfileScreen extends React.Component {
                     if (snapshot !== null) {
                         this.setState({
                             emailVerified: user.emailVerified,
-                            name: user.displayName,
-                            profPic: user.photoURL,
+                            name: snapshot.val().fullName,
+                            profPic: snapshot.val().photoURL,
                             userId: user.uid,
                             age: snapshot.val().age,
                             bio: snapshot.val().bio,

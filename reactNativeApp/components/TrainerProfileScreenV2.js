@@ -144,7 +144,7 @@ export default class TrainerProfileScreenV2 extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
       // firebase.auth().signOut();
         const { state } = this.props.navigation;
         const { navigate } = this.props.navigation;
@@ -152,24 +152,19 @@ export default class TrainerProfileScreenV2 extends React.Component {
             if (!user) {
                 navigate('Log');
             } else {
-                console.log('user is', user);
+                console.log('useris', user);
                 console.log('what is state', this.state);
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
-                console.log('WHAT IS USER ID INSIDE PROFILE', user.uid);
+                console.log('WHAT IS USER I INSIDE PROFILE', user.uid);
                 userRef.on('value', (snapshot) => {
                     console.log('snapshot inside user', snapshot);
                     if (snapshot !== null) {
                         this.setState({
-                            emailVerified: user.emailVerified,
                             userName: user.displayName,
-                            profPic: user.photoURL,
                             userID: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
-                            isCertified: snapshot.val().isCertified,
                         });
                     }
-                    console.log('what is state inside trainer prof', this.state);
+                    console.log('what is state inside trainerprof', this.state);
                 });
             }
         });
@@ -180,20 +175,22 @@ export default class TrainerProfileScreenV2 extends React.Component {
         const threadsRef = firebase.database().ref('threads/');
         const firstMessage = {
             _id: Math.random(),
-            text: 'This is the first message!',
+            text: 'You guys are connected! Let your partner know where in the gym you are. When you locate each other, type "START" to start your session',
             createdAt: new Date(),
             user: {
                 _id: 'trim_bot',
                 name: 'TRIM BOT',
             },
         };
-        firebase.database().ref('/users/' + this.state.trainerID).update({
-            clientConnected: true,
-        });
+        // firebase.database().ref('/users/' + this.state.userId).update({
+        //     fullName: this.state.name,
+        //     age: this.state.age,
+        //     bio: this.state.bio,
+        //     photoURL: this.state.profPic,
+        // });
         console.log('wnag');
         threadsRef.once('value').then((snapshot) => {
             const threads = snapshot.val();
-            console.log(threads);
             const newThreadKey = threadsRef.push({
                 users: [
                     {
@@ -207,7 +204,13 @@ export default class TrainerProfileScreenV2 extends React.Component {
                 ],
                 createdAt: new Date(),
             }).key;
+            firebase.database().ref('/users/' + this.state.trainerID).update({
+                clientConnected: newThreadKey,
+            });
             firebase.database().ref(`threads/${newThreadKey}/messages`).push(firstMessage);
+            firebase.database().ref('/threads/' + newThreadKey).update({
+                readyToStart: false,
+            });
             this.setState({ threadId: newThreadKey });
             console.log('NEW THREAD CREATED', this.state.threadId);
             navigate('MessengerV2', { currentThread: this.state.threadId });

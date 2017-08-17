@@ -126,21 +126,25 @@ export default class HomeV3 extends Component {
                 this.findPartners();
                 userRef.on('value', (snapshot) => {
                     if (snapshot.val()) {
+                      console.log('SNAPSHOTVAL1', snapshot.val());
                         this.setState({
                             emailVerified: user.emailVerified,
-                            name: user.displayName,
-                            profPic: user.photoURL,
+                            name: snapshot.val().fullName,
+                            profPic: snapshot.val().photoURL,
                             userId: user.uid,
                             isTrainer: snapshot.val().isTrainer,
                             isCertified: snapshot.val().isCertified,
                             userLat: snapshot.val().latitude,
                             userLong: snapshot.val().longitude,
                             isReady: snapshot.val().isReady,
-                            clientConnected: snapshot.val().clientConnected || 'NO WAY JOSE',
+                            clientConnected: snapshot.val().clientConnected,
                         });
-                        if (snapshot.val().clientConnected === true) {
-                            console.log("YESYESYES");
-                            alert('yesyesyes');
+                        if (snapshot.val().clientConnected !== false) {
+                            console.log("YESYESYES!!");
+                            navigate('MessengerV2', { currentThread: snapshot.val().clientConnected });
+                            userRef.update({
+                                clientConnected: false,
+                            });
                         }
                     }
                 });

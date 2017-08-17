@@ -48,7 +48,7 @@ export default class BottomModal extends Component {
             resizeMode="contain"
           />
           <Text>{prof.fullName}</Text>
-          <Text>Rating: 5/5</Text>
+          <Text>Rating: {((Math.random() * 2) + 3).toFixed(1)}/5.0</Text>
           <Text>{prof.miles} miles away</Text>
         </View>
       </TouchableOpacity>

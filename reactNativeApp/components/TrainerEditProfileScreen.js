@@ -188,10 +188,10 @@ class TrainerEditProfileScreen extends React.Component {
                         bio: snapshot.val().bio,
                         userId: user.uid,
                         emailVerified: user.emailVerified,
-                        name: user.displayName,
-                        profPic: user.photoURL || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+                        name: snapshot.val().fullName,
+                        profPic: snapshot.val().photoURL,
                     });
-                    console.log('what is state', this.state);
+                    console.log('what istate', this.state);
                 });
             }
         });

@@ -84,19 +84,11 @@ export default class Menu extends React.Component {
                   Trainer Profile
                 </Text>
           }
-
             <Text
               onPress={() => this.props.onItemSelected('PaymentSettings')}
               style={menuStyles.item}
             >
               Payment Settings
-            </Text>
-
-            <Text
-              onPress={() => this.props.onItemSelected('Messages')}
-              style={menuStyles.item}
-            >
-              Messages
             </Text>
 
             <Text

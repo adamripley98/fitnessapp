@@ -109,7 +109,6 @@ class TimerScreen extends React.Component {
     stop = (navigate) => {
         console.log('session stopped', this.state.minutes, this.state.seconds, this.state.totalSeconds);
         clearInterval(timerVar);
-        // TODO: use time elapsed in payment algorithm calculations
         const currentSessionKey = firebase.database().ref().child('trainingSessions').push().key;
         const latestSession = {
             trainer: this.state.trainer,

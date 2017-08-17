@@ -122,6 +122,7 @@ export default class HomeV3 extends Component {
                 navigate('Log');
             } else {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
+                this.findPartners();
                 userRef.on('value', (snapshot) => {
                     if (snapshot.val()) {
                         console.log('what is snapVALLLL', snapshot.val());
@@ -321,7 +322,7 @@ export default class HomeV3 extends Component {
                 </TouchableOpacity> :
                 <View />}
               {this.certBanner(navigate)}
-              <Map />
+              <Map nearby={this.state.nearby} />
               {this.state.isTrainer === false ?
                 this.bottomButton() :
                 this.bottomTrainer()

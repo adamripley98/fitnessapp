@@ -171,8 +171,6 @@ export default class TrainerProfileScreenV2 extends React.Component {
                     }
                     console.log('what is state inside trainer prof', this.state);
                 });
-
-                console.log('stat', this.state.age, this.state.bio, this.state.trainerName, this.state.profPic);
             }
         });
     }
@@ -189,6 +187,10 @@ export default class TrainerProfileScreenV2 extends React.Component {
                 name: 'TRIM BOT',
             },
         };
+        firebase.database().ref('/users/' + this.state.trainerID).update({
+            clientConnected: true,
+        });
+        console.log('wnag');
         threadsRef.once('value').then((snapshot) => {
             const threads = snapshot.val();
             console.log(threads);

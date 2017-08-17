@@ -136,7 +136,12 @@ export default class HomeV3 extends Component {
                             userLat: snapshot.val().latitude,
                             userLong: snapshot.val().longitude,
                             isReady: snapshot.val().isReady,
+                            clientConnected: snapshot.val().clientConnected || 'NO WAY JOSE',
                         });
+                        if (snapshot.val().clientConnected === true) {
+                            console.log("YESYESYES");
+                            alert('yesyesyes');
+                        }
                     }
                 });
             }
@@ -264,6 +269,7 @@ export default class HomeV3 extends Component {
           style={{ width: '100%', display: 'flex', alignItems: 'center' }}
           onPress={() => {
                 // this.findPartners();
+              console.log('this.state.clientConnected', this.state.clientConnected);
               alert('You will be notified if a user would like to connect');
           }}
         >
@@ -302,7 +308,10 @@ export default class HomeV3 extends Component {
           profPic={this.state.profPic}
           isTrainer={this.state.isTrainer}
         />);
-
+        if (this.state.userConnected) {
+            console.log('yes daddy');
+            alert('USER CONNECTEDDD!!!!');
+        }
         return (
           <Drawer
             open={this.state.isOpen}

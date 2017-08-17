@@ -241,7 +241,10 @@ export default class HomeV3 extends Component {
 
     menuButton = () => (
       <TouchableOpacity
-        onPress={() => this.toggle()}
+        onPress={() => {
+            this.toggle();
+            this.setState({ bottomModalIsOpen: false });
+        }}
         style={styles.button}
       >
         <Image

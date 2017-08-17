@@ -10,7 +10,6 @@ import React from 'react';
 import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
 
 let timerVar = null;
 
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
         padding: 10,
         textAlign: 'center',
         alignItems: 'center',
-        color: '#fff',
+        color: 'black',
         backgroundColor: 'transparent',
     },
     bg: {
@@ -40,10 +39,21 @@ const styles = StyleSheet.create({
     },
     centering: {
         backgroundColor: 'transparent',
-        fontSize: 35,
+        fontSize: 65,
         marginTop: 60,
         marginBottom: 30,
         alignContent: 'center',
+    },
+    centeringTop: {
+        fontSize: 20,
+        marginTop: 60,
+        paddingLeft: 2,
+        width: width * 1.005,
+        marginBottom: 30,
+        paddingTop: 20,
+        paddingBottom: 20,
+        alignContent: 'center',
+        backgroundColor: '#FF8A65',
     },
     markBio: {
         justifyContent: 'center',
@@ -200,24 +210,16 @@ class TimerScreen extends React.Component {
         console.log('USER', this.state.user, 'TRAINER', this.state.trainer);
         return (
           <View style={styles.container}>
-            <Image
-              source={background}
-              style={[styles.cont, styles.bg]}
-              resizeMode="cover"
-            >
               <View style={styles.markBio}>
                 {this.state.isTrainer ?
-                  <Text style={styles.centering}>You've been training
-                     {this.state.user.name} for</Text>
-                : <Text style={styles.centering}>You've been training with
-                   {this.state.trainer.name} for</Text>
+                  <Text style={styles.centeringTop}>Training session with {this.state.user.name}</Text>
+                : <Text style={styles.centeringTop}>Training session with {this.state.trainer.name}</Text>
               }
                 {this.displayTime(this.state.minutes, this.state.seconds)}
               </View>
               <TouchableOpacity onPress={() => this.stop(navigate)}>
                 <Text style={styles.button}>Stop Session!</Text>
               </TouchableOpacity>
-            </Image>
           </View>
         );
     }

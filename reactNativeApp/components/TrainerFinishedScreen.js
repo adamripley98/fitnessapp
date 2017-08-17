@@ -11,7 +11,6 @@ import React from 'react';
 import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
 
 const styles = StyleSheet.create({
     banner: {
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
         padding: 10,
         textAlign: 'center',
         alignItems: 'center',
-        color: '#fff',
+        color: 'black',
         backgroundColor: 'transparent',
     },
     greenButton: {
@@ -77,6 +76,8 @@ const styles = StyleSheet.create({
         height: 160,
         borderWidth: 3,
         borderRadius: 80,
+        borderColor: '#FF5722',
+        margin: 20,
         backgroundColor: '#FFAB91',
     },
     name: {
@@ -120,8 +121,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         borderWidth: 2,
         fontSize: 20,
-        marginTop: 30,
+        margin: 20,
+        marginTop: 90,
         marginBottom: 30,
+        padding: 10,
+        borderColor: '#FF5722',
         alignContent: 'center',
     },
 });
@@ -185,7 +189,7 @@ class TrainerFinishedScreen extends React.Component {
         const min = Math.round(this.state.sessionLength / 60);
         console.log('$', dollars);
         return (<Text style={styles.summary}>{this.state.name.split(' ')[0]}, Good Work!
-          Your {min} minute long session earned you ${this.state.price}.
+          Your {min} minute long session earned you ${this.state.price}!
         </Text>);
     }
 
@@ -193,18 +197,12 @@ class TrainerFinishedScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            <Image
-              source={background}
-              style={[styles.cont, styles.bg]}
-              resizeMode="cover"
-            >
               <View style={styles.markBio}>
                 {this.renderInfo()}
               </View>
               <TouchableOpacity onPress={() => this.submit(navigate)}>
                 <Text style={styles.button}>Finish</Text>
               </TouchableOpacity>
-            </Image>
           </View>
         );
     }

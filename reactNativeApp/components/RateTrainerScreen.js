@@ -12,7 +12,6 @@ import firebase from 'firebase';
 import Stars from 'react-native-stars';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
 const emp = require('./logos/empStar.png');
 const full = require('./logos/fullStar.png');
 const half = require('./logos/halfStar.png');
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
         padding: 10,
         textAlign: 'center',
         alignItems: 'center',
-        color: '#fff',
+        color: 'black',
         backgroundColor: 'transparent',
     },
     greenButton: {
@@ -115,14 +114,18 @@ const styles = StyleSheet.create({
     },
     textBox: {
         borderWidth: 2,
+        borderColor: '#FF5722',
         height: 150,
         margin: 20,
         backgroundColor: 'white',
         opacity: 0.5,
     },
     summary: {
+        padding: 10,
         backgroundColor: 'transparent',
         borderWidth: 2,
+        borderColor: '#FF5722',
+        margin: 20,
         fontSize: 20,
         marginTop: 30,
         marginBottom: 30,
@@ -225,11 +228,6 @@ class RateTrainerScreen extends React.Component {
         const { navigate } = this.props.navigation;
         return (
           <View style={styles.container}>
-            <Image
-              source={background}
-              style={[styles.cont, styles.bg]}
-              resizeMode="cover"
-            >
               <View style={styles.markBio}>
                 {this.renderInfo()}
               </View>
@@ -257,7 +255,6 @@ class RateTrainerScreen extends React.Component {
               <TouchableOpacity onPress={() => this.submit(navigate)}>
                 <Text style={styles.button}>Submit Rating</Text>
               </TouchableOpacity>
-            </Image>
           </View>
         );
     }

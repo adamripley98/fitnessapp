@@ -46,16 +46,34 @@ const styles = StyleSheet.create({
     },
     centeringTop: {
         fontSize: 20,
-        marginTop: 60,
         paddingLeft: 2,
-        width: width * 1.005,
-        marginBottom: 30,
-        paddingTop: 20,
-        paddingBottom: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderBottomWidth: 2,
+        borderTopWidth: 2,
+        borderColor: 'black',
         alignContent: 'center',
-        backgroundColor: '#FF8A65',
+        // backgroundColor: '#FF8A65',
     },
     markBio: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    mk: {
+        marginTop: 60,
+        marginBottom: 30,
+        padding: 10,
+        borderBottomWidth: 2,
+        borderTopWidth: 2,
+        borderColor: '#FF8A65',
+    },
+    btn: {
+        borderWidth: 2,
+        borderRadius: 4,
+        borderColor: '#FF8A65',
+        width: 120,
+    },
+    but: {
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -211,15 +229,20 @@ class TimerScreen extends React.Component {
         return (
           <View style={styles.container}>
               <View style={styles.markBio}>
-                {this.state.isTrainer ?
-                  <Text style={styles.centeringTop}>Training session with {this.state.user.name}</Text>
-                : <Text style={styles.centeringTop}>Training session with {this.state.trainer.name}</Text>
-              }
+                <View style={styles.mk}>
+                  {this.state.isTrainer ?
+                    <Text style={styles.centeringTop}>Training session with {this.state.user.name.split(' ')[0]}</Text>
+                  : <Text style={styles.centeringTop}>Training session with {this.state.trainer.name.split(' ')[0]}</Text>
+                }
+                </View>
                 {this.displayTime(this.state.minutes, this.state.seconds)}
               </View>
-              <TouchableOpacity onPress={() => this.stop(navigate)}>
+            <View style={styles.but}>
+              <TouchableOpacity style={styles.btn} onPress={() => this.stop(navigate)}>
                 <Text style={styles.button}>Stop Session!</Text>
               </TouchableOpacity>
+            </View>
+
           </View>
         );
     }

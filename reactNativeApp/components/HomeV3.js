@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
         height: 30,
         textAlign: 'center',
         paddingTop: 20,
-        // marginTop: 50,
         paddingBottom: 30,
         backgroundColor: '#f44336',
         shadowOpacity: 0.75,
@@ -114,14 +113,21 @@ export default class HomeV3 extends Component {
             bottomModalIsOpen: false,
             nearby: [],
         };
+        const { navigate } = this.props.navigation;
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('Log');
+            }
+        });
     }
 
     componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                navigate('Log');
-            } else {
+            // if (!user) {
+            //     navigate('Log');
+            // } else {
+            if (user) {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
                 this.findPartners();
                 userRef.on('value', (snapshot) => {

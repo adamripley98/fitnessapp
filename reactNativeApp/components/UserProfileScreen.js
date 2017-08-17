@@ -29,29 +29,31 @@ export default class UserProfileScreen extends React.Component {
         this.state = {
             name: '',
         };
-    }
-
-    componentWillMount() {
-      // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
-            } else {
-                const userRef = firebase.database().ref(`/users/${user.uid}`);
-                userRef.on('value', (snapshot) => {
-                    if (snapshot !== null) {
-                        this.setState({
-                            emailVerified: user.emailVerified,
-                            name: snapshot.val().fullName,
-                            profPic: snapshot.val().photoURL,
-                            userId: user.uid,
-                            age: snapshot.val().age,
-                            bio: snapshot.val().bio,
-                        });
-                    }
-                });
             }
+        });
+    }
+
+    componentDidMount() {
+      // firebase.auth().signOut();
+        const { navigate } = this.props.navigation;
+        firebase.auth().onAuthStateChanged((user) => {
+            const userRef = firebase.database().ref(`/users/${user.uid}`);
+            userRef.on('value', (snapshot) => {
+                if (snapshot.val()) {
+                    this.setState({
+                        emailVerified: user.emailVerified,
+                        name: snapshot.val().fullName,
+                        profPic: snapshot.val().photoURL,
+                        userId: user.uid,
+                        age: snapshot.val().age,
+                        bio: snapshot.val().bio,
+                    });
+                }
+            });
         });
     }
 

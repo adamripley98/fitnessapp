@@ -17,10 +17,17 @@ export default class Example extends React.Component {
         title: 'Messenger',
         header: null,
     };
+
     constructor(props) {
         console.log('l');
 
         super(props);
+        const { navigate } = this.props.navigation;
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                navigate('Log');
+            }
+        });
         this.params = this.props.navigation.state.params;
         this.state = {
             messages: [],
@@ -30,7 +37,6 @@ export default class Example extends React.Component {
             currentThread: this.params.currentThread,
             readyToStart: false,
         };
-
         this._isMounted = false;
         this.onSend = this.onSend.bind(this);
         this.onReceive = this.onReceive.bind(this);
@@ -47,7 +53,7 @@ export default class Example extends React.Component {
         this._isMounted = true;
         const ref = firebase.database().ref(`threads/${this.state.currentThread}/messages`);
         ref.on('value', (snapshot) => {
-            console.log('snapshot', snapshot.val());
+            console.log('snapshotinmessage', snapshot.val());
             this.setState(() => ({
                 messages: Object.values(snapshot.val()).reverse(),
             }));
@@ -65,9 +71,7 @@ export default class Example extends React.Component {
 
     componentDidMount() {
         firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                navigate('Log');
-            } else {
+            if (user) {
                 this.setState({
                     name: user.displayName,
                     userId: user.uid,
@@ -195,22 +199,22 @@ export default class Example extends React.Component {
 
     render() {
         return (
-          <GiftedChat
-            messages={this.state.messages}
-            onSend={this.onSend}
-            loadEarlier={this.state.loadEarlier}
-            onLoadEarlier={this.onLoadEarlier}
-            isLoadingEarlier={this.state.isLoadingEarlier}
+          <View style={{ backgroundColor: '#FFE0B2', flex: 1 }}>
+            <GiftedChat
+              messages={this.state.messages || []}
+              onSend={this.onSend}
+              loadEarlier={this.state.loadEarlier}
+              onLoadEarlier={this.onLoadEarlier}
+              isLoadingEarlier={this.state.isLoadingEarlier}
 
-            user={{
-                _id: this.state.userId,
-            }}
-
-            // renderActions={this.renderCustomActions}
-            renderBubble={this.renderBubble}
-            renderCustomView={this.renderCustomView}
-            renderFooter={this.renderFooter}
-          />
+              user={{
+                  _id: this.state.userId,
+              }}
+              renderBubble={this.renderBubble}
+              renderCustomView={this.renderCustomView}
+              renderFooter={this.renderFooter}
+            />
+          </View>
         );
     }
 }

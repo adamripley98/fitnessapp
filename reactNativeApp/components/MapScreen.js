@@ -55,6 +55,7 @@ export default class MapScreen extends React.Component {
                 });
             },
             (error) => {
+                console.log('was there a map error?', error);
             },
             {},
         );

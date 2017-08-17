@@ -109,31 +109,6 @@ export default class LogScreen extends React.Component {
             password: '',
         };
         this.inputs = {};
-    }
-
-    // GOES AFTER if(user)
-    // const userRef = firebase.database().ref(`/users/${usr.uid}`);
-    // userRef.on('value', (snapshot) => {
-    //     console.log('snapshot inside log', snapshot.val());
-    //     this.setState({ isTrainer: snapshot.val().isTrainer || 'idk yet' });
-    //     if (snapshot.val().isTrainer === true) {
-    //         navigate('TrainerProfile');
-    //     } else if (snapshot.val().isTrainer === false) {
-    //         navigate('UserProfile');
-    //     } else {
-    //         console.log('SOMETHING WEIRD IS HAPPENING');
-    //     }
-    // });
-    // const userRef = firebase.database().ref(`/users/${usr.uid}`);
-    // userRef.on('value', (snapshot) => {
-    //     if (snapshot.val().isTrainer) {
-    //         this.setState({
-    //             isTrainer: snapshot.val().isTrainer,
-    //         });
-    //         navigate('HomeV3', { isTrain: this.state.isTrainer });
-    //     }
-    // });
-    componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((usr) => {
             if (usr) {

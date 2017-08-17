@@ -283,9 +283,9 @@ export default class HomeV3 extends Component {
         swipeThreshold={175}
         swipeArea={100}
       >
-        <View style={styles.bottomModal}>
-          <Text>These trainers are nearby</Text>
+        <View>
           <BottomModal
+            style={{ width, height, backgroundColor: 'blue' }}
             nearby={this.state.nearby}
             navigate={navigate}
           />

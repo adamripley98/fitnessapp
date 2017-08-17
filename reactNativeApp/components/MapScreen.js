@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import MapStyle from './mapStyle.json';
 
 const currentLocation = require('../assets/icons/currentLocationFYTOrange.png');
+const pic = require('./logos/fullStar.png');
 
 export default class MapScreen extends React.Component {
     static navigationOptions = {
@@ -76,6 +77,7 @@ export default class MapScreen extends React.Component {
         );
     }
     render() {
+        const marker = { latitude: 37.787834, longitude: -122.406417 }
         if (this.state.currentRegion.latitude && this.state.currentRegion.longitude) {
             return (
               <View style={styles.container}>
@@ -87,6 +89,10 @@ export default class MapScreen extends React.Component {
                   showsUserLocation
                   provider={PROVIDER_GOOGLE}
                   customMapStyle={MapStyle}
+                />
+                <MapView.Marker
+                  coordinate={marker}
+                  image={pic}
                 />
                 <TouchableOpacity
                   onPress={this.moveToCurrentCoords.bind(this)}

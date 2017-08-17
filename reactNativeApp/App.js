@@ -114,6 +114,6 @@ const myApp = StackNavigator({
     MessagesScreenV2: {
         screen: MessagesScreenV2,
     },
-}, { initialRouteName: 'TrainerProfileV2' });
+}, { initialRouteName: 'HomeV3' });
 
 export default myApp;

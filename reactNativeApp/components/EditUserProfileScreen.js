@@ -10,6 +10,7 @@ import {
 import React from 'react';
 import firebase from 'firebase';
 import Exponent from 'expo';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const { width, height } = Dimensions.get('window');
 
@@ -251,6 +252,7 @@ class EditUserProfileScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
+              <KeyboardAwareScrollView>
               <View style={styles.public}>
                 <Text> Public Information </Text>
                 <View style={styles.markWrap}>
@@ -285,6 +287,7 @@ class EditUserProfileScreen extends React.Component {
               <TouchableOpacity onPress={() => this.saveChanges(navigate)}>
                 <Text style={[styles.button, styles.greenButton]}>Save changes</Text>
               </TouchableOpacity>
+            </KeyboardAwareScrollView>
             </Image>
           </View>
         );

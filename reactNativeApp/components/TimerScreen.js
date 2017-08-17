@@ -15,20 +15,6 @@ const background = require('./logos/bkg.jpg');
 let timerVar = null;
 
 const styles = StyleSheet.create({
-    banner: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width,
-        height: 30,
-        textAlign: 'center',
-        paddingTop: 10,
-        paddingBottom: 30,
-        backgroundColor: '#f44336',
-        shadowOpacity: 0.75,
-        shadowRadius: 5,
-        shadowColor: 'black',
-        shadowOffset: { height: 3, width: 3 },
-    },
     cont: {
         flex: 1,
     },
@@ -44,15 +30,8 @@ const styles = StyleSheet.create({
         padding: 10,
         textAlign: 'center',
         alignItems: 'center',
-        // marginBottom: 10,
         color: '#fff',
         backgroundColor: 'transparent',
-    },
-    greenButton: {
-        backgroundColor: '#4CD964',
-    },
-    blueButton: {
-        backgroundColor: '#34AADC',
     },
     bg: {
         paddingTop: 30,
@@ -66,57 +45,9 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         alignContent: 'center',
     },
-    markWrap: {
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     markBio: {
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    mark: {
-        width: 160,
-        height: 160,
-        borderWidth: 3,
-        borderRadius: 80,
-        backgroundColor: '#FFAB91',
-    },
-    name: {
-        fontSize: 20,
-        marginTop: 20,
-        backgroundColor: 'transparent',
-    },
-    icon: {
-        width: 30,
-        height: 30,
-        marginLeft: 150,
-    },
-    bio: {
-        backgroundColor: 'transparent',
-        borderTopWidth: 2,
-        borderBottomWidth: 2,
-        borderColor: '#424242',
-        height: 60,
-        width: width - 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        paddingTop: 40,
-        paddingBottom: 40,
-    },
-    location: {
-        fontSize: 15,
-    },
-    profile: {
-        paddingTop: 30,
-        backgroundColor: '#FFAB91',
-    },
-    textBox: {
-        borderWidth: 2,
-        height: 150,
-        margin: 20,
-        backgroundColor: 'white',
-        opacity: 0.5,
     },
 });
 
@@ -178,7 +109,6 @@ class TimerScreen extends React.Component {
     stop = (navigate) => {
         console.log('session stopped', this.state.minutes, this.state.seconds, this.state.totalSeconds);
         clearInterval(timerVar);
-        // TODO: use time elapsed in payment algorithm calculations
         const currentSessionKey = firebase.database().ref().child('trainingSessions').push().key;
         const latestSession = {
             trainer: this.state.trainer,

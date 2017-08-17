@@ -160,11 +160,19 @@ class RateTrainerScreen extends React.Component {
                         paidYet: snapshot.val().session.paidYet,
                         sessionLength: snapshot.val().session.sessionLength,
                         sessionKey: snapshot.val().session.sessionKey,
+                        price: this.calculatePrice(snapshot.val().session.sessionLength),
                     });
+                    this.calculatePrice();
                     console.log('what is state inside rate', this.state);
                 });
             }
         });
+    }
+
+    //arbitrarily based only off time. $12 an hour.
+    calculatePrice = () => {
+        const dollars = Math.round((this.state.sessionLength / 300) * 100) / 100;
+        return dollars;
     }
 
     submit = (navigate) => {
@@ -183,6 +191,7 @@ class RateTrainerScreen extends React.Component {
                 paidYet: true,
                 stars: this.state.stars,
                 feedback: this.state.feedback,
+                price: this.state.price,
             });
             this.setState({ stars: 0 });
             this.setState({ feedback: null });
@@ -191,6 +200,7 @@ class RateTrainerScreen extends React.Component {
     }
 
     renderInfo = () => {
+
         const dollars = Math.round((this.state.sessionLength / 300) * 100) / 100;
         const min = Math.round(this.state.sessionLength / 60);
         console.log('$', dollars);

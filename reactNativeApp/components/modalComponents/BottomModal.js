@@ -34,22 +34,21 @@ export default class BottomModal extends Component {
         return nearby;
     }
 
-    renderProf = (prof) => {
-        return (
-          <TouchableOpacity key={Math.random()}>
-            <View style={styles.container}>
-              <Image
-                source={{ uri: prof.photoURL }}
-                style={styles.backButtonIcon}
-                resizeMode="contain"
-              />
-              <Text>{prof.fullName}</Text>
-              <Text>Rating: 5/5</Text>
-              <Text>{prof.miles} miles away</Text>
-            </View>
-          </TouchableOpacity>
-        );
-    }
+    renderProf = prof => (
+      <TouchableOpacity key={Math.random()}>
+        <View style={styles.container}>
+          <Image
+            source={{ uri: prof.photoURL }}
+            style={styles.backButtonIcon}
+            resizeMode="contain"
+          />
+          <Text>{prof.fullName}</Text>
+          <Text>Rating: 5/5</Text>
+          <Text>{prof.miles} miles away</Text>
+          <Text>ID: {prof.uid}</Text>
+        </View>
+      </TouchableOpacity>
+    )
 
     renderList() {
         const list = [];
@@ -60,6 +59,7 @@ export default class BottomModal extends Component {
         });
         return list;
     }
+
     render() {
         return (
           <View style={styless.bottomModal}>

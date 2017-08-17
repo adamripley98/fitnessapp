@@ -69,12 +69,6 @@ export default class Menu extends React.Component {
               <Text style={menuStyles.name}>{this.props.name}</Text>
             </View>
 
-            <Text
-              onPress={() => this.props.onItemSelected('Map')}
-              style={menuStyles.item}
-            >
-              Map
-            </Text>
             {console.log('istrainer???', this.props.isTrainer)}
             {
               this.props.isTrainer === false ?
@@ -91,19 +85,11 @@ export default class Menu extends React.Component {
                   Trainer Profile
                 </Text>
           }
-
             <Text
               onPress={() => this.props.onItemSelected('PaymentSettings')}
               style={menuStyles.item}
             >
               Payment Settings
-            </Text>
-
-            <Text
-              onPress={() => this.props.onItemSelected('Messages')}
-              style={menuStyles.item}
-            >
-              Messages
             </Text>
 
             <Text

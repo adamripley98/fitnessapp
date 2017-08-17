@@ -117,12 +117,12 @@ export default class HomeV3 extends Component {
 
     componentDidMount() {
         const { navigate } = this.props.navigation;
-        this.calcDistance(37.7749, 122.4194, 45, -122.406417);
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
             } else {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
+                this.findPartners();
                 userRef.on('value', (snapshot) => {
                     if (snapshot.val()) {
                         console.log('what is snapVALLLL', snapshot.val());
@@ -135,6 +135,7 @@ export default class HomeV3 extends Component {
                             isCertified: snapshot.val().isCertified,
                             userLat: snapshot.val().latitude,
                             userLong: snapshot.val().longitude,
+                            isReady: snapshot.val().isReady,
                         });
                     }
                 });
@@ -178,12 +179,17 @@ export default class HomeV3 extends Component {
         navigate('TrainerCertification');
     }
 
+    updateMenuState(isOpen) {
+        this.setState({ isOpen });
+    }
+
     calcDistance = (lat1, lon1, lat2, lon2) => {
         const radlat1 = Math.PI * lat1 / 180;
         const radlat2 = Math.PI * lat2 / 180;
         const theta = lon1 - lon2;
         const radtheta = Math.PI * theta / 180;
-        let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) *
+        Math.cos(radlat2) * Math.cos(radtheta);
         dist = Math.acos(dist);
         dist = dist * 180 / Math.PI;
         dist = dist * 60 * 1.1515;
@@ -203,6 +209,7 @@ export default class HomeV3 extends Component {
                       user.latitude, user.longitude);
                     if (distance <= 5) {
                         console.log(user.fullName, 'is only', distance, 'miles away!');
+                        console.log('USER ID:', user._id);
                         user.miles = distance;
                         nearby.push(user);
                     }
@@ -254,6 +261,22 @@ export default class HomeV3 extends Component {
       </View>
     );
 
+    bottomTrainer = () => (
+      <View style={styles.bottomModalButton}>
+        <TouchableHighlight
+          style={{ width: '100%', display: 'flex', alignItems: 'center' }}
+          onPress={() => {
+                // this.findPartners();
+              alert('You will be notified if a user would like to connect');
+          }}
+        >
+          <View style={styles.bottomButton}>
+            <Text style={{ fontSize: 30 }}>Look for Users</Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+
     bottomModalFrame = () => (
       <ModalBox
         style={styles.bottomModal}
@@ -300,9 +323,15 @@ export default class HomeV3 extends Component {
                 </TouchableOpacity> :
                 <View />}
               {this.certBanner(navigate)}
-              <Map />
-              {this.bottomButton()}
-              {this.bottomModalFrame()}
+              <Map nearby={this.state.nearby} />
+              {this.state.isTrainer === false ?
+                this.bottomButton() :
+                this.bottomTrainer()
+            }
+              {this.state.isTrainer === false ?
+                this.bottomModalFrame() :
+                <View />
+            }
             </View>
             {this.menuButton()}
           </Drawer>

@@ -104,7 +104,7 @@ export default class BottomModal extends Component {
             avatarContainerStyle={{ width: 60, height: 60, borderRadius: 80 }}
             avatarOverlayContainerStyle={{ width: 60, height: 60, borderRadius: 80 }}
             style={{ width, padding: 10, borderBottomWidth: 1, borderColor: 'orange' }}
-            key={prof.id}
+            key={Math.random()}
             title={
               <View style={styles.titleView}>
                 <Text>{prof.fullName}</Text>
@@ -140,10 +140,10 @@ export default class BottomModal extends Component {
                 alignItems: 'center',
                 backgroundColor: 'orange',
                 marginTop: 10,
-                padding: 5,
+                padding: 10,
             }}
             >
-              <Text style={{ fontSize: 20 }}>Trainers Nearby</Text>
+              <Text style={{ fontSize: 25 }}>Trainers Nearby</Text>
             </View>
             <List>
               {this.renderListV2()}

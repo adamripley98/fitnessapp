@@ -7,7 +7,8 @@ import styless from '../ModalStyle';
 
 const editProfPic = require('../logos/editprof.png');
 
-const screen = Dimensions.get('window');
+// const screen = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     backButtonIcon: {
@@ -20,6 +21,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         marginBottom: 20,
+        width: width - 3,
     },
 });
 export default class BottomModal extends Component {
@@ -48,7 +50,6 @@ export default class BottomModal extends Component {
           <Text>{prof.fullName}</Text>
           <Text>Rating: 5/5</Text>
           <Text>{prof.miles} miles away</Text>
-          <Text>ID: {prof.uniqueId}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -65,12 +66,12 @@ export default class BottomModal extends Component {
 
     render() {
         return (
-          <View style={[styless.bottomModal, { zIndex: 1 }]}>
+          <View style={styless.bottomModal}>
             <ScrollView
               showsVerticalScrollIndicator={false}
               decelerationRate={'fast'}
             >
-              <View style={{ width: screen.width * 0.95, paddingLeft: 10 }}>
+              <View style={{ justifyContent: 'center' }}>
                 {this.renderList()}
               </View>
             </ScrollView>

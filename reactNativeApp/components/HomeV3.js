@@ -111,7 +111,7 @@ export default class HomeV3 extends Component {
         this.state = {
             isOpen: false,
             selectedItem: 'Map',
-            bottomModalIsOpen: true,
+            bottomModalIsOpen: false,
             nearby: [],
         };
     }
@@ -126,7 +126,7 @@ export default class HomeV3 extends Component {
                 this.findPartners();
                 userRef.on('value', (snapshot) => {
                     if (snapshot.val()) {
-                      console.log('SNAPSHOTVAL1', snapshot.val());
+                        console.log('SNAPSHOTVAL1', snapshot.val());
                         this.setState({
                             emailVerified: user.emailVerified,
                             name: snapshot.val().fullName,
@@ -140,7 +140,7 @@ export default class HomeV3 extends Component {
                             clientConnected: snapshot.val().clientConnected,
                         });
                         if (snapshot.val().clientConnected !== false) {
-                            console.log("YESYESYES!!");
+                            console.log('YESYESYES!!');
                             navigate('MessengerV2', { currentThread: snapshot.val().clientConnected });
                             userRef.update({
                                 clientConnected: false,

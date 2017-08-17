@@ -16,7 +16,7 @@ const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const editProfPic = require('./logos/editprof.png');
 const locationPic = require('./logos/location.png');
-const backIcon = require('./logos/back.png');
+const backIcon = require('./logos/backIcon2.png');
 
 export default class UserProfileScreen extends React.Component {
     static navigationOptions = {
@@ -72,7 +72,12 @@ export default class UserProfileScreen extends React.Component {
                 <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
                   <Image
                     source={backIcon}
-                    style={styles.backButtonIcon}
+                    style={{
+                        position: 'absolute',
+                        left: 8,
+                        height: 25,
+                        width: 25,
+                    }}
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#34AADC',
     },
     bg: {
-        paddingTop: 30,
+        paddingTop: 20,
         width: null,
         height: null,
     },

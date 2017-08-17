@@ -168,7 +168,7 @@ class TrainerFinishedScreen extends React.Component {
                             price: this.calculatePrice(snapshot.val().session.sessionLength),
                         });
                     }
-                    console.log('what is state inside rate', this.state);
+                    console.log('what isstate inside rate', this.state);
                 });
             }
         });

@@ -114,22 +114,38 @@ const styles = StyleSheet.create({
     },
     textBox: {
         borderWidth: 2,
-        borderColor: '#FF5722',
+        borderColor: '#FF8A65',
+        borderRadius: 4,
         height: 150,
         margin: 20,
-        backgroundColor: 'white',
-        opacity: 0.5,
+        backgroundColor: 'transparent',
+        // opacity: 0.5,
     },
     summary: {
         padding: 10,
         backgroundColor: 'transparent',
-        borderWidth: 2,
-        borderColor: '#FF5722',
-        margin: 20,
         fontSize: 20,
-        marginTop: 30,
-        marginBottom: 30,
         alignContent: 'center',
+    },
+    btn: {
+        borderWidth: 2,
+        borderRadius: 4,
+        borderColor: '#FF8A65',
+        width: 120,
+    },
+    but: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    summ: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomWidth: 2,
+        borderTopWidth: 2,
+        borderColor: '#FF8A65',
+        width: 300,
+        marginBottom: 20,
+        marginTop: 20,
     },
 });
 
@@ -218,10 +234,10 @@ class RateTrainerScreen extends React.Component {
         const dollars = Math.round((this.state.sessionLength / 300) * 100) / 100;
         const min = Math.round(this.state.sessionLength / 60);
         console.log('$', dollars);
-        return (<Text style={styles.summary}>{this.state.name.split(' ')[0]}, thank you for training!
+        return (<View style={styles.summ}><Text style={styles.summary}>{this.state.name.split(' ')[0]}, thank you for training!
           Your {min} minute long session will be ${this.state.price}.
           Please give {this.state.trainer.name || 'dood'} a rating and some feedback!
-        </Text>);
+        </Text></View>);
     }
 
     render() {
@@ -252,9 +268,11 @@ class RateTrainerScreen extends React.Component {
                   numberOfLines={10}
                 />
               </View>
-              <TouchableOpacity onPress={() => this.submit(navigate)}>
-                <Text style={styles.button}>Submit Rating</Text>
-              </TouchableOpacity>
+              <View style={styles.but}>
+                <TouchableOpacity style={styles.btn} onPress={() => this.submit(navigate)}>
+                  <Text style={styles.button}>Submit Rating</Text>
+                </TouchableOpacity>
+              </View>
           </View>
         );
     }

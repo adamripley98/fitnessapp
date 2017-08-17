@@ -62,7 +62,7 @@ export default class BottomModal extends Component {
 
     render() {
         return (
-          <View style={styless.bottomModal}>
+          <View style={[styless.bottomModal, { zIndex: 1 }]}>
             <ScrollView
               showsVerticalScrollIndicator={false}
               decelerationRate={'fast'}

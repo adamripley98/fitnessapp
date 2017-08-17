@@ -160,7 +160,7 @@ export default class HomeV3 extends Component {
 
     toggle() {
         this.setState({
-            isOpen: !this.state.isOpen,
+            isOpen: true,
         });
     }
 
@@ -179,8 +179,8 @@ export default class HomeV3 extends Component {
         navigate('TrainerCertification');
     }
 
-    updateMenuState(isOpen) {
-        this.setState({ isOpen });
+    closeMenu = () => {
+        this.setState({ isOpen: false });
     }
 
     calcDistance = (lat1, lon1, lat2, lon2) => {
@@ -235,8 +235,8 @@ export default class HomeV3 extends Component {
 
     menuButton = () => (
       <TouchableOpacity
-        onPress={this.toggle}
-        style={styles.button}
+        onPress={() => this.toggle()}
+        style={[styles.button, { zIndex: 0 }]}
       >
         <Image
           source={hamburgerIcon}
@@ -303,6 +303,8 @@ export default class HomeV3 extends Component {
           isTrainer={this.state.isTrainer}
         />);
 
+        console.log('is it open?', this.state.isOpen);
+
         return (
           <Drawer
             open={this.state.isOpen}
@@ -310,6 +312,7 @@ export default class HomeV3 extends Component {
             content={menu}
             tapToClose
             openDrawerOffset={0.2} // 20% gap on the right side of drawer
+            onClose={() => this.setState({ isOpen: false })}
             panCloseMask={0.2}
             closedDrawerOffset={-3}
             tweenHandler={ratio => ({
@@ -332,8 +335,8 @@ export default class HomeV3 extends Component {
                 this.bottomModalFrame() :
                 <View />
             }
+              {this.menuButton()}
             </View>
-            {this.menuButton()}
           </Drawer>
         );
     }

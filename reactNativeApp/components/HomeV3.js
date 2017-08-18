@@ -127,6 +127,7 @@ export default class HomeV3 extends Component {
             // if (!user) {
             //     navigate('Log');
             // } else {
+            console.disableYellowBox = true;
             if (user) {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
                 this.findPartners();

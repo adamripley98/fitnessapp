@@ -114,6 +114,6 @@ const myApp = StackNavigator({
     TrainerFinished: {
         screen: TrainerFinished,
     },
-}, { initialRouteName: 'HomeV3' });
+}, { initialRouteName: 'Log' });
 
 export default myApp;

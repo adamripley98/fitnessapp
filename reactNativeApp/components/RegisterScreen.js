@@ -229,80 +229,80 @@ export default class RegisterScreen extends React.Component {
               />
               <View style={styles.inputsContainer}>
                 <KeyboardAwareScrollView>
-                <View style={styles.inputContainer}>
-                  <View style={styles.iconContainer}>
-                    <Image
-                      source={personIcon}
-                      style={styles.inputIcon}
-                      resizeMode="contain"
+                  <View style={styles.inputContainer}>
+                    <View style={styles.iconContainer}>
+                      <Image
+                        source={personIcon}
+                        style={styles.inputIcon}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <TextInput
+                      style={[styles.input, styles.whiteFont]}
+                      placeholder="Full Name"
+                      placeholderTextColor="#FFF"
+                      underlineColorAndroid="transparent"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onChangeText={name => this.setState({ name })}
                     />
                   </View>
-                  <TextInput
-                    style={[styles.input, styles.whiteFont]}
-                    placeholder="Full Name"
-                    placeholderTextColor="#FFF"
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={name => this.setState({ name })}
-                  />
-                </View>
 
-                <View style={styles.inputContainer}>
-                  <View style={styles.iconContainer}>
-                    <Image
-                      source={emailIcon}
-                      style={styles.inputIcon}
-                      resizeMode="contain"
+                  <View style={styles.inputContainer}>
+                    <View style={styles.iconContainer}>
+                      <Image
+                        source={emailIcon}
+                        style={styles.inputIcon}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <TextInput
+                      style={[styles.input, styles.whiteFont]}
+                      placeholder="Email"
+                      placeholderTextColor="#FFF"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onChangeText={email => this.setState({ email })}
                     />
                   </View>
-                  <TextInput
-                    style={[styles.input, styles.whiteFont]}
-                    placeholder="Email"
-                    placeholderTextColor="#FFF"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={email => this.setState({ email })}
-                  />
-                </View>
 
-                <View style={styles.inputContainer}>
-                  <View style={styles.iconContainer}>
-                    <Image
-                      source={lockIcon}
-                      style={styles.inputIcon}
-                      resizeMode="contain"
+                  <View style={styles.inputContainer}>
+                    <View style={styles.iconContainer}>
+                      <Image
+                        source={lockIcon}
+                        style={styles.inputIcon}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <TextInput
+                      secureTextEntry
+                      style={[styles.input, styles.whiteFont]}
+                      placeholder="Password"
+                      placeholderTextColor="#FFF"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onChangeText={psw => this.setState({ password: psw })}
                     />
                   </View>
-                  <TextInput
-                    secureTextEntry
-                    style={[styles.input, styles.whiteFont]}
-                    placeholder="Password"
-                    placeholderTextColor="#FFF"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={psw => this.setState({ password: psw })}
-                  />
-                </View>
 
-                <View style={styles.inputContainer}>
-                  <View style={styles.iconContainer}>
-                    <Image
-                      source={lockIcon}
-                      style={styles.inputIcon}
-                      resizeMode="contain"
+                  <View style={styles.inputContainer}>
+                    <View style={styles.iconContainer}>
+                      <Image
+                        source={lockIcon}
+                        style={styles.inputIcon}
+                        resizeMode="contain"
+                      />
+                    </View>
+                    <TextInput
+                      secureTextEntry
+                      style={[styles.input, styles.whiteFont]}
+                      placeholder="Confirm Password"
+                      placeholderTextColor="#FFF"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onChangeText={psw => this.setState({ confirmPassword: psw })}
                     />
                   </View>
-                  <TextInput
-                    secureTextEntry
-                    style={[styles.input, styles.whiteFont]}
-                    placeholder="Confirm Password"
-                    placeholderTextColor="#FFF"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    onChangeText={psw => this.setState({ confirmPassword: psw })}
-                  />
-                </View>
                 </KeyboardAwareScrollView>
               </View>
 

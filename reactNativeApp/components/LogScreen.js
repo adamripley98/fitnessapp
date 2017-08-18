@@ -126,19 +126,21 @@ export default class LogScreen extends React.Component {
 
     login(navigate) {
         let noErr = true;
-        firebase.auth().signInWithEmailAndPassword(this.state.email,
-      this.state.password).catch((error) => {
-          if (error) {
-              noErr = false;
-              alert(error.message);
-          }
-      })
-      .then(() => {
-          if (noErr) {
-              console.log('logging in');
-              navigate('Messenger');
-          }
-      });
+        console.log('logging in');
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch((error) => {
+            if (error) {
+                noErr = false;
+                alert(error.message);
+            } else {
+                console.log('in else');
+            }
+        });
+      // .then(() => {
+      //     if (noErr) {
+      //         console.log('logging in');
+      //         navigate('HomeV3');
+      //     }
+      // });
     }
 
     reg = (navigate) => {
@@ -166,50 +168,52 @@ export default class LogScreen extends React.Component {
               </View>
               <View style={styles.wrapper}>
                 <KeyboardAwareScrollView>
-                <View style={styles.inputWrap}>
-                  <View style={styles.iconWrap}>
-                    <Image source={personIcon} style={styles.icon} resizeMode="contain" />
+                  <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                      <Image source={personIcon} style={styles.icon} resizeMode="contain" />
+                    </View>
+                    <TextInput
+                      placeholder="Email Address"
+                      placeholderTextColor="#FFF"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      style={styles.input}
+                      onChangeText={usr => this.setState({ email: usr })}
+                    />
                   </View>
-                  <TextInput
-                    placeholder="Email Address"
-                    placeholderTextColor="#FFF"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    onChangeText={usr => this.setState({ email: usr })}
-                  />
-                </View>
-                <View style={styles.inputWrap}>
-                  <View style={styles.iconWrap}>
-                    <Image source={lockIcon} style={styles.icon} resizeMode="contain" />
+                  <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                      <Image source={lockIcon} style={styles.icon} resizeMode="contain" />
+                    </View>
+                    <TextInput
+                      placeholderTextColor="#FFF"
+                      placeholder="Password"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      style={styles.input}
+                      onChangeText={psw => this.setState({ password: psw })}
+                      secureTextEntry
+                    />
                   </View>
-                  <TextInput
-                    placeholderTextColor="#FFF"
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    style={styles.input}
-                    onChangeText={psw => this.setState({ password: psw })}
-                    secureTextEntry
-                  />
-                </View>
-                <TouchableOpacity activeOpacity={0.5}>
-                  <View>
-                    <Text
-                      style={styles.forgotPasswordText}
-                      onPress={() => this.forgot()}
-                    >Forgot Password?</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.5}>
-                  <View style={styles.button}>
-                    <Text
-                      style={styles.buttonText}
-                      onPress={() => this.login(navigate)}
-                    >Sign In</Text>
-                  </View>
-                </TouchableOpacity>
-              </KeyboardAwareScrollView>
+                  <TouchableOpacity activeOpacity={0.5}>
+                    <View>
+                      <Text
+                        style={styles.forgotPasswordText}
+                        onPress={() => this.forgot()}
+                      >Forgot Password?</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={() => this.login(navigate)}
+                  >
+                    <View style={styles.button}>
+                      <Text
+                        style={styles.buttonText}
+                      >Sign In</Text>
+                    </View>
+                  </TouchableOpacity>
+                </KeyboardAwareScrollView>
               </View>
               <View style={styles.container}>
                 <View style={styles.signupWrap}>

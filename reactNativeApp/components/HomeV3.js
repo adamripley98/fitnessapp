@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import ModalBox from 'react-native-modalbox';
 import Drawer from 'react-native-drawer';
 import firebase from 'firebase';
+import Modal from 'react-native-modal';
 
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
@@ -26,6 +28,28 @@ const styles = StyleSheet.create({
         top: 20,
         left: 10,
         padding: 0,
+    },
+    button2: {
+        backgroundColor: 'lightblue',
+        padding: 12,
+        margin: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    centering: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 8,
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 22,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
     },
     caption: {
         fontSize: 20,
@@ -54,6 +78,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute',
         width: '100%',
+        backgroundColor: '#FFAB91',
         height: '10%',
         bottom: 0,
     },
@@ -112,6 +137,8 @@ export default class HomeV3 extends Component {
             selectedItem: 'Map',
             bottomModalIsOpen: false,
             nearby: [],
+            visibleModal: null,
+            animating: true,
         };
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
@@ -124,10 +151,6 @@ export default class HomeV3 extends Component {
     componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
-            // if (!user) {
-            //     navigate('Log');
-            // } else {
-            console.disableYellowBox = true;
             if (user) {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
                 this.findPartners();
@@ -148,6 +171,7 @@ export default class HomeV3 extends Component {
                         });
                         if (snapshot.val().clientConnected !== false) {
                             console.log('YESYESYES!!');
+                            this.setState({ visibleModal: null });
                             navigate('MessengerV2', { currentThread: snapshot.val().clientConnected });
                             userRef.update({
                                 clientConnected: false,
@@ -158,6 +182,26 @@ export default class HomeV3 extends Component {
             }
         });
     }
+
+    _renderButton = (text, onPress) => (
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.button2}>
+          <Text>{text}</Text>
+        </View>
+      </TouchableOpacity>
+ );
+
+    _renderModalContent = () => (
+      <View style={styles.modalContent}>
+        <Text>Waiting for clients</Text>
+        <ActivityIndicator
+          animating={this.state.animating}
+          style={[styles.centering, { height: 80 }]}
+          size="large"
+        />
+      </View>
+    );
+
 
     onMenuItemSelected = (item) => {
         const { navigate } = this.props.navigation;
@@ -284,11 +328,11 @@ export default class HomeV3 extends Component {
           onPress={() => {
                 // this.findPartners();
               console.log('this.state.clientConnected', this.state.clientConnected);
-              alert('You will be notified if a user would like to connect');
+              this.setState({ visibleModal: 2 });
           }}
         >
           <View style={styles.bottomButton}>
-            <Text style={{ fontSize: 30 }}>Look for Users</Text>
+            <Text style={{ fontSize: 30 }}>Look for Clients</Text>
           </View>
         </TouchableHighlight>
       </View>
@@ -348,6 +392,13 @@ export default class HomeV3 extends Component {
                 </TouchableOpacity> :
                 <View />}
               {this.certBanner(navigate)}
+              <Modal
+                isVisible={this.state.visibleModal === 2}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutRight'}
+              >
+                {this._renderModalContent()}
+              </Modal>
               <Map nearby={this.state.nearby} />
               {this.state.isTrainer === false ?
                 this.bottomButton() :

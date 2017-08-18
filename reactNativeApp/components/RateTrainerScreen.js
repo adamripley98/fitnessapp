@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 
 class RateTrainerScreen extends React.Component {
     static navigationOptions = {
-        title: 'Welcome',
+        title: 'Welome',
         header: null,
     };
     constructor(props) {

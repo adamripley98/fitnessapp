@@ -112,8 +112,8 @@ export default class BottomModal extends Component {
             }
             subtitle={
               <View style={[styles.subtitleView, { paddingBottom: 5 }]}>
-                <Text style={styles.ratingText}>Distance: {prof.miles} Miles</Text>
-                <Text style={styles.ratingText}>Rating: 5/5</Text>
+                <Text style={styles.ratingText}>Distance: {prof.miles} miles away</Text>
+                <Text style={styles.ratingText}>Rating: {((Math.random() * 2) + 3).toFixed(1)}/5.0</Text>
               </View>
             }
           />),

@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import ModalBox from 'react-native-modalbox';
 import Drawer from 'react-native-drawer';
 import firebase from 'firebase';
+import Modal from 'react-native-modal';
 
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
@@ -19,7 +21,6 @@ import Map from './MapScreen';
 const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
 const { width, height } = Dimensions.get('window');
-
 
 export default class HomeV3 extends Component {
     static navigationOptions = {
@@ -38,6 +39,8 @@ export default class HomeV3 extends Component {
             selectedItem: 'Map',
             bottomModalIsOpen: false,
             nearby: [],
+            visibleModal: null,
+            animating: true,
         };
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
@@ -50,9 +53,6 @@ export default class HomeV3 extends Component {
     componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
-            // if (!user) {
-            //     navigate('Log');
-            // } else {
             if (user) {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
                 this.findPartners();
@@ -73,6 +73,7 @@ export default class HomeV3 extends Component {
                         });
                         if (snapshot.val().clientConnected !== false) {
                             console.log('YESYESYES!!');
+                            this.setState({ visibleModal: null });
                             navigate('MessengerV2', { currentThread: snapshot.val().clientConnected });
                             userRef.update({
                                 clientConnected: false,
@@ -83,6 +84,26 @@ export default class HomeV3 extends Component {
             }
         });
     }
+
+    _renderButton = (text, onPress) => (
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.button2}>
+          <Text>{text}</Text>
+        </View>
+      </TouchableOpacity>
+ );
+
+    _renderModalContent = () => (
+      <View style={styles.modalContent}>
+        <Text>Waiting for clients</Text>
+        <ActivityIndicator
+          animating={this.state.animating}
+          style={[styles.centering, { height: 80 }]}
+          size="large"
+        />
+      </View>
+    );
+
 
     onMenuItemSelected = (item) => {
         const { navigate } = this.props.navigation;
@@ -209,11 +230,11 @@ export default class HomeV3 extends Component {
           onPress={() => {
                 // this.findPartners();
               console.log('this.state.clientConnected', this.state.clientConnected);
-              alert('You will be notified if a user would like to connect');
+              this.setState({ visibleModal: 2 });
           }}
         >
           <View style={styles.bottomButton}>
-            <Text style={{ fontSize: 30 }}>Look for Users</Text>
+            <Text style={{ fontSize: 30 }}>Look for Clients</Text>
           </View>
         </TouchableHighlight>
       </View>
@@ -273,6 +294,13 @@ export default class HomeV3 extends Component {
                 </TouchableOpacity> :
                 <View />}
               {this.certBanner(navigate)}
+              <Modal
+                isVisible={this.state.visibleModal === 2}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutRight'}
+              >
+                {this._renderModalContent()}
+              </Modal>
               <Map nearby={this.state.nearby} />
               {this.state.isTrainer === false ?
                 this.bottomButton() :

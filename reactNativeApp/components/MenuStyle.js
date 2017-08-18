@@ -13,15 +13,15 @@ export default StyleSheet.create({
         marginTop: 20,
     },
     avatar: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
+        width: 70,
+        height: 70,
+        borderRadius: 35,
         flex: 1,
     },
     name: {
         position: 'absolute',
-        left: 70,
-        top: 20,
+        left: 75,
+        top: 30,
     },
     item: {
         fontSize: 14,

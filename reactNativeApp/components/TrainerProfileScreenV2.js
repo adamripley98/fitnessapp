@@ -109,7 +109,7 @@ export default class TrainerProfileScreenV2 extends React.Component {
     }
 
     render() {
-        const { navigate } = this.props.navigation;
+        const { navigate, goBack } = this.props.navigation;
         const { state } = this.props.navigation;
         return (
           <View style={styles.container}>
@@ -119,7 +119,7 @@ export default class TrainerProfileScreenV2 extends React.Component {
               resizeMode="cover"
             >
               <View style={styles.headerIconView}>
-                <TouchableOpacity onPress={() => navigate('HomeV3', { currentModalState: true })} style={[styles.headerBackButtonView, { height: 25, width: 25 }]}>
+                <TouchableOpacity onPress={() => goBack()} style={[styles.headerBackButtonView, { height: 25, width: 25 }]}>
                   <Image
                     source={backIcon2}
                     style={{

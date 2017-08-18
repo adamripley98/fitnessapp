@@ -20,86 +20,12 @@ const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
 const { width, height } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-    button: {
-        position: 'absolute',
-        top: 20,
-        left: 10,
-        padding: 0,
-    },
-    caption: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        alignItems: 'center',
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    bottomModalButton: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        width: '100%',
-        height: '10%',
-        bottom: 0,
-    },
-    bottomModal: {
-        backgroundColor: 'white',
-        paddingTop: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 0,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        height: '100%',
-        width: '100%',
-    },
-    bottomButton: {
-        backgroundColor: 'white',
-        shadowColor: 'black',
-        shadowOffset: { width: 10, height: 10 },
-        padding: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderRadius: 0,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        width: '98%',
-        height: '100%',
-    },
-    banner: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width,
-        height: 30,
-        textAlign: 'center',
-        paddingTop: 20,
-        paddingBottom: 30,
-        backgroundColor: '#f44336',
-        shadowOpacity: 0.75,
-        shadowRadius: 5,
-        shadowColor: 'black',
-        shadowOffset: { height: 3, width: 3 },
-    },
-});
 
 export default class HomeV3 extends Component {
     static navigationOptions = {
         title: 'Home',
         header: null,
+        gesturesEnabled: false,
     };
     constructor(props) {
         super(props);
@@ -251,11 +177,11 @@ export default class HomeV3 extends Component {
             this.toggle();
             this.setState({ bottomModalIsOpen: false });
         }}
-        style={styles.button}
+        style={[styles.button, { width: 42, height: 42 }]}
       >
         <Image
           source={hamburgerIcon}
-          style={{ width: 32, height: 32 }}
+          style={{ width: '100%', height: '100%' }}
         />
       </TouchableOpacity>
     )
@@ -362,3 +288,79 @@ export default class HomeV3 extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    button: {
+        position: 'absolute',
+        top: 22,
+        left: 12,
+        padding: 0,
+    },
+    caption: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        alignItems: 'center',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    instructions: {
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5,
+    },
+    bottomModalButton: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        width: '100%',
+        height: '10%',
+        bottom: 0,
+    },
+    bottomModal: {
+        backgroundColor: 'white',
+        paddingTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 0,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: '100%',
+        width: '100%',
+    },
+    bottomButton: {
+        backgroundColor: 'white',
+        shadowColor: 'black',
+        shadowOffset: { width: 10, height: 10 },
+        padding: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 0,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        width: '98%',
+        height: '100%',
+    },
+    banner: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width,
+        height: 30,
+        textAlign: 'center',
+        paddingTop: 20,
+        paddingBottom: 30,
+        backgroundColor: '#f44336',
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        shadowColor: 'black',
+        shadowOffset: { height: 3, width: 3 },
+    },
+});

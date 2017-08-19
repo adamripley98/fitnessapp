@@ -29,7 +29,7 @@ export default class UserProfileScreen extends React.Component {
         this.state = {
             name: '',
         };
-        const { navigate } = this.props.navigation;
+        const { navigate, goBack } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {
                 navigate('Log');
@@ -63,7 +63,7 @@ export default class UserProfileScreen extends React.Component {
     }
 
     render() {
-        const { navigate } = this.props.navigation;
+        const { navigate, goBack } = this.props.navigation;
         return (
           <View style={styles.container}>
             <Image
@@ -72,29 +72,29 @@ export default class UserProfileScreen extends React.Component {
               resizeMode="cover"
             >
               <TouchableOpacity
-                onPress={() => navigate('HomeV3', { currentModalState: true })}
-                style={{ height: 25, width: 25 }}
+                onPress={() => navigate('HomeV3')}
+                style={{ height: 30, width: 30 }}
               >
                 <Image
                   source={backIcon2}
                   style={{
                       position: 'absolute',
                       left: 8,
-                      height: 25,
-                      width: 25,
+                      height: '100%',
+                      width: '100%',
                   }}
                   resizeMode="contain"
                 />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.editProf(navigate)}
-                style={{ height: 25, width: 25, position: 'absolute', top: 20, right: 6 }}
+                style={{ height: 30, width: 30, position: 'absolute', top: 20, right: 6 }}
               >
                 <Image
                   source={editProfile}
                   style={{
-                      height: 25,
-                      width: 25,
+                      height: '100%',
+                      width: '100%',
                   }}
                   resizeMode="contain"
                 />

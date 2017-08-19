@@ -134,13 +134,12 @@ export default class LogScreen extends React.Component {
             } else {
                 console.log('in else');
             }
+        }).then(() => {
+            if (noErr) {
+                console.log('logging in');
+                navigate('HomeV3');
+            }
         });
-      // .then(() => {
-      //     if (noErr) {
-      //         console.log('logging in');
-      //         navigate('HomeV3');
-      //     }
-      // });
     }
 
     reg = (navigate) => {

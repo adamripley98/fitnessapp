@@ -13,19 +13,21 @@ export default StyleSheet.create({
         marginTop: 20,
     },
     avatar: {
-        width: 70,
-        height: 70,
-        borderRadius: 35,
+        width: 90,
+        height: 90,
+        borderRadius: 45,
         flex: 1,
     },
     name: {
         position: 'absolute',
-        left: 75,
-        top: 30,
+        left: 102,
+        top: 31,
+        fontSize: 25,
     },
     item: {
-        fontSize: 14,
+        fontSize: 20,
         fontWeight: '300',
         paddingTop: 5,
+        padding: 2,
     },
 });

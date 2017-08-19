@@ -104,7 +104,6 @@ export default class HomeV3 extends Component {
       </View>
     );
 
-
     onMenuItemSelected = (item) => {
         const { navigate } = this.props.navigation;
         this.setState({

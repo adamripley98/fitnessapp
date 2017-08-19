@@ -100,7 +100,7 @@ export default class EditUserProfileScreen extends React.Component {
     }
 
     render() {
-        const { navigate } = this.props.navigation;
+        const { navigate, goBack } = this.props.navigation;
         const { image } = this.state;
         console.log('email verified', this.state.emailVerified);
         return (
@@ -112,10 +112,10 @@ export default class EditUserProfileScreen extends React.Component {
             >
               <KeyboardAwareScrollView>
                 <TouchableOpacity
-                  onPress={() => navigate('UserProfile')}
+                  onPress={() => goBack()}
                   style={{
-                      height: 25,
-                      width: 25,
+                      height: 30,
+                      width: 30,
                   }}
                 >
                   <Image
@@ -123,8 +123,8 @@ export default class EditUserProfileScreen extends React.Component {
                     style={{
                         position: 'absolute',
                         left: 8,
-                        height: 25,
-                        width: 25,
+                        height: '100%',
+                        width: '100%',
                     }}
                     resizeMode="contain"
                   />

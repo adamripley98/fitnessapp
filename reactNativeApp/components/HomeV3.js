@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import ModalBox from 'react-native-modalbox';
 import Drawer from 'react-native-drawer';
 import firebase from 'firebase';
+import Modal from 'react-native-modal';
 
 import BottomModal from './modalComponents/BottomModal';
 import Menu from './Menu';
@@ -20,86 +22,11 @@ const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
 const { width, height } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-    button: {
-        position: 'absolute',
-        top: 20,
-        left: 10,
-        padding: 0,
-    },
-    caption: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        alignItems: 'center',
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-    bottomModalButton: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-        width: '100%',
-        height: '10%',
-        bottom: 0,
-    },
-    bottomModal: {
-        backgroundColor: 'white',
-        paddingTop: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 0,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        height: '100%',
-        width: '100%',
-    },
-    bottomButton: {
-        backgroundColor: 'white',
-        shadowColor: 'black',
-        shadowOffset: { width: 10, height: 10 },
-        padding: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderRadius: 0,
-        borderColor: 'rgba(0, 0, 0, 0.1)',
-        width: '98%',
-        height: '100%',
-    },
-    banner: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        width,
-        height: 30,
-        textAlign: 'center',
-        paddingTop: 20,
-        paddingBottom: 30,
-        backgroundColor: '#f44336',
-        shadowOpacity: 0.75,
-        shadowRadius: 5,
-        shadowColor: 'black',
-        shadowOffset: { height: 3, width: 3 },
-    },
-});
-
 export default class HomeV3 extends Component {
     static navigationOptions = {
         title: 'Home',
         header: null,
+        gesturesEnabled: false,
     };
     constructor(props) {
         super(props);
@@ -112,6 +39,8 @@ export default class HomeV3 extends Component {
             selectedItem: 'Map',
             bottomModalIsOpen: false,
             nearby: [],
+            visibleModal: null,
+            animating: true,
         };
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
@@ -124,9 +53,6 @@ export default class HomeV3 extends Component {
     componentDidMount() {
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
-            // if (!user) {
-            //     navigate('Log');
-            // } else {
             if (user) {
                 const userRef = firebase.database().ref(`/users/${user.uid}`);
                 this.findPartners();
@@ -147,6 +73,7 @@ export default class HomeV3 extends Component {
                         });
                         if (snapshot.val().clientConnected !== false) {
                             console.log('YESYESYES!!');
+                            this.setState({ visibleModal: null });
                             navigate('MessengerV2', { currentThread: snapshot.val().clientConnected });
                             userRef.update({
                                 clientConnected: false,
@@ -157,6 +84,25 @@ export default class HomeV3 extends Component {
             }
         });
     }
+
+    _renderButton = (text, onPress) => (
+      <TouchableOpacity onPress={onPress}>
+        <View style={styles.button2}>
+          <Text>{text}</Text>
+        </View>
+      </TouchableOpacity>
+ );
+
+    _renderModalContent = () => (
+      <View style={styles.modalContent}>
+        <Text>Waiting for clients</Text>
+        <ActivityIndicator
+          animating={this.state.animating}
+          style={[styles.centering, { height: 80 }]}
+          size="large"
+        />
+      </View>
+    );
 
     onMenuItemSelected = (item) => {
         const { navigate } = this.props.navigation;
@@ -251,11 +197,11 @@ export default class HomeV3 extends Component {
             this.toggle();
             this.setState({ bottomModalIsOpen: false });
         }}
-        style={styles.button}
+        style={[styles.button, { width: 42, height: 42 }]}
       >
         <Image
           source={hamburgerIcon}
-          style={{ width: 32, height: 32 }}
+          style={{ width: '100%', height: '100%' }}
         />
       </TouchableOpacity>
     )
@@ -283,11 +229,11 @@ export default class HomeV3 extends Component {
           onPress={() => {
                 // this.findPartners();
               console.log('this.state.clientConnected', this.state.clientConnected);
-              alert('You will be notified if a user would like to connect');
+              this.setState({ visibleModal: 2 });
           }}
         >
           <View style={styles.bottomButton}>
-            <Text style={{ fontSize: 30 }}>Look for Users</Text>
+            <Text style={{ fontSize: 30 }}>Look for Clients</Text>
           </View>
         </TouchableHighlight>
       </View>
@@ -347,6 +293,13 @@ export default class HomeV3 extends Component {
                 </TouchableOpacity> :
                 <View />}
               {this.certBanner(navigate)}
+              <Modal
+                isVisible={this.state.visibleModal === 2}
+                animationIn={'slideInLeft'}
+                animationOut={'slideOutRight'}
+              >
+                {this._renderModalContent()}
+              </Modal>
               <Map nearby={this.state.nearby} />
               {this.state.isTrainer === false ?
                 this.bottomButton() :
@@ -362,3 +315,79 @@ export default class HomeV3 extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    button: {
+        position: 'absolute',
+        top: 22,
+        left: 12,
+        padding: 0,
+    },
+    caption: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        alignItems: 'center',
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    instructions: {
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5,
+    },
+    bottomModalButton: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        width: '100%',
+        height: '10%',
+        bottom: 0,
+    },
+    bottomModal: {
+        backgroundColor: 'white',
+        paddingTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 0,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        height: '100%',
+        width: '100%',
+    },
+    bottomButton: {
+        backgroundColor: 'white',
+        shadowColor: 'black',
+        shadowOffset: { width: 10, height: 10 },
+        padding: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 0,
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        width: '98%',
+        height: '100%',
+    },
+    banner: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width,
+        height: 30,
+        textAlign: 'center',
+        paddingTop: 20,
+        paddingBottom: 30,
+        backgroundColor: '#f44336',
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        shadowColor: 'black',
+        shadowOffset: { height: 3, width: 3 },
+    },
+});

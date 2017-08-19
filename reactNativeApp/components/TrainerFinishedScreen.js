@@ -138,7 +138,7 @@ class TrainerFinishedScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
+            name: 'Dood Dood',
             stars: 0,
             feedback: null,
             user: 'test user',
@@ -158,7 +158,7 @@ class TrainerFinishedScreen extends React.Component {
                     console.log("TR9", snapshot.val().session.trainer);
                     if (snapshot.val()) {
                         this.setState({
-                            name: user.displayName,
+                            name: snapshot.val().fullName || 'Trainer Trainer',
                             userId: user.uid,
                             user: snapshot.val().session.user,
                             trainer: snapshot.val().session.trainer,

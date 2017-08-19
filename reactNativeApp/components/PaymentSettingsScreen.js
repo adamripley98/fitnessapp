@@ -12,6 +12,7 @@ import firebase from 'firebase';
 const { width, height } = Dimensions.get('window');
 const background = require('./logos/bkg.jpg');
 const backIcon = require('./logos/back.png');
+const backIcon2 = require('./logos/backIcon2.png');
 
 const styles = StyleSheet.create({
     banner: {
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#34AADC',
     },
     bg: {
-        paddingTop: 30,
+        paddingTop: 20,
         width: null,
         height: null,
     },
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     },
 });
 
-class PaymentSettingsScreen extends React.Component {
+export default class PaymentSettingsScreen extends React.Component {
     static navigationOptions = {
         title: 'Welcome',
         header: null,
@@ -155,7 +156,7 @@ class PaymentSettingsScreen extends React.Component {
     }
 
     render() {
-        const { navigate } = this.props.navigation;
+        const { navigate, goBack } = this.props.navigation;
         return (
           <View style={styles.container}>
             <Image
@@ -163,22 +164,27 @@ class PaymentSettingsScreen extends React.Component {
               style={[styles.cont, styles.bg]}
               resizeMode="cover"
             >
-              <View style={styles.headerIconView}>
-                <TouchableOpacity onPress={() => navigate('HomeV3')} style={styles.headerBackButtonView}>
-                  <Image
-                    source={backIcon}
-                    style={styles.backButtonIcon}
-                    resizeMode="contain"
-                  />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                onPress={() => goBack()}
+                style={{ height: 30, width: 30 }}
+              >
+                <Image
+                  source={backIcon2}
+                  style={{
+                      position: 'absolute',
+                      left: 8,
+                      height: '100%',
+                      width: '100%',
+                  }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
               <View style={styles.markBio}>
-                <Text style={styles.centering}>Card Settings</Text>
+                <Text style={styles.centering}>Payment Settings</Text>
+                <Text style={[styles.centering, { fontSize: 15 }]}>(Coming Soon)</Text>
               </View>
             </Image>
           </View>
         );
     }
-  }
-
-module.exports = PaymentSettingsScreen;
+}

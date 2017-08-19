@@ -21,6 +21,8 @@ const profPic = '../assets/jchen.png';
 
 
 const xIcon = require('../assets/icons/xIcon.png');
+const xIcon2 = require('../assets/icons/xIcon2.png');
+const hamburgerIcon = require('../assets/icons/hamburgerIcon.png');
 
 
 export default class Menu extends React.Component {
@@ -34,13 +36,17 @@ export default class Menu extends React.Component {
           position: 'absolute',
           top: 10,
           right: 0,
+          zIndex: 1,
       }}
       >
-        <TouchableOpacity onPress={() => this.props.xPressed()}>
+        <TouchableOpacity
+          onPress={() => this.props.xPressed()}
+          style={{ width: 30, height: 30 }}
+        >
           <View>
             <Image
-              source={xIcon}
-              style={{ width: 20, height: 20 }}
+              source={xIcon2}
+              style={{ width: '100%', height: '100%' }}
             />
           </View>
         </TouchableOpacity>
@@ -60,7 +66,6 @@ export default class Menu extends React.Component {
         return (
           <ScrollView scrollEnabled={false} scrollsToTop={false} style={menuStyles.menu}>
             {this.xButton()}
-
             <View style={menuStyles.avatarContainer}>
               <Image
                 style={menuStyles.avatar}
@@ -76,13 +81,13 @@ export default class Menu extends React.Component {
                   onPress={() => this.props.onItemSelected('UserProfile')}
                   style={menuStyles.item}
                 >
-              User Profile
+                  Profile
                 </Text> :
                 <Text
                   onPress={() => this.props.onItemSelected('TrainerProfile')}
                   style={menuStyles.item}
                 >
-                  Trainer Profile
+                  Profile
                 </Text>
           }
             <Text

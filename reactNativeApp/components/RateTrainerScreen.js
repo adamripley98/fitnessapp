@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 
 class RateTrainerScreen extends React.Component {
     static navigationOptions = {
-        title: 'Welcome',
+        title: 'Welome',
         header: null,
     };
     constructor(props) {
@@ -174,7 +174,6 @@ class RateTrainerScreen extends React.Component {
                 const sessionRef = firebase.database().ref('/users/' + user.uid + '/trainingSessions/' + this.props.navigation.state.params.sessionKey);
                 sessionRef.on('value', (snapshot) => {
                     console.log('what is snapshot inside rate', snapshot.val());
-                    console.log("TR9", snapshot.val().session.trainer);
                     if (snapshot.val()) {
                         this.setState({
                             name: user.displayName,

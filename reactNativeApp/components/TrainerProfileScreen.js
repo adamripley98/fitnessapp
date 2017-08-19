@@ -123,7 +123,6 @@ class TrainerProfileScreen extends React.Component {
     }
 
     componentDidMount() {
-      // firebase.auth().signOut();
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) {

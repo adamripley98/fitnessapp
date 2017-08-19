@@ -96,7 +96,7 @@ class TimerScreen extends React.Component {
             currentSessionKey: firebase.database().ref().child('trainingSessions').push().key,
         };
         console.log('this id', this.state.trainer.id);
-        // const seshRef = firebase.database().ref('/users/' + this.state.trainer.id + '/trainingSessions/' + currentSessionKey);
+        //const seshRef = firebase.database().ref('/users/' + this.state.trainer.id + '/trainingSessions/' + currentSessionKey);
         // seshRef.update({
         //     sessionFinished: false,
         // });
@@ -208,7 +208,7 @@ class TimerScreen extends React.Component {
         //     navigate('Rating', { sessionKey: currentSessionKey });
         // } else {
         //     console.log('somethingweird');
-        // }
+        // }\
     }
 
     displayTime = (min, sec) => {

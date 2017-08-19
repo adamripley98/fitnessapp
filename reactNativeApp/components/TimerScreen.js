@@ -208,7 +208,7 @@ class TimerScreen extends React.Component {
         //     navigate('Rating', { sessionKey: currentSessionKey });
         // } else {
         //     console.log('somethingweird');
-        // }
+        // }\
     }
 
     displayTime = (min, sec) => {

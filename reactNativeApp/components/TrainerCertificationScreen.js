@@ -11,8 +11,8 @@ import firebase from 'firebase';
 import { SegmentedControls } from 'react-native-radio-buttons';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
-const editProfPic = require('./logos/editprof.png');
+const background = require('../assets/icons/bkg.jpg');
+const editProfPic = require('../assets/icons/editprof.png');
 
 const options = [
     'Yes',

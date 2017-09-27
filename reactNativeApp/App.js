@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, AppRegistry } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import RegisterScreen from './components/RegisterScreen';
-import LogScreen from './components/LogScreen';
+import RegisterScreen from './components/logReg/RegisterScreen';
+import LogScreen from './components/logReg/LogScreen';
 import UserProfileScreen from './components/UserProfileScreen';
 import EditUserProfileScreen from './components/EditUserProfileScreen';
 import MessengerV2 from './components/MessengerV2';
@@ -18,9 +18,7 @@ import TrainerCertificationScreen from './components/TrainerCertificationScreen'
 import MapScreen from './components/MapScreen';
 import PaymentSettingsScreen from './components/PaymentSettingsScreen';
 import TrainerFinished from './components/TrainerFinishedScreen';
-// JEFFREY'S THING
-// import { StyleSheet, Text, View } from 'react-native';
-import HomeV2 from './components/HomeV2';
+// import HomeV2 from './components/HomeV2';
 import HomeV3 from './components/HomeV3';
 
 const styles = StyleSheet.create({
@@ -63,9 +61,9 @@ const myApp = StackNavigator({
     EditUserProfile: {
         screen: EditUserProfileScreen,
     },
-    Messages: {
-        screen: MessagesScreen,
-    },
+    // Messages: {
+    //     screen: MessagesScreen,
+    // },
     MessagesV2: {
         screen: MessagesScreenV2,
     },
@@ -75,9 +73,9 @@ const myApp = StackNavigator({
     Rating: {
         screen: RateTrainerScreen,
     },
-    HomeV2: {
-        screen: HomeV2,
-    },
+    // HomeV2: {
+    //     screen: HomeV2,
+    // },
     HomeV3: {
         screen: HomeV3,
     },
@@ -105,9 +103,9 @@ const myApp = StackNavigator({
     MessengerV2: {
         screen: MessengerV2,
     },
-    MessagesScreen: {
-        screen: MessagesScreen,
-    },
+    // MessagesScreen: {
+    //     screen: MessagesScreen,
+    // },
     MessagesScreenV2: {
         screen: MessagesScreenV2,
     },

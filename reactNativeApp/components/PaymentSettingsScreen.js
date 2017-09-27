@@ -10,8 +10,8 @@ import React from 'react';
 import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
-const backIcon = require('./logos/back.png');
+const background = require('../assets/icons/bkg.jpg');
+const backIcon = require('../assets/icons/back.png');
 
 const styles = StyleSheet.create({
     banner: {

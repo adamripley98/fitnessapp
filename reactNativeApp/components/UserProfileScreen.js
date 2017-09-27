@@ -13,11 +13,11 @@ import React from 'react';
 import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
-const editProfPic = require('./logos/editprof.png');
-const editProfile = require('./logos/editProfile.png');
-const locationPic = require('./logos/location.png');
-const backIcon2 = require('./logos/backIcon2.png');
+const background = require('../assets/icons/bkg.jpg');
+const editProfPic = require('../assets/icons/editprof.png');
+const editProfile = require('../assets/icons/editProfile.png');
+const locationPic = require('../assets/icons/location.png');
+const backIcon2 = require('../assets/icons/backIcon2.png');
 
 export default class UserProfileScreen extends React.Component {
     static navigationOptions = {

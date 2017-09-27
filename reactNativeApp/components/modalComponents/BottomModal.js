@@ -6,7 +6,7 @@ import { List, ListItem } from 'react-native-elements';
 
 import styless from '../ModalStyle';
 
-const editProfPic = require('../logos/editprof.png');
+const editProfPic = require('../../assets/icons/editprof.png');
 
 // const screen = Dimensions.get('window');
 const { width, height } = Dimensions.get('window');

@@ -15,7 +15,7 @@ import React from 'react';
 import firebase from 'firebase';
 
 const { width, height } = Dimensions.get('window');
-const background = require('./logos/bkg.jpg');
+const background = require('../assets/icons/bkg.jpg');
 
 const styles = StyleSheet.create({
     banner: {

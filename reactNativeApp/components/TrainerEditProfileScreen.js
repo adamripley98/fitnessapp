@@ -14,7 +14,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const { width, height } = Dimensions.get('window');
 
-const background = require('./logos/bkg.jpg');
+const background = require('../assets/icons/bkg.jpg');
 
 const styles = StyleSheet.create({
     banner: {

@@ -12,9 +12,9 @@ import firebase from 'firebase';
 import Stars from 'react-native-stars';
 
 const { width, height } = Dimensions.get('window');
-const emp = require('./logos/empStar.png');
-const full = require('./logos/fullStar.png');
-const half = require('./logos/halfStar.png');
+const emp = require('../assets/icons/empStar.png');
+const full = require('../assets/icons/fullStar.png');
+const half = require('../assets/icons/halfStar.png');
 
 const styles = StyleSheet.create({
     banner: {

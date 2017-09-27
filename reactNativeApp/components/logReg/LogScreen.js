@@ -13,14 +13,14 @@ import {
   Keyboard,
 } from 'react-native';
 import firebase from 'firebase';
-import { firebaseApp } from '../../firebase';
+import { firebaseApp } from '../../../firebase';
 
 const { width, height } = Dimensions.get('window');
 
-const background = require('./logos/bkg.jpg');
-const mark = require('./logos/weight.png');
-const lockIcon = require('./logos/loginlock.png');
-const personIcon = require('./logos/loginperson.png');
+const background = require('../../assets/icons/bkg.jpg');
+const mark = require('../../assets/icons/weight.png');
+const lockIcon = require('../../assets/icons/loginlock.png');
+const personIcon = require('../../assets/icons/loginperson.png');
 
 const styles = StyleSheet.create({
     container: {

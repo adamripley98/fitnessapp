@@ -12,10 +12,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import firebase from 'firebase';
 
-const background = require('./logos/bkg.jpg');
-const personIcon = require('./logos/signup_person.png');
-const lockIcon = require('./logos/signup_lock.png');
-const emailIcon = require('./logos/signup_email.png');
+const background = require('../../assets/icons/bkg.jpg');
+const personIcon = require('../../assets/icons/signup_person.png');
+const lockIcon = require('../../assets/icons/signup_lock.png');
+const emailIcon = require('../../assets/icons/signup_email.png');
 
 const options = [
     'User',

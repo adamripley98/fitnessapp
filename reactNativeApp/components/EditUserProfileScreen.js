@@ -14,8 +14,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 const { width, height } = Dimensions.get('window');
 
-const background = require('./logos/bkg.jpg');
-const backIcon2 = require('./logos/backIcon2.png');
+const background = require('../assets/icons/bkg.jpg');
+const backIcon2 = require('../assets/icons/backIcon2.png');
 
 export default class EditUserProfileScreen extends React.Component {
     static navigationOptions = {

@@ -19,8 +19,6 @@ export default class Example extends React.Component {
     };
 
     constructor(props) {
-        console.log('l');
-
         super(props);
         const { navigate } = this.props.navigation;
         firebase.auth().onAuthStateChanged((user) => {
@@ -92,7 +90,7 @@ export default class Example extends React.Component {
         setTimeout(() => {
             if (this._isMounted === true) {
                 this.setState(previousState => ({
-                    messages: GiftedChat.prepend(previousState.messages, require('./data/old_messages.js')),
+                    messages: GiftedChat.prepend(previousState.messages, {}),
                     loadEarlier: false,
                     isLoadingEarlier: false,
                 }));

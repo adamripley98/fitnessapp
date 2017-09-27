@@ -6,7 +6,7 @@ import firebase from 'firebase';
 import MapStyle from './mapStyle.json';
 
 const currentLocation = require('../assets/icons/currentLocationFYTOrange.png');
-const pic = require('./logos/fullStar.png');
+const pic = require('../assets/icons/fullStar.png');
 
 export default class MapScreen extends React.Component {
     static navigationOptions = {
